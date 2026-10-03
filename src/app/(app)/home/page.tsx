@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search, ChevronRight, Grid, Users, Calendar, Folder } from "lucide-react";
+import { Search, ChevronRight, Grid, Users, Calendar, Folder, BookOpen } from "lucide-react";
 import styles from "./page.module.css";
 
 export default function HomePage() {
@@ -144,6 +144,15 @@ export default function HomePage() {
               </div>
               <h3 className={styles.qaTitle}>Resources</h3>
               <p className={styles.qaDesc}>Access useful information and documents</p>
+              <ChevronRight className={styles.qaArrow} size={20} />
+            </Link>
+
+            <Link href="/library" className={styles.qaCard}>
+              <div className={styles.qaHeader}>
+                <div className={`${styles.qaIconWrap} ${styles.qaIconBlue}`}><BookOpen size={20} /></div>
+              </div>
+              <h3 className={styles.qaTitle}>Library</h3>
+              <p className={styles.qaDesc}>Browse and borrow community books</p>
               <ChevronRight className={styles.qaArrow} size={20} />
             </Link>
 
