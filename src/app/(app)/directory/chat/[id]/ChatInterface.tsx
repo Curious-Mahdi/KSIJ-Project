@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { sendMessage, shareContact, markConversationCompleted } from "@/lib/actions/directory";
+import { useRouter } from "next/navigation";
+import { sendMessage, shareContact, markConversationCompleted, markConversationReopened } from "@/lib/actions/directory";
 import styles from "./page.module.css";
 import { Send, Phone, Mail, CheckCircle2 } from "lucide-react";
 
@@ -10,6 +11,7 @@ export default function ChatInterface({ conversation, currentUserId }: { convers
   const [isSending, setIsSending] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   
   const isOwner = currentUserId === conversation.ownerId;
 
@@ -21,6 +23,14 @@ export default function ChatInterface({ conversation, currentUserId }: { convers
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [conversation.messages]);
+
+  // Polling to auto-refresh chat
+  useEffect(() => {
+    const interval = setInterval(() => {
+      router.refresh();
+    }, 3000); // Check for new messages every 3 seconds
+    return () => clearInterval(interval);
+  }, [router]);
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,6 +60,12 @@ export default function ChatInterface({ conversation, currentUserId }: { convers
   const handleComplete = async () => {
     if (confirm("Mark this conversation as completed?")) {
       await markConversationCompleted(conversation.id);
+    }
+  };
+
+  const handleReopen = async () => {
+    if (confirm("Reopen this conversation?")) {
+      await markConversationReopened(conversation.id);
     }
   };
 
@@ -101,8 +117,22 @@ export default function ChatInterface({ conversation, currentUserId }: { convers
           ))}
 
           {conversation.status === "COMPLETED" && (
-            <div className={styles.systemMessage}>
-              This conversation was marked as completed.
+            <div className={styles.systemMessage} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
+              <span>This conversation was marked as completed.</span>
+              <button 
+                onClick={handleReopen} 
+                style={{
+                  background: 'none', 
+                  border: '1px solid var(--color-primary)', 
+                  color: 'var(--color-primary)',
+                  padding: '4px 12px',
+                  borderRadius: '16px',
+                  cursor: 'pointer',
+                  fontSize: '0.85rem'
+                }}
+              >
+                Reopen Conversation
+              </button>
             </div>
           )}
 

@@ -20,6 +20,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     }
   }, [status, session, router]);
 
+  // Global polling to refresh Server Components (like Notifications and Chats)
+  useEffect(() => {
+    if (status === "authenticated") {
+      const interval = setInterval(() => {
+        router.refresh();
+      }, 3000); // Poll every 3 seconds
+      return () => clearInterval(interval);
+    }
+  }, [status, router]);
+
   if (status === "loading" || status === "unauthenticated" || (status === "authenticated" && !session?.user?.jamaat)) {
     return null; // or a loading spinner
   }

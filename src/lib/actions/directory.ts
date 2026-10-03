@@ -256,6 +256,24 @@ export async function markConversationCompleted(conversationId: string) {
   revalidatePath(`/directory/chat/${conversationId}`);
 }
 
+export async function markConversationReopened(conversationId: string) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) throw new Error("Unauthorized");
+  const userId = (session.user as any).id;
+
+  const conversation = await prisma.conversation.findUnique({ where: { id: conversationId } });
+  if (!conversation || (conversation.initiatedById !== userId && conversation.ownerId !== userId)) {
+    throw new Error("Unauthorized");
+  }
+
+  await prisma.conversation.update({
+    where: { id: conversationId },
+    data: { status: "IN_CONVERSATION" }
+  });
+
+  revalidatePath(`/directory/chat/${conversationId}`);
+}
+
 export async function getMyDirectory() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) throw new Error("Unauthorized");
