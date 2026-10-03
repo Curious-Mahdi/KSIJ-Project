@@ -23,7 +23,7 @@
   
   /* Transparent background to blend with page */
   background: transparent;
-  padding: var(--space-48) 0;
+  padding: 120px 0 80px;
   position: relative;
 }
 
@@ -222,10 +222,10 @@
   width: 100%;
   max-width: 1240px;
   margin: 0 auto;
-  padding: 0 var(--space-24) var(--space-64);
+  padding: 0 var(--space-24) 160px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-32);
+  gap: 80px;
 }
 
 @media (min-width: 1024px) {
@@ -239,7 +239,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--space-48);
+  gap: 100px;
   min-width: 0;
 }
 
@@ -309,25 +309,34 @@
 
 .qaCard {
   background-color: var(--color-surface);
-  border-radius: var(--radius-lg);
-  padding: var(--space-24);
+  border-radius: 2rem;
+  padding: var(--space-32);
   display: flex;
   flex-direction: column;
   position: relative;
-  border: 1px solid var(--color-border);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Double-Bezel nested architecture */
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.15),
+    0 0 0 1px rgba(0,0,0,0.04), 
+    0 0 0 6px rgba(0,0,0,0.02), 
+    0 16px 32px -8px rgba(0,0,0,0.04);
+  transition: all 0.7s cubic-bezier(0.32, 0.72, 0, 1);
   cursor: pointer;
   overflow: hidden;
   color: var(--color-text-main);
 }
 .qaCard:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-primary-light);
-  background-color: #F4F8F5; /* Very light green on hover */
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.2),
+    0 0 0 1px rgba(11,81,51,0.1), 
+    0 0 0 6px rgba(11,81,51,0.03), 
+    0 24px 48px -12px rgba(0,0,0,0.06);
+  background-color: #F8FBF9; /* Subtlest green tint */
 }
 .qaCard:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.98);
 }
 
 .qaCardFeatured {
@@ -429,16 +438,16 @@
 }
 
 .qaIconWrap {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.7s cubic-bezier(0.32, 0.72, 0, 1);
 }
 .qaCard:hover .qaIconWrap {
-  transform: scale(1.05);
+  transform: scale(1.08) rotate(-4deg);
 }
 
 .qaIconGreen {
@@ -497,13 +506,28 @@
 
 .announcementCard {
   background-color: var(--color-surface-success);
-  border: 1px solid var(--color-primary-light);
-  border-radius: var(--radius-lg);
-  padding: var(--space-20);
+  border-radius: 1.75rem;
+  padding: var(--space-24);
   color: var(--color-text-main);
-  margin-bottom: var(--space-16);
+  margin-bottom: var(--space-20);
   position: relative;
   overflow: hidden;
+  /* Premium nested shell feel */
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.3),
+    0 0 0 1px rgba(11,81,51,0.05),
+    0 0 0 6px rgba(11,81,51,0.02),
+    0 12px 24px -4px rgba(0,0,0,0.03);
+  transition: all 0.7s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.announcementCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    0 0 0 1px rgba(11,81,51,0.08),
+    0 0 0 6px rgba(11,81,51,0.03),
+    0 16px 32px -8px rgba(0,0,0,0.05);
 }
 .announcementCard::before {
   content: '';
@@ -543,23 +567,28 @@
 }
 
 .announcementLink {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--color-primary);
-  transition: color 0.2s ease;
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-}
-.announcementLink:hover {
-  color: var(--color-primary-dark);
+  gap: 12px;
 }
 .announcementLink:hover .linkArrow {
-  transform: translateX(2px);
+  transform: translate(2px, -2px) scale(1.05);
+  background-color: rgba(11,81,51,0.15);
 }
+
 .linkArrow {
-  transition: transform 0.2s ease;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background-color: rgba(11,81,51,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.7s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .updateRow {
@@ -629,42 +658,51 @@
 }
 
 .readMoreLink {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--color-primary);
-  transition: color 0.2s ease;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 12px;
+  margin-top: var(--space-8);
 }
 .updateRow:hover .readMoreLink {
-  text-decoration: underline;
+  color: var(--color-primary-dark);
 }
 .updateRow:hover .readMoreLink .linkArrow {
-  transform: translateX(4px);
+  transform: translate(2px, -2px) scale(1.05);
+  background-color: rgba(11,81,51,0.15);
 }
 
 .viewAllBtn {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 12px;
   width: max-content;
   margin-top: var(--space-24);
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--color-text-main);
-  padding: var(--space-12) var(--space-20);
+  padding: 8px 8px 8px 24px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-full);
   background-color: var(--color-surface);
-  transition: all 0.2s ease;
+  transition: all 0.7s cubic-bezier(0.32, 0.72, 0, 1);
+  cursor: pointer;
+}
+.viewAllBtn .linkArrow {
+  background-color: var(--color-surface-alt);
 }
 .viewAllBtn:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  border-color: var(--color-primary-light);
+  transform: scale(0.98);
 }
 .viewAllBtn:hover .linkArrow {
-  transform: translateX(4px);
+  transform: translate(2px, -2px) scale(1.05);
+  background-color: rgba(11,81,51,0.1);
+}
+.viewAllBtn:active {
+  transform: scale(0.96);
 }
 
 /* ==================================================
@@ -698,13 +736,14 @@
   color: var(--color-primary);
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  gap: 8px;
 }
 .sidebarLink:hover {
-  text-decoration: underline;
+  color: var(--color-primary-dark);
 }
 .sidebarLink:hover .linkArrow {
-  transform: translateX(2px);
+  transform: translate(2px, -2px) scale(1.05);
+  background-color: rgba(11,81,51,0.15);
 }
 
 .eventsList {
@@ -786,11 +825,12 @@
   color: var(--color-primary);
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  gap: 8px;
 }
 .eventRow:hover .eventLink {
-  text-decoration: underline;
+  color: var(--color-primary-dark);
 }
 .eventRow:hover .eventLink .linkArrow {
-  transform: translateX(4px);
+  transform: translate(2px, -2px) scale(1.05);
+  background-color: rgba(11,81,51,0.15);
 }
