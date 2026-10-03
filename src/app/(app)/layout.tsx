@@ -1,28 +1,41 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Home, Grid, Users, Calendar, MoreHorizontal, Bell } from "lucide-react";
+import { useSession } from "next-auth/react";
 import styles from "./layout.module.css";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { data: session, status } = useSession();
 
-  // Fake auth user info
-  const user = {
-    name: "Ali",
-    avatarInitial: "A"
-  };
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    } else if (status === "authenticated" && !session?.user?.jamaat) {
+      router.push("/onboarding");
+    }
+  }, [status, session, router]);
+
+  if (status === "loading" || status === "unauthenticated" || (status === "authenticated" && !session?.user?.jamaat)) {
+    return null; // or a loading spinner
+  }
+
+  const user = session?.user;
+  const avatarInitial = user?.name ? user.name.charAt(0).toUpperCase() : "?";
 
   return (
     <div className={styles.appLayout}>
       {/* Top Header */}
       <header className={styles.header}>
         {/* Desktop Logo */}
-        <Link href="/home" className={styles.logo}>KSIJ Reload</Link>
+        <Link href="/home" className={styles.logo}>✨ KSIJ Reload</Link>
 
         {/* Mobile Title */}
-        <span className={styles.mobileTitle}>KSIJ Reload</span>
+        <span className={styles.mobileTitle}>✨ KSIJ Reload</span>
 
         {/* Desktop Navigation */}
         <nav className={styles.desktopNav}>
@@ -40,9 +53,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </Link>
           <div className="flex-center gap-8">
             <Link href="/profile" className="avatar" style={{ width: '32px', height: '32px', fontSize: '0.875rem' }}>
-              {user.avatarInitial}
+              {user?.image ? (
+                <img src={user.image} alt="Profile" style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
+              ) : (
+                avatarInitial
+              )}
             </Link>
-            <span className={styles.userName}>{user.name}</span>
           </div>
         </div>
       </header>

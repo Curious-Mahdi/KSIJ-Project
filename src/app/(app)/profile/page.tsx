@@ -2,13 +2,14 @@
 
 import styles from "./page.module.css";
 import { ChevronRight } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
 
 export default function ProfilePage() {
-  const user = {
-    name: "Ali",
-    email: "user@example.com",
-    avatarInitial: "A"
-  };
+  const { data: session } = useSession();
+  
+  if (!session) return null;
+  const user = session.user;
+  const avatarInitial = user.name ? user.name.charAt(0).toUpperCase() : "?";
 
   return (
     <div className={styles.container}>
@@ -16,7 +17,11 @@ export default function ProfilePage() {
       
       <div className={styles.headerCard}>
         <div className={styles.avatarLarge}>
-          {user.avatarInitial}
+          {user.image ? (
+            <img src={user.image} alt="Profile" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+          ) : (
+            avatarInitial
+          )}
         </div>
         <div className={styles.userInfo}>
           <h2 className="h2">{user.name}</h2>
@@ -37,7 +42,7 @@ export default function ProfilePage() {
           </div>
           <div className={styles.listItem}>
             <span>Jamaat/Centre</span>
-            <span className="text-secondary">Main Centre (Sample)</span>
+            <span className="text-secondary">{user.jamaat || "Not selected"}</span>
           </div>
         </div>
       </div>
@@ -74,7 +79,11 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <button className="btn btn-secondary w-full" style={{ marginTop: 'var(--space-24)' }}>
+      <button 
+        className="btn btn-secondary w-full" 
+        style={{ marginTop: 'var(--space-24)' }}
+        onClick={() => signOut({ callbackUrl: "/login" })}
+      >
         Sign Out
       </button>
     </div>
