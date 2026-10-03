@@ -32,10 +32,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Top Header */}
       <header className={styles.header}>
         {/* Desktop Logo */}
-        <Link href="/home" className={styles.logo}>✨ KSIJ Reload</Link>
+        <Link href="/home" className={styles.logo}>KSIJ Reload</Link>
 
         {/* Mobile Title */}
-        <span className={styles.mobileTitle}>✨ KSIJ Reload</span>
+        <span className={styles.mobileTitle}>KSIJ Reload</span>
 
         {/* Desktop Navigation */}
         <nav className={styles.desktopNav}>

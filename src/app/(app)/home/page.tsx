@@ -1,136 +1,255 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { Search, Grid, Users, Calendar, Folder, BellRing } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Search, ChevronRight, Grid, Users, Calendar, Folder } from "lucide-react";
 import styles from "./page.module.css";
 
 export default function HomePage() {
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+
   const user = {
     name: "Ali"
   };
 
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setIsSearchFocused(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setIsSearchFocused(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
-    <div className={styles.homeContainer}>
-      <h1 className={`h2 ${styles.greeting}`}>Good morning, {user.name}</h1>
-
-      <div className={styles.searchSection}>
-        <div className={styles.searchWrapper}>
-          <Search className={styles.searchIcon} size={20} />
-          <input 
-            type="text" 
-            placeholder="What are you looking for?" 
-            className={styles.searchInput}
-          />
-        </div>
-      </div>
-
-      <div className={styles.announcementCard}>
-        <div className="flex-center gap-8 text-primary" style={{ justifyContent: 'flex-start' }}>
-          <BellRing size={20} />
-          <h3 className="h3">Important Community Update</h3>
-        </div>
-        <p className="body-text">
-          Annual membership renewal is now open. Please update your details and complete the process by the end of the month.
-        </p>
-        <Link href="#" className="btn btn-primary" style={{ alignSelf: 'flex-start', marginTop: '8px' }}>
-          Read More
-        </Link>
-      </div>
-
-      <div className={styles.quickAccess}>
-        <h2 className="h3">Quick Access</h2>
-        <div className={styles.quickAccessGrid}>
-          <Link href="/services" className={styles.quickAction}>
-            <div className={styles.quickActionIcon}><Grid size={24} /></div>
-            <span>Services</span>
-          </Link>
-          <Link href="/directory" className={styles.quickAction}>
-            <div className={styles.quickActionIcon}><Users size={24} /></div>
-            <span>Directory</span>
-          </Link>
-          <Link href="/events" className={styles.quickAction}>
-            <div className={styles.quickActionIcon}><Calendar size={24} /></div>
-            <span>Events</span>
-          </Link>
-          <Link href="/resources" className={styles.quickAction}>
-            <div className={styles.quickActionIcon}><Folder size={24} /></div>
-            <span>Resources</span>
-          </Link>
-        </div>
-      </div>
-
-      <h2 className="h3 sectionTitle">Community Updates</h2>
-      <div className={styles.feed}>
-        {/* Sample Post 1 */}
-        <article className={styles.postCard}>
-          <div className={styles.postHeader}>
-            <div className={styles.postAvatar}>K</div>
-            <div className={styles.postMeta}>
-              <span className={styles.postAuthor}>KSIJ Education Board</span>
-              <span className={styles.postTime}>2 hours ago</span>
+    <div className={styles.pageWrapper}>
+      
+      {/* Search Backdrop */}
+      <div className={`${styles.searchBackdrop} ${isSearchFocused ? styles.searchBackdropVisible : ''}`}></div>
+      
+      {/* Hero Section */}
+      <section 
+        className={`${styles.heroSection} ${!isSearchFocused ? 'animateFadeUp' : ''}`}
+        style={{ position: 'relative' }}
+      >
+        <div className={styles.heroContent}>
+          <h1 className={styles.heroGreeting}>Salamun Alaykum, {user.name}</h1>
+          <div className={styles.goldHairline}></div>
+          <p className={styles.heroSubtitle}>Everything your community has to offer, in one place.</p>
+          
+          <div 
+            ref={searchRef}
+            className={`${styles.searchWrapper} ${isSearchFocused ? styles.searchWrapperFocused : ''}`}
+          >
+            <div className={styles.searchContainer}>
+              <Search className={styles.searchIcon} size={24} />
+              <input 
+                type="text" 
+                placeholder="What do you need?" 
+                className={styles.searchInput}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearch}
+                onFocus={() => setIsSearchFocused(true)}
+              />
             </div>
-          </div>
-          <h3 className={styles.postTitle}>Higher Education Scholarship 2024</h3>
-          <p className={styles.postContent}>
-            Applications are now open for the 2024 Higher Education Scholarship program. We encourage all eligible students to apply before the deadline. [Sample Content]
-          </p>
-          <Link href="#" className={styles.readMore}>Read More &rarr;</Link>
-        </article>
+            
+            {/* Interactive Search Results Dropdown */}
+            {isSearchFocused && searchQuery.length > 0 && (
+              <div className={styles.searchResults}>
+                
+                <div className={styles.resultCategory}>
+                  <div className={styles.resultCategoryTitle}>Services</div>
+                  <Link href="/services" className={styles.resultItem}>
+                    <span className={styles.resultItemTitle}>Scholarship Assistance</span>
+                    <ChevronRight className={styles.resultItemArrow} size={16} />
+                  </Link>
+                  <Link href="/services" className={styles.resultItem}>
+                    <span className={styles.resultItemTitle}>Medical Consultations</span>
+                    <ChevronRight className={styles.resultItemArrow} size={16} />
+                  </Link>
+                </div>
 
-        {/* Sample Post 2 */}
-        <article className={styles.postCard}>
-          <div className={styles.postHeader}>
-            <div className={styles.postAvatar} style={{ backgroundColor: 'var(--color-info)' }}>M</div>
-            <div className={styles.postMeta}>
-              <span className={styles.postAuthor}>Medical Committee</span>
-              <span className={styles.postTime}>Yesterday</span>
-            </div>
-          </div>
-          <h3 className={styles.postTitle}>Upcoming Health Camp</h3>
-          <p className={styles.postContent}>
-            Join us for a free general health checkup camp this weekend at the main medical wing. Special consultations for optometry and dental care will be available. [Sample Content]
-          </p>
-          <Link href="#" className={styles.readMore}>Read More &rarr;</Link>
-        </article>
+                <div className={styles.resultCategory}>
+                  <div className={styles.resultCategoryTitle}>Updates</div>
+                  <Link href="/updates/scholarship" className={styles.resultItem}>
+                    <span className={styles.resultItemTitle}>Higher Education Scholarship 2024</span>
+                    <ChevronRight className={styles.resultItemArrow} size={16} />
+                  </Link>
+                </div>
 
-        {/* Sample Post 3 */}
-        <article className={styles.postCard}>
-          <div className={styles.postHeader}>
-            <div className={styles.postAvatar} style={{ backgroundColor: 'var(--color-warning)' }}>Y</div>
-            <div className={styles.postMeta}>
-              <span className={styles.postAuthor}>Youth Affairs</span>
-              <span className={styles.postTime}>2 days ago</span>
-            </div>
+                <div className={styles.resultCategory}>
+                  <div className={styles.resultCategoryTitle}>Events</div>
+                  <Link href="/events/townhall" className={styles.resultItem}>
+                    <span className={styles.resultItemTitle}>Community Townhall</span>
+                    <ChevronRight className={styles.resultItemArrow} size={16} />
+                  </Link>
+                </div>
+
+              </div>
+            )}
           </div>
-          <h3 className={styles.postTitle}>Mentorship Registration Open</h3>
-          <p className={styles.postContent}>
-            Looking for career guidance? Register for our upcoming mentorship cycle to connect with established professionals in your field of interest. [Sample Content]
-          </p>
-          <Link href="#" className={styles.readMore}>Read More &rarr;</Link>
-        </article>
+          <p className={styles.searchHelper}>Search services, events, people and resources</p>
+        </div>
+      </section>
+
+      {/* Quick Access (Full Width) */}
+      <div className={`${styles.quickAccessWrapper} animateFadeUp delay-100`}>
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Quick access</h2>
+          <div className={styles.quickAccessGrid}>
+            
+            <Link href="/services" className={styles.qaCard}>
+              <div className={styles.qaHeader}>
+                <div className={`${styles.qaIconWrap} ${styles.qaIconGreen}`}><Grid size={20} /></div>
+              </div>
+              <h3 className={styles.qaTitle}>Community Services</h3>
+              <p className={styles.qaDesc}>Find assistance, programs and support</p>
+              <ChevronRight className={styles.qaArrow} size={20} />
+            </Link>
+            
+            <Link href="/directory" className={styles.qaCard}>
+              <div className={styles.qaHeader}>
+                <div className={`${styles.qaIconWrap} ${styles.qaIconBlue}`}><Users size={20} /></div>
+              </div>
+              <h3 className={styles.qaTitle}>Directory</h3>
+              <p className={styles.qaDesc}>Find community members and businesses</p>
+              <ChevronRight className={styles.qaArrow} size={20} />
+            </Link>
+
+            <Link href="/events" className={styles.qaCard}>
+              <div className={styles.qaHeader}>
+                <div className={`${styles.qaIconWrap} ${styles.qaIconYellow}`}><Calendar size={20} /></div>
+              </div>
+              <h3 className={styles.qaTitle}>Events</h3>
+              <p className={styles.qaDesc}>See upcoming community events</p>
+              <ChevronRight className={styles.qaArrow} size={20} />
+            </Link>
+
+            <Link href="/resources" className={styles.qaCard}>
+              <div className={styles.qaHeader}>
+                <div className={`${styles.qaIconWrap} ${styles.qaIconOrange}`}><Folder size={20} /></div>
+              </div>
+              <h3 className={styles.qaTitle}>Resources</h3>
+              <p className={styles.qaDesc}>Access useful information and documents</p>
+              <ChevronRight className={styles.qaArrow} size={20} />
+            </Link>
+
+          </div>
+        </section>
       </div>
 
-      <h2 className="h3 sectionTitle mt-32">Upcoming Events</h2>
-      <div className={styles.eventsGrid}>
-        <div className={styles.eventCard}>
-          <div className="badge" style={{ alignSelf: 'flex-start' }}>Oct 15, 2024</div>
-          <h3 className="h3">Community Townhall</h3>
-          <div className="small-text mt-8">
-            <p>8:00 PM</p>
-            <p>Main Centre</p>
-          </div>
-          <Link href="#" className="btn btn-secondary mt-16">View Event</Link>
-        </div>
+      {/* Main Layout Container (2-Column) */}
+      <div className={styles.mainLayout}>
         
-        <div className={styles.eventCard}>
-          <div className="badge" style={{ alignSelf: 'flex-start' }}>Oct 22, 2024</div>
-          <h3 className="h3">Youth Career Seminar</h3>
-          <div className="small-text mt-8">
-            <p>10:00 AM</p>
-            <p>Community Hall</p>
-          </div>
-          <Link href="#" className="btn btn-secondary mt-16">View Event</Link>
+        {/* LEFT COLUMN: Main Content */}
+        <div className={`${styles.mainColumn} animateFadeUp delay-200`}>
+          
+          {/* Community Updates */}
+          <section className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <div>
+                <h2 className={styles.sectionTitle}>
+                  Community updates
+                </h2>
+                <p className={styles.sectionSubtitle}>Important information from across the community</p>
+              </div>
+            </div>
+
+            <div className={styles.feed}>
+              
+              {/* Highlighted Announcement */}
+              <div className={styles.announcementCard}>
+                <div className={styles.announcementLabel}>IMPORTANT</div>
+                <h3 className={styles.announcementTitle}>Register for the NASR Cup</h3>
+                <p className={styles.announcementDesc}><strong>Sports and Logistics Department:</strong> Registration is now open for the upcoming NASR Football Cup. Form your teams and register before the deadline.</p>
+                <Link href="/updates/nasr-cup" className={styles.announcementLink}>Read announcement <span className={styles.linkArrow}>&rarr;</span></Link>
+              </div>
+
+              {/* Update Rows (Editorial Style) */}
+              <Link href="/updates/hackathon" className={styles.updateRow}>
+                <div className={styles.updateSource}>
+                  <div className={styles.updateAvatar}>T</div>
+                  <div className={styles.updateMeta}>
+                    <span className={styles.updateAuthor}>Tech and AI Committee</span>
+                    <span className={styles.updateTime}>Technology &middot; 2 hours ago</span>
+                  </div>
+                </div>
+                <h3 className={styles.updateTitle}>Register for the Hackathon</h3>
+                <p className={styles.updateSummary}>Join the community hackathon at Khoja Masjid Imambada Hall Dongri. Build innovative solutions, collaborate with peers, and showcase your coding skills. Prizes for the top teams.</p>
+                <div className={styles.readMoreLink}>Read more <span className={styles.linkArrow}>&rarr;</span></div>
+              </Link>
+
+              <Link href="/updates/ai-bootcamp" className={styles.updateRow}>
+                <div className={styles.updateSource}>
+                  <div className={styles.updateAvatar} style={{backgroundColor: '#0284c7'}}>E</div>
+                  <div className={styles.updateMeta}>
+                    <span className={styles.updateAuthor}>Education Board</span>
+                    <span className={styles.updateTime}>Education &middot; 1 month ago</span>
+                  </div>
+                </div>
+                <h3 className={styles.updateTitle}>AI 2-Day Boot Camp</h3>
+                <p className={styles.updateSummary}>A successful conclusion to our intensive AI 2-day boot camp, where students learned the fundamentals of machine learning and modern AI development.</p>
+                <div className={styles.readMoreLink}>Read more <span className={styles.linkArrow}>&rarr;</span></div>
+              </Link>
+
+              <Link href="/updates" className={styles.viewAllBtn}>View all updates <span className={styles.linkArrow}>&rarr;</span></Link>
+            </div>
+          </section>
         </div>
+
+        {/* RIGHT COLUMN: Sidebar (Editorial Style) */}
+        <aside className={`${styles.sidebar} animateFadeUp delay-300`}>
+          
+          <section className={styles.sidebarSection}>
+            <div className={styles.sidebarHeader}>
+              <h2 className={styles.sidebarTitle}>Upcoming events</h2>
+              <Link href="/events" className={styles.sidebarLink}>See all <span className={styles.linkArrow}>&rarr;</span></Link>
+            </div>
+            
+            <div className={styles.eventsList}>
+              <Link href="/events/hackathon" className={styles.eventRow}>
+                <div className={styles.eventDate}>
+                  <span className={styles.dateMonth}>OCT</span>
+                  <span className={styles.dateDay}>04</span>
+                  <div style={{ width: '2px', height: '16px', backgroundColor: 'var(--color-accent-gold)', marginTop: '4px', borderRadius: '2px' }}></div>
+                </div>
+                <div className={styles.eventDetails}>
+                  <h3 className={styles.eventTitle}>Hackathon</h3>
+                  <p className={styles.eventInfo}>Khoja Masjid Imambada Hall Dongri</p>
+                  <div className={styles.eventLink}>View event <span className={styles.linkArrow}>&rarr;</span></div>
+                </div>
+              </Link>
+
+              <Link href="/events/nasr-cup" className={styles.eventRow}>
+                <div className={styles.eventDate}>
+                  <span className={styles.dateMonth}>OCT</span>
+                  <span className={styles.dateDay}>11</span>
+                  <div style={{ width: '2px', height: '16px', backgroundColor: 'var(--color-accent-gold)', marginTop: '4px', borderRadius: '2px' }}></div>
+                </div>
+                <div className={styles.eventDetails}>
+                  <h3 className={styles.eventTitle}>NASR Football Cup</h3>
+                  <p className={styles.eventInfo}>Venue TBD</p>
+                  <div className={styles.eventLink}>View event <span className={styles.linkArrow}>&rarr;</span></div>
+                </div>
+              </Link>
+            </div>
+          </section>
+          
+        </aside>
+
       </div>
     </div>
   );

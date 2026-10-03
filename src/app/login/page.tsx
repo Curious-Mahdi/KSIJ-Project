@@ -13,18 +13,18 @@ export default function LoginPage() {
       <div className={styles.brandPanel}>
         <div>
           <div className={styles.brandLogo}>
-            <span>✨</span> KSIJ Reload
+            KSIJ Reload
           </div>
           
           <div className={styles.brandContent}>
             <h1 className={styles.brandStatement}>
               One community.<br/>
-              Every profession.<br/>
-              <span className={styles.brandAccent}>Verified.</span>
+              One place.<br/>
+              <span className={styles.brandAccent}>Everything connected.</span>
             </h1>
             
             <p className={styles.brandDescription}>
-              A trusted space where KSIJ professionals worldwide connect, find opportunities, and guide the next generation — built on the World Federation community.
+              One place for everything your community has to offer. A simpler way to access, discover and stay connected with your community.
             </p>
           </div>
         </div>
@@ -41,7 +41,7 @@ export default function LoginPage() {
           
           <h2 className={styles.welcomeTitle}>Welcome back</h2>
           <p className={styles.welcomeText}>
-            Continue with your Google account to sign in or create your profile.
+            Continue with your Google account to access KSIJ Reload and everything your community has to offer.
           </p>
 
           <button 
@@ -59,11 +59,26 @@ export default function LoginPage() {
 
           <button className={styles.oneIdBtn} disabled>
             <span className={styles.comingSoonBadge}>COMING SOON</span>
-            Sign in with One ID
+            
+            <div className={styles.oneIdBranding}>
+              <svg className={styles.oneIdIcon} width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="16" stroke="#404040" strokeWidth="3" strokeDasharray="4 2"/>
+                <circle cx="20" cy="20" r="10" stroke="#404040" strokeWidth="2.5"/>
+                <path d="M20 14L25 17V23L20 26L15 23V17L20 14Z" fill="none" stroke="#404040" strokeWidth="2" strokeLinejoin="round"/>
+              </svg>
+              <div className={styles.oneIdTextStack}>
+                <div className={styles.oneIdLogoText}>
+                  <span className={styles.oneIdOne}>One</span><span className={styles.oneIdID}>ID</span>
+                </div>
+                <div className={styles.oneIdByWf}>BY WF</div>
+              </div>
+            </div>
+
+            <span className={styles.oneIdBtnText}>Sign in with One ID</span>
           </button>
 
           <p className={styles.disclaimerText}>
-            Signing in creates your KSIJ Reload profile. New members are reviewed by their jamaat before going live, and you choose who can find you.
+            New accounts are reviewed and verified before access to KSIJ Reload is granted.
           </p>
 
           <div className={styles.legalLinks}>
