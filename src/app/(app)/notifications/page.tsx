@@ -1,9 +1,15 @@
-"use client";
-
 import styles from "./page.module.css";
-import { Bell } from "lucide-react";
+import { Bell, MessageCircle } from "lucide-react";
+import { getMyDirectory } from "@/lib/actions/directory";
+import Link from "next/link";
 
-export default function NotificationsPage() {
+export default async function NotificationsPage() {
+  let activeConversations: any[] = [];
+  try {
+    const data = await getMyDirectory();
+    activeConversations = data.activeConversations;
+  } catch (e) {}
+
   return (
     <div className={styles.container}>
       <h1 className="h2 mb-24">Notifications</h1>
@@ -16,6 +22,24 @@ export default function NotificationsPage() {
       </div>
 
       <div className={styles.notificationList}>
+        {activeConversations.map(conv => (
+          <Link href={`/directory/chat/${conv.id}`} key={conv.id} style={{textDecoration: 'none', color: 'inherit'}}>
+            <div className={`${styles.notificationCard} ${conv.status === 'NEW' ? styles.unread : ''}`}>
+              <div className={styles.iconWrapper} style={{ backgroundColor: 'var(--color-primary)', color: 'white' }}>
+                <MessageCircle size={20} />
+              </div>
+              <div className={styles.content}>
+                <h4 className="h3" style={{ fontSize: '1rem', marginBottom: '4px' }}>
+                  New Message from {conv.initiatedBy?.name || conv.listing?.name}
+                </h4>
+                <p className="small-text">You have an active inquiry regarding your directory listing.</p>
+                <span className={styles.time}>Just now</span>
+              </div>
+              {conv.status === 'NEW' && <div className={styles.unreadDot}></div>}
+            </div>
+          </Link>
+        ))}
+
         {/* Sample Notification 1 */}
         <div className={`${styles.notificationCard} ${styles.unread}`}>
           <div className={styles.iconWrapper}>

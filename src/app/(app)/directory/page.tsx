@@ -27,6 +27,15 @@ export default async function DirectoryPage() {
         <div className="animateFadeUp">
           <h1 className={styles.title}>Directory</h1>
           <p className={styles.subtitle}>Find businesses, professionals and services across the community.</p>
+          
+          <div className={styles.headerActions}>
+            <Link href="/directory/my-directory" className={styles.secondaryBtn}>
+              My Dashboard & Chats
+            </Link>
+            <Link href="/directory/list-yourself" className={styles.primaryBtn}>
+              List Yourself <ArrowRight size={16} style={{marginLeft: '8px'}} />
+            </Link>
+          </div>
         </div>
 
         <div className={`${styles.searchContainer} animateFadeUp delay-100`}>
