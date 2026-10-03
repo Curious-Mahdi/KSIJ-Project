@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, Grid, Users, Calendar, MoreHorizontal, Bell } from "lucide-react";
+import { Home, Grid, Users, Store, Calendar, MoreHorizontal, Bell } from "lucide-react";
 import { useSession } from "next-auth/react";
 import styles from "./layout.module.css";
 
@@ -52,6 +52,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Link href="/home" className={`${styles.navLink} ${pathname === '/home' ? styles.navLinkActive : ''}`}>Home</Link>
           <Link href="/services" className={`${styles.navLink} ${pathname === '/services' ? styles.navLinkActive : ''}`}>Services</Link>
           <Link href="/directory" className={`${styles.navLink} ${pathname === '/directory' ? styles.navLinkActive : ''}`}>Directory</Link>
+          <Link href="/marketplace" className={`${styles.navLink} ${pathname.startsWith('/marketplace') ? styles.navLinkActive : ''}`}>Marketplace</Link>
           <Link href="/events" className={`${styles.navLink} ${pathname === '/events' ? styles.navLinkActive : ''}`}>Events</Link>
         </nav>
 
@@ -88,13 +89,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Grid size={24} />
           <span>Services</span>
         </Link>
-        <Link href="/directory" className={`${styles.bottomNavItem} ${pathname === '/directory' ? styles.bottomNavActive : ''}`}>
+        <Link href="/directory" className={`${styles.bottomNavItem} ${pathname.startsWith('/directory') ? styles.bottomNavActive : ''}`}>
           <Users size={24} />
           <span>Directory</span>
         </Link>
-        <Link href="/events" className={`${styles.bottomNavItem} ${pathname === '/events' ? styles.bottomNavActive : ''}`}>
-          <Calendar size={24} />
-          <span>Events</span>
+        <Link href="/marketplace" className={`${styles.bottomNavItem} ${pathname.startsWith('/marketplace') ? styles.bottomNavActive : ''}`}>
+          <Store size={24} />
+          <span>Market</span>
         </Link>
         <Link href="/more" className={`${styles.bottomNavItem} ${pathname === '/more' ? styles.bottomNavActive : ''}`}>
           <MoreHorizontal size={24} />

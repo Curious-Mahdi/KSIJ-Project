@@ -31,23 +31,26 @@ export default async function NotificationsPage() {
       </div>
 
       <div className={styles.notificationList}>
-        {activeConversations.filter(c => c.ownerId === userId && c.status === 'NEW').map(conv => (
-          <Link href={`/directory/chat/${conv.id}`} key={conv.id} style={{textDecoration: 'none', color: 'inherit'}}>
-            <div className={`${styles.notificationCard} ${styles.unread}`}>
-              <div className={styles.iconWrapper} style={{ backgroundColor: 'var(--color-primary)', color: 'white' }}>
-                <MessageCircle size={20} />
+        {activeConversations.filter(c => c.ownerId === userId && c.status === 'NEW').map(conv => {
+          const entityName = conv.listing?.name || conv.marketplaceListing?.title || conv.communityProperty?.name || "a listing";
+          return (
+            <Link href={`/directory/chat/${conv.id}`} key={conv.id} style={{textDecoration: 'none', color: 'inherit'}}>
+              <div className={`${styles.notificationCard} ${styles.unread}`}>
+                <div className={styles.iconWrapper} style={{ backgroundColor: 'var(--color-primary)', color: 'white' }}>
+                  <MessageCircle size={20} />
+                </div>
+                <div className={styles.content}>
+                  <h4 className="h3" style={{ fontSize: '1rem', marginBottom: '4px' }}>
+                    New Inquiry from {conv.initiatedBy?.name || "Someone"}
+                  </h4>
+                  <p className="small-text">You have a new inquiry regarding your listing: {entityName}</p>
+                  <span className={styles.time}>Just now</span>
+                </div>
+                <div className={styles.unreadDot}></div>
               </div>
-              <div className={styles.content}>
-                <h4 className="h3" style={{ fontSize: '1rem', marginBottom: '4px' }}>
-                  New Inquiry from {conv.initiatedBy?.name || "Someone"}
-                </h4>
-                <p className="small-text">You have a new inquiry regarding your listing: {conv.listing?.name}</p>
-                <span className={styles.time}>Just now</span>
-              </div>
-              <div className={styles.unreadDot}></div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          );
+        })}
 
         {/* Sample Notification 1 */}
         <div className={`${styles.notificationCard} ${styles.unread}`}>

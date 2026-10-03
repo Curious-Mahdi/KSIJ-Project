@@ -15,6 +15,7 @@ model User {
   email          String?  @unique
   profilePhoto   String?
   jamaat         String?
+  isAdmin        Boolean  @default(false)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -23,6 +24,10 @@ model User {
   ownedConversations     Conversation[]     @relation("OwnedConversations")
   messages               Message[]
   contactShares          ContactShare[]
+
+  marketplaceListings    MarketplaceListing[]
+  communityProperties    CommunityProperty[] @relation("ManagedProperties")
+  marketplaceReports     MarketplaceReport[]
 }
 
 model DirectoryListing {
@@ -76,8 +81,16 @@ model DirectoryContact {
 
 model Conversation {
   id           String   @id @default(cuid())
-  listingId    String
-  listing      DirectoryListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  
+  // Polymorphic relations (one of these will be set)
+  listingId    String?
+  listing      DirectoryListing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  
+  marketplaceListingId String?
+  marketplaceListing   MarketplaceListing? @relation(fields: [marketplaceListingId], references: [id], onDelete: Cascade)
+  
+  communityPropertyId  String?
+  communityProperty    CommunityProperty? @relation(fields: [communityPropertyId], references: [id], onDelete: Cascade)
   
   initiatedById String
   initiatedBy  User     @relation("InitiatedConversations", fields: [initiatedById], references: [id], onDelete: Cascade)
@@ -121,4 +134,116 @@ model ContactShare {
   emailShared    Boolean  @default(false)
   
   createdAt      DateTime @default(now())
+}
+
+// ==========================================
+// MARKETPLACE MODELS
+// ==========================================
+
+model MarketplaceListing {
+  id               String   @id @default(cuid())
+  sellerId         String
+  seller           User     @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  
+  category         String   // PROPERTY, VEHICLES, ELECTRONICS, FURNITURE, HOME_APPLIANCES, BOOKS_EDUCATION, CLOTHING_ACCESSORIES, OTHER
+  transactionType  String   // SALE, RENT, LEASE, FREE, OTHER
+  
+  title            String
+  shortDescription String
+  description      String?
+  
+  price            Float?
+  currency         String   @default("INR")
+  isNegotiable     Boolean  @default(false)
+  
+  condition        String?  // New, Used - Good, Used - Fair
+  
+  // Location
+  location         String?
+  city             String?
+  area             String?
+  
+  // Property Specific fields
+  propertyType     String?  // Residential, Commercial, Land, Other
+  bedrooms         Int?
+  bathrooms        Int?
+  propertyArea     String?
+  furnishing       String?  // Furnished, Semi-furnished, Unfurnished
+  features         String?  // JSON or CSV
+  
+  // Vehicle Specific fields
+  vehicleType      String?
+  brand            String?
+  model            String?
+  year             Int?
+  kilometers       Int?
+  
+  status           String   @default("PUBLISHED") // DRAFT, PUBLISHED, PAUSED, SOLD, RENTED, CLOSED, ARCHIVED
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  images           MarketplaceImage[]
+  conversations    Conversation[]
+  reports          MarketplaceReport[]
+}
+
+model MarketplaceImage {
+  id                 String   @id @default(cuid())
+  listingId          String
+  listing            MarketplaceListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  url                String
+  sortOrder          Int      @default(0)
+  createdAt          DateTime @default(now())
+}
+
+model CommunityProperty {
+  id               String   @id @default(cuid())
+  name             String
+  propertyType     String   // Hall, Imambara, Resort, Event Space, Sports Facility, Other
+  description      String
+  
+  managedById      String
+  managedBy        User     @relation("ManagedProperties", fields: [managedById], references: [id], onDelete: Cascade)
+  
+  location         String?
+  city             String?
+  
+  capacity         Int?
+  pricing          String?  // E.g. "₹5,000 onwards"
+  facilities       String?  // JSON or CSV
+  availabilityInfo String?
+  
+  status           String   @default("PUBLISHED") // DRAFT, PUBLISHED, PAUSED, ARCHIVED
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  images           CommunityPropertyImage[]
+  enquiries        Conversation[]
+}
+
+model CommunityPropertyImage {
+  id                 String   @id @default(cuid())
+  propertyId         String
+  property           CommunityProperty @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  url                String
+  sortOrder          Int      @default(0)
+  createdAt          DateTime @default(now())
+}
+
+model MarketplaceReport {
+  id                 String   @id @default(cuid())
+  listingId          String
+  listing            MarketplaceListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  
+  reporterId         String
+  reporter           User     @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  
+  reason             String   // Scam, Misleading, Prohibited, Inappropriate, Duplicate, Other
+  details            String?
+  
+  status             String   @default("PENDING") // PENDING, REVIEWED, DISMISSED, ACTION_TAKEN
+  
+  createdAt          DateTime @default(now())
 }

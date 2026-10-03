@@ -6,7 +6,7 @@ import { sendMessage, shareContact, markConversationCompleted, markConversationR
 import styles from "./page.module.css";
 import { Send, Phone, Mail, CheckCircle2 } from "lucide-react";
 
-export default function ChatInterface({ conversation, currentUserId }: { conversation: any, currentUserId: string }) {
+export default function ChatInterface({ conversation, currentUserId, entityName = "the listing" }: { conversation: any, currentUserId: string, entityName?: string }) {
   const [text, setText] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -79,7 +79,7 @@ export default function ChatInterface({ conversation, currentUserId }: { convers
         <div className={styles.messageList}>
           
           <div className={styles.systemMessage}>
-            Conversation started regarding <strong>{conversation.listing.name}</strong>
+            Conversation started regarding <strong>{entityName}</strong>
           </div>
 
           {conversation.messages.map((msg: any) => {
