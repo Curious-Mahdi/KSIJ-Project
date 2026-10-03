@@ -21,7 +21,53 @@
   font-size: 1.25rem;
   color: var(--color-text-secondary);
   max-width: 600px;
-  margin: 0 auto var(--space-40);
+  margin: 0 auto var(--space-32);
+}
+
+.headerActions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-16);
+  margin-bottom: var(--space-40);
+  flex-wrap: wrap;
+}
+
+.primaryBtn {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.primaryBtn:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.secondaryBtn {
+  background-color: var(--color-surface);
+  color: var(--color-text-main);
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.secondaryBtn:hover {
+  background-color: var(--color-surface-alt);
+  border-color: var(--color-border-hover);
+  transform: translateY(-2px);
 }
 
 .searchContainer {
