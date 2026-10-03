@@ -5,7 +5,7 @@ import cardStyles from "../page.module.css";
 import { getCommunityProperties } from "@/lib/actions/marketplace";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 export default async function CommunityPropertiesPage({ searchParams }: { searchParams: any }) {
   const properties = await getCommunityProperties(searchParams);
