@@ -169,6 +169,12 @@ export async function getConversation(conversationId: string) {
           contact: true
         }
       },
+      marketplaceListing: {
+        include: { seller: { select: { id: true, name: true, profilePhoto: true } } }
+      },
+      communityProperty: {
+        include: { managedBy: { select: { id: true, name: true, profilePhoto: true } } }
+      },
       initiatedBy: { select: { id: true, name: true, profilePhoto: true } },
       messages: {
         orderBy: { createdAt: 'asc' },
@@ -299,6 +305,8 @@ export async function getMyDirectory() {
     },
     include: {
       listing: { select: { name: true } },
+      marketplaceListing: { select: { title: true } },
+      communityProperty: { select: { name: true } },
       initiatedBy: { select: { name: true } },
       owner: { select: { name: true } }
     },
