@@ -7,18 +7,6 @@ async function main() {
 
   // Create 5 fake users to own these listings
   const fakeUsers = [];
-  
-  // Shujaat (Cybercart Owner)
-  const shujaat = await prisma.user.upsert({
-    where: { email: `codingwithali72@gmail.com` },
-    update: {},
-    create: {
-      googleId: `117594228546420565527`,
-      email: `codingwithali72@gmail.com`,
-      name: `Shujaat Ali Punjani`,
-    },
-  });
-  fakeUsers.push(shujaat);
 
   for (let i = 1; i <= 5; i++) {
     const user = await prisma.user.upsert({
@@ -34,24 +22,6 @@ async function main() {
   }
 
   const listingsData = [
-    // CYBERCART SOLUTIONS
-    {
-      ownerId: fakeUsers[0].id,
-      listingType: "Service",
-      name: "Cybercart solutions",
-      shortDescription: "All Types of web solutions",
-      description: "We build blazing fast modern applications.",
-      category: "Technology & Digital",
-      subcategory: "Web developer",
-      services: JSON.stringify(["web design","website","digital","marketing","business"]),
-      skills: JSON.stringify([]),
-      location: "Mumbai",
-      serviceMode: "Both",
-      status: "PUBLISHED",
-      contact: {
-        create: { phoneVisibility: "CHAT_ONLY", emailVisibility: "CHAT_ONLY" }
-      }
-    },
     // Web Developers (overlapping)
     {
       ownerId: fakeUsers[0].id,
