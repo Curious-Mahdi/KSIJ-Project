@@ -12,7 +12,8 @@
 
 # testing
 /coverage
-
+/Extra-sibtain
+/.agents
 # next.js
 /.next/
 /out/
