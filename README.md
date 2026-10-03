@@ -2,8 +2,21 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+### 1. Environment Setup
+Copy the example environment file to `.env`:
+```bash
+cp .env.example .env
+```
+Update `.env` with your Google OAuth and secret keys if needed.
 
+### 2. Database Setup
+Push schema and seed initial data:
+```bash
+npx prisma db push
+npx prisma db seed
+```
+
+### 3. Run the development server
 ```bash
 npm run dev
 # or
