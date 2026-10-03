@@ -1,0 +1,313 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-24) var(--space-16) var(--space-80);
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 80px); /* minus header */
+}
+
+.header {
+  background-color: var(--color-surface);
+  border-radius: 1.5rem;
+  padding: var(--space-16) var(--space-24);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  margin-bottom: var(--space-24);
+  flex-shrink: 0;
+}
+
+.headerInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--color-primary);
+  border: 1px solid var(--color-border);
+}
+
+.listingName {
+  font-weight: 700;
+  font-size: 1.125rem;
+  margin-bottom: 2px;
+}
+
+.status {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.statusIndicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+}
+
+.headerActions {
+  display: flex;
+  gap: var(--space-12);
+}
+
+.chatArea {
+  flex: 1;
+  background-color: var(--color-surface);
+  border-radius: 1.5rem;
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.messageList {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-24);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.messageWrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+}
+
+.messageWrapper.mine {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.messageWrapper.theirs {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.messageBubble {
+  padding: 12px 16px;
+  border-radius: 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.mine .messageBubble {
+  background-color: var(--color-primary);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.theirs .messageBubble {
+  background-color: var(--color-surface-alt);
+  color: var(--color-text-main);
+  border-bottom-left-radius: 4px;
+}
+
+.messageTime {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+.systemMessage {
+  align-self: center;
+  background-color: var(--color-surface-success);
+  color: var(--color-primary-dark);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  margin: var(--space-16) 0;
+  border: 1px solid rgba(11,81,51,0.1);
+  text-align: center;
+}
+
+.contactCard {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-primary-light);
+  border-radius: 1rem;
+  padding: var(--space-16);
+  margin-top: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 300px;
+}
+
+.contactCardTitle {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 8px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 0.9375rem;
+}
+
+.contactItem:last-child {
+  margin-bottom: 0;
+}
+
+.inputArea {
+  padding: var(--space-16);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+}
+
+.inputForm {
+  display: flex;
+  gap: var(--space-12);
+  align-items: flex-end;
+}
+
+.input {
+  flex: 1;
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: 1.5rem;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: none;
+  max-height: 120px;
+  min-height: 48px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input:focus {
+  border-color: var(--color-primary);
+  background-color: var(--color-surface);
+}
+
+.sendBtn {
+  background-color: var(--color-primary);
+  color: white;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.sendBtn:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+
+.sendBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.actionBtn {
+  background-color: var(--color-surface-alt);
+  color: var(--color-text-main);
+  border: 1px solid var(--color-border);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.actionBtn:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-text-muted);
+}
+
+.actionBtn.primary {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.actionBtn.primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: var(--color-surface);
+  border-radius: 1.5rem;
+  padding: var(--space-32);
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.1);
+}
+
+.modalTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: var(--space-8);
+}
+
+.modalDesc {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-24);
+  font-size: 0.9375rem;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.checkbox input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary);
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+}

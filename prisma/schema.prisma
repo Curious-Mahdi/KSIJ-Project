@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -16,4 +17,108 @@ model User {
   jamaat         String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+
+  listings               DirectoryListing[]
+  initiatedConversations Conversation[]     @relation("InitiatedConversations")
+  ownedConversations     Conversation[]     @relation("OwnedConversations")
+  messages               Message[]
+  contactShares          ContactShare[]
+}
+
+model DirectoryListing {
+  id               String   @id @default(cuid())
+  ownerId          String
+  owner            User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  listingType      String   // BUSINESS, SERVICE, PROFESSIONAL
+  name             String   // Business name or Professional name
+  shortDescription String
+  description      String?
+  
+  category         String
+  subcategory      String?
+  services         String   // JSON string or comma separated
+  skills           String?  // JSON string or comma separated
+  keywords         String?  // JSON string or comma separated
+  
+  location         String?
+  serviceArea      String?
+  serviceMode      String?  // Online, In-person, Both
+  
+  image            String?
+  website          String?
+  
+  status           String   @default("PUBLISHED") // DRAFT, PUBLISHED, PAUSED, ARCHIVED
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  contact          DirectoryContact?
+  conversations    Conversation[]
+}
+
+model DirectoryContact {
+  id                 String   @id @default(cuid())
+  listingId          String   @unique
+  listing            DirectoryListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  
+  phone              String?
+  whatsapp           String?
+  email              String?
+  
+  phoneVisibility    String   @default("CHAT_ONLY") // PUBLIC, CHAT_ONLY, PRIVATE
+  whatsappVisibility String   @default("CHAT_ONLY")
+  emailVisibility    String   @default("CHAT_ONLY")
+  
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Conversation {
+  id           String   @id @default(cuid())
+  listingId    String
+  listing      DirectoryListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  
+  initiatedById String
+  initiatedBy  User     @relation("InitiatedConversations", fields: [initiatedById], references: [id], onDelete: Cascade)
+  
+  ownerId      String
+  owner        User     @relation("OwnedConversations", fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  status       String   @default("NEW") // NEW, IN_CONVERSATION, CONTACT_SHARED, COMPLETED, CLOSED
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  messages       Message[]
+  contactShares  ContactShare[]
+}
+
+model Message {
+  id             String   @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  senderId       String
+  sender         User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  
+  message        String
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model ContactShare {
+  id             String   @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  sharedById     String
+  sharedBy       User     @relation(fields: [sharedById], references: [id], onDelete: Cascade)
+  
+  phoneShared    Boolean  @default(false)
+  whatsappShared Boolean  @default(false)
+  emailShared    Boolean  @default(false)
+  
+  createdAt      DateTime @default(now())
 }
