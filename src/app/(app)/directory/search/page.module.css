@@ -1,0 +1,216 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-40) var(--space-16) var(--space-80);
+}
+
+.header {
+  margin-bottom: var(--space-40);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: var(--color-primary);
+  margin-bottom: var(--space-16);
+}
+
+.layout {
+  display: flex;
+  gap: var(--space-40);
+  align-items: flex-start;
+}
+
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  background-color: var(--color-surface);
+  border-radius: 1.5rem;
+  padding: var(--space-24);
+  border: 1px solid var(--color-border);
+}
+
+.filterGroup {
+  margin-bottom: var(--space-24);
+}
+
+.filterGroup:last-child {
+  margin-bottom: 0;
+}
+
+.filterTitle {
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--color-text-main);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-12);
+}
+
+.filterLink {
+  display: block;
+  padding: 8px 12px;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.9375rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+}
+
+.filterLink:hover {
+  background-color: var(--color-surface-hover);
+  color: var(--color-primary);
+}
+
+.filterLinkActive {
+  background-color: var(--color-surface-success);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.results {
+  flex: 1;
+}
+
+.resultsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-24);
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+}
+
+.listingList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+.listingCard {
+  background-color: var(--color-surface);
+  border-radius: 1.5rem;
+  padding: var(--space-24);
+  border: 1px solid var(--color-border);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.listingCard:hover {
+  border-color: var(--color-primary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -8px rgba(0,0,0,0.08);
+}
+
+.cardHeader {
+  display: flex;
+  gap: var(--space-16);
+  align-items: center;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  border: 1px solid var(--color-border);
+}
+
+.cardMeta {
+  flex: 1;
+}
+
+.cardType {
+  font-size: 0.75rem;
+  color: var(--color-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.cardSubcat {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.cardDesc {
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.cardTags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-full);
+  color: var(--color-text-main);
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-16);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.linkArrow {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.listingCard:hover .linkArrow {
+  background-color: rgba(11,81,51,0.1);
+  color: var(--color-primary);
+  transform: translate(2px, -2px);
+}
+
+.emptyState {
+  text-align: center;
+  padding: var(--space-64);
+  background-color: var(--color-surface);
+  border-radius: 1.5rem;
+  border: 1px solid var(--color-border);
+}
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+  }
+}

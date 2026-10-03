@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&display=swap');
 @import "tailwindcss";
 :root {
   /* Core Colors - Light Premium Theme */
-  --color-background: #FAFAF8; /* Light warm neutral */
+  --color-background: #F3F4F0; /* Warm bone/silver for contrast */
   --color-surface: #FFFFFF; /* Bright white */
   --color-surface-hover: #F8F9F6;
-  --color-surface-alt: #F3F4F0;
+  --color-surface-alt: #E8EBE6;
   
   --color-primary: #0B5133; /* Deep green */
   --color-primary-dark: #083D26; 
@@ -57,7 +57,7 @@
   --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.06);
 
   /* Typography */
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-serif: 'Playfair Display', Georgia, serif;
 }
 
@@ -80,16 +80,18 @@ body {
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(15px);
+    transform: translateY(32px);
+    filter: blur(4px);
   }
   to {
     opacity: 1;
     transform: none;
+    filter: blur(0px);
   }
 }
 
 .animateFadeUp {
-  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeUp 0.9s cubic-bezier(0.32, 0.72, 0, 1) forwards;
   opacity: 0;
 }
 .delay-100 { animation-delay: 100ms; }
