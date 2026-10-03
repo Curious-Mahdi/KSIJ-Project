@@ -1,10 +1,12 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [vector]
 }
 
 model User {
@@ -16,4 +18,41 @@ model User {
   jamaat         String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model KnowledgeDocument {
+  id            String   @id @default(cuid())
+  title         String
+  description   String?
+  category      String?
+  documentType  String?
+  schemeId      String?
+  version       String?
+  status        String   @default("active")
+  language      String   @default("en")
+  jurisdiction  String?
+  sourceUrl     String?
+  effectiveFrom DateTime?
+  effectiveTo   DateTime?
+  fileName      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  chunks        KnowledgeChunk[]
+}
+
+model KnowledgeChunk {
+  id            String   @id @default(cuid())
+  documentId    String
+  content       String
+  chunkIndex    Int
+  section       String?
+  pageNumber    Int?
+  
+  // 384 dimensions is standard for all-MiniLM-L6-v2
+  embedding     Unsupported("vector(384)")?
+
+  createdAt     DateTime @default(now())
+
+  document      KnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
 }

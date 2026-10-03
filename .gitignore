@@ -12,8 +12,7 @@
 
 # testing
 /coverage
-/Extra-sibtain
-/.agents
+
 # next.js
 /.next/
 /out/
@@ -24,6 +23,7 @@
 # misc
 .DS_Store
 *.pem
+Thumbs.db
 
 # debug
 npm-debug.log*
@@ -35,7 +35,7 @@ yarn-error.log*
 .env*
 !.env.example
 
-# sqlite database
+# database
 prisma/*.db
 prisma/*.db-journal
 *.sqlite
@@ -45,4 +45,13 @@ prisma/*.db-journal
 *.tsbuildinfo
 next-env.d.ts
 
+# AI tool configs
 /.agents
+/.claude
+/.cursor
+/.devin
+CLAUDE.md
+AGENTS.md
+
+# project-specific
+/Extra-sibtain
