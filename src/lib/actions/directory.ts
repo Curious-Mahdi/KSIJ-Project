@@ -63,15 +63,25 @@ export async function getDirectoryListings(searchParams?: {
   };
 
   if (searchParams?.q) {
-    whereClause.OR = [
-      { name: { contains: searchParams.q, mode: 'insensitive' } },
-      { shortDescription: { contains: searchParams.q, mode: 'insensitive' } },
-      { description: { contains: searchParams.q, mode: 'insensitive' } },
-      { category: { contains: searchParams.q, mode: 'insensitive' } },
-      { subcategory: { contains: searchParams.q, mode: 'insensitive' } },
-      { services: { contains: searchParams.q, mode: 'insensitive' } },
-      { skills: { contains: searchParams.q, mode: 'insensitive' } },
-    ];
+    // Format for Postgres full-text search (web development -> web | development)
+    const formattedQuery = searchParams.q
+      .trim()
+      .split(/\s+/)
+      .map(word => word.replace(/[^a-zA-Z0-9]/g, '')) // basic sanitization
+      .filter(word => word.length > 0)
+      .join(' | ');
+
+    if (formattedQuery) {
+      whereClause.OR = [
+        { name: { search: formattedQuery } },
+        { shortDescription: { search: formattedQuery } },
+        { description: { search: formattedQuery } },
+        { category: { search: formattedQuery } },
+        { subcategory: { search: formattedQuery } },
+        { services: { search: formattedQuery } },
+        { skills: { search: formattedQuery } },
+      ];
+    }
   }
 
   if (searchParams?.type && searchParams.type !== 'All') {

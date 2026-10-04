@@ -16,11 +16,20 @@ export async function getMarketplaceListings(params: any = {}) {
     where.transactionType = params.transactionType;
   }
   if (params.query) {
-    where.OR = [
-      { title: { contains: params.query, mode: 'insensitive' } },
-      { description: { contains: params.query, mode: 'insensitive' } },
-      { location: { contains: params.query, mode: 'insensitive' } }
-    ];
+    const formattedQuery = params.query
+      .trim()
+      .split(/\s+/)
+      .map((word: string) => word.replace(/[^a-zA-Z0-9]/g, ''))
+      .filter((word: string) => word.length > 0)
+      .join(' | ');
+
+    if (formattedQuery) {
+      where.OR = [
+        { title: { search: formattedQuery } },
+        { description: { search: formattedQuery } },
+        { location: { search: formattedQuery } }
+      ];
+    }
   }
 
   const listings = await prisma.marketplaceListing.findMany({
@@ -36,11 +45,20 @@ export async function getCommunityProperties(params: any = {}) {
   const where: any = { status: "PUBLISHED" };
   
   if (params.query) {
-    where.OR = [
-      { name: { contains: params.query, mode: 'insensitive' } },
-      { description: { contains: params.query, mode: 'insensitive' } },
-      { location: { contains: params.query, mode: 'insensitive' } }
-    ];
+    const formattedQuery = params.query
+      .trim()
+      .split(/\s+/)
+      .map((word: string) => word.replace(/[^a-zA-Z0-9]/g, ''))
+      .filter((word: string) => word.length > 0)
+      .join(' | ');
+
+    if (formattedQuery) {
+      where.OR = [
+        { name: { search: formattedQuery } },
+        { description: { search: formattedQuery } },
+        { location: { search: formattedQuery } }
+      ];
+    }
   }
   
   if (params.type && params.type !== 'All Types') {
