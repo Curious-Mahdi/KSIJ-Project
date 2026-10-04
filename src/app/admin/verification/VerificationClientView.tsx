@@ -463,7 +463,7 @@ export default function VerificationClientView({ organizations, initialAuditLogs
                 ) : (
                   auditLogs.slice(0, 10).map((log) => (
                     <tr key={log.id}>
-                      <td style={{ fontSize: "0.6875rem", color: "#64748B" }}>
+                      <td style={{ fontSize: "0.6875rem", color: "#64748B" }} suppressHydrationWarning>
                         {new Date(log.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                         <br />
                         {new Date(log.createdAt).toLocaleDateString([], { day: "numeric", month: "short" })}
