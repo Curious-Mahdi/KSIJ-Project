@@ -43,7 +43,7 @@ export default async function OpportunityDetailPage({ params }: { params: Promis
           <div className={styles.org}>
             {opportunity.organisationName}
             {opportunity.verificationStatus === 'VERIFIED' && (
-              <CheckCircle2 size={18} className={styles.verifiedIcon} title="Verified Organisation" />
+              <span title="Verified Organisation"><CheckCircle2 size={18} className={styles.verifiedIcon} /></span>
             )}
           </div>
 

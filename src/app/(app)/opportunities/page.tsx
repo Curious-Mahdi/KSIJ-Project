@@ -244,7 +244,7 @@ export default async function OpportunitiesPage({ searchParams }: { searchParams
                     <div className={styles.cardOrg}>
                       {opp.organisationName}
                       {opp.verificationStatus === 'VERIFIED' && (
-                        <CheckCircle2 size={16} className={styles.verifiedIcon} title="Verified Organisation" />
+                        <span title="Verified Organisation"><CheckCircle2 size={16} className={styles.verifiedIcon} /></span>
                       )}
                     </div>
 
