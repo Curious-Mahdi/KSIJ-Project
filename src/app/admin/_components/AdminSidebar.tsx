@@ -11,6 +11,7 @@ import {
   Megaphone,
   Inbox,
   BarChart3,
+  ShieldCheck,
 } from "lucide-react";
 import styles from "../admin.module.css";
 
@@ -31,6 +32,16 @@ const NAV_ITEMS: NavItem[] = [
     label: "Analytics",
     href: "/admin/analytics",
     icon: BarChart3,
+  },
+  {
+    label: "Assistance Verification",
+    href: "/admin/verification",
+    icon: ShieldCheck,
+  },
+  {
+    label: "Assistance Registry",
+    href: "/admin/registry",
+    icon: ShieldCheck,
   },
   {
     label: "Services",

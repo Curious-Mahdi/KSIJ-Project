@@ -30,10 +30,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     if (status === "authenticated") {
       const interval = setInterval(() => {
         router.refresh();
-      }, 5000);
+      }, 3000); // Poll every 3 seconds
       return () => clearInterval(interval);
     }
   }, [status, router]);
+
 
   if (isProtectedRoute && (status === "loading" || status === "unauthenticated")) {
     return null;
@@ -45,6 +46,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   const navRoutes = ['home', 'services', 'directory', 'opportunities', 'venues', 'events'];
 
+
   return (
     <div className={styles.appLayout}>
       {/* Top Header */}
@@ -55,7 +57,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {/* Mobile Title */}
         <span className={styles.mobileTitle}>KSIJ One</span>
 
-        {/* Desktop Navigation with Animated Tab Indicators */}
+        {/* Desktop Navigation */}
         <nav className={styles.desktopNav}>
           {navRoutes.map((route) => {
             const isActive = pathname.startsWith(`/${route}`);
@@ -139,7 +141,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Home size={24} />
           <span>Home</span>
         </Link>
-        <Link href="/services" className={`${styles.bottomNavItem} ${pathname.startsWith('/services') ? styles.bottomNavActive : ''}`}>
+        <Link href="/services" className={`${styles.bottomNavItem} ${pathname === '/services' ? styles.bottomNavActive : ''}`}>
           <Grid size={24} />
           <span>Services</span>
         </Link>

@@ -89,7 +89,7 @@ export default function LoginPage() {
                   gap: "0.375rem"
                 }}
               >
-                <span>Admin Portal</span>
+                <span>👑 Admin Portal</span>
               </button>
 
               <button
@@ -148,7 +148,6 @@ export default function LoginPage() {
             <Link href="#" className={styles.legalLink}>Community Guidelines</Link>
             <Link href="#" className={styles.legalLink} style={{ width: '100%', marginTop: '8px' }}>Deleting your account</Link>
           </div>
-
         </div>
       </div>
 

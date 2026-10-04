@@ -28,10 +28,10 @@ model User {
   messages               Message[]
   contactShares          ContactShare[]
 
-  marketplaceListings    MarketplaceListing[]
-  communityProperties    CommunityProperty[]  @relation("ManagedProperties")
-  marketplaceReports     MarketplaceReport[]
-  postedOpportunities    Opportunity[]            @relation("PostedOpportunities")
+  marketplaceListings     MarketplaceListing[]
+  communityProperties     CommunityProperty[]  @relation("ManagedProperties")
+  marketplaceReports      MarketplaceReport[]
+  postedOpportunities     Opportunity[]            @relation("PostedOpportunities")
   opportunityApplications OpportunityApplication[] @relation("OpportunityApplications")
 }
 
@@ -418,4 +418,136 @@ model Enquiry {
   adminNotes  String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Opportunity {
+  id                    String    @id @default(cuid())
+  type                  String
+  title                 String
+  slug                  String?
+  organisationName      String
+  organisationId        String?
+  postedByUserId        String
+  description           String
+  category              String
+  skills                String?
+  location              String?
+  workMode              String?
+  experienceLevel       String?
+  employmentType        String?
+  compensationMin       Float?
+  compensationMax       Float?
+  compensationPeriod    String?
+  currency              String    @default("INR")
+  duration              String?
+  startDate             String?
+  applicationDeadline   DateTime?
+  applicationMethod     String?
+  externalApplicationUrl String?
+  status                String    @default("ACTIVE")
+  verificationStatus    String    @default("UNVERIFIED")
+  mentorCapacity        Int?
+  timeCommitment        String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+// ==========================================
+// CENTRALIZED ASSISTANCE REGISTRY MODELS
+// ==========================================
+
+model Organization {
+  id           String             @id @default(cuid())
+  name         String             @unique
+  code         String             @unique
+  description  String?
+  contactEmail String?
+  contactPhone String?
+  status       String             @default("ACTIVE")
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  records          AssistanceRecord[]
+  apiKey           String?            @default("ak_live_demo")
+  verificationLogs VerificationAuditLog[]
+}
+
+model Beneficiary {
+  id                 String             @id @default(cuid())
+  beneficiaryId      String             @unique // e.g. "BEN-000101"
+  name               String
+  phone              String
+  area               String
+  familySize         Int                @default(1)
+  verificationStatus String             @default("VERIFIED") // VERIFIED, PENDING, UNVERIFIED
+  verificationRef    String?
+  notes              String?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  assistanceRecords  AssistanceRecord[]
+
+  @@index([phone])
+  @@index([name])
+  @@index([area])
+  @@index([beneficiaryId])
+}
+
+model AssistanceRecord {
+  id             String       @id @default(cuid())
+  beneficiaryId  String
+  beneficiary    Beneficiary  @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  category       String       // "Medical Assistance", "Food Support", "Education / Scholarship", etc.
+  amount         Float
+  date           DateTime     @default(now())
+  status         String       @default("COMPLETED")
+  purpose        String?
+  notes          String?
+  privateNotes   String?      // Organization's strictly private case worker notes
+  caseReference  String?      // Internal case/dossier reference
+  isPrivate      Boolean      @default(true)
+  
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([beneficiaryId])
+  @@index([organizationId])
+  @@index([category])
+  @@index([date])
+}
+
+model CentralVerificationRecord {
+  id                   String   @id @default(cuid())
+  beneficiaryReference String   // e.g. "BEN-000123"
+  category             String   // e.g. "Medical Assistance"
+  lastAssistanceDate   DateTime
+  status               String   @default("ACTIVE")
+  reviewRequired       Boolean  @default(true)
+  sourceAttestation    String   @default("AUTHORIZED_MEMBER_FOUNDATION")
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([beneficiaryReference])
+  @@index([category])
+}
+
+model VerificationAuditLog {
+  id                   String       @id @default(cuid())
+  organizationId       String
+  organization         Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  beneficiaryReference String
+  category             String
+  action               String       // "VERIFICATION_CHECK", "ASSISTANCE_RECORDED", "ACCESS_DENIED"
+  result               String       // "RELEVANT_ASSISTANCE_FOUND", "CLEARED", "BLOCKED"
+  reviewRequired       Boolean      @default(false)
+  details              String?
+  createdAt            DateTime     @default(now())
+
+  @@index([organizationId])
+  @@index([beneficiaryReference])
+  @@index([createdAt])
 }
