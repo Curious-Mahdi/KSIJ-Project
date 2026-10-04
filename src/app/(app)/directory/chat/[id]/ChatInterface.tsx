@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { sendMessage, shareContact, markConversationCompleted, markConversationReopened } from "@/lib/actions/directory";
 import styles from "./page.module.css";
-import { Send, Phone, Mail, CheckCircle2 } from "lucide-react";
+import { Send, Phone, Mail, CheckCircle2, User } from "lucide-react";
 
 export default function ChatInterface({ conversation, currentUserId, entityName = "the listing" }: { conversation: any, currentUserId: string, entityName?: string }) {
   const [text, setText] = useState("");
@@ -97,13 +97,25 @@ export default function ChatInterface({ conversation, currentUserId, entityName 
           {conversation.messages.map((msg: any) => {
             const isMine = msg.senderId === currentUserId;
             return (
-              <div key={msg.id} className={`${styles.messageWrapper} ${isMine ? styles.mine : styles.theirs}`}>
-                <div className={styles.messageBubble}>
-                  {msg.message}
+              <div key={msg.id} className={`${styles.messageRow} ${isMine ? styles.mineRow : styles.theirsRow}`}>
+                {!isMine && (
+                  <div className={styles.messageAvatar}>
+                    {entityName.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <div className={`${styles.messageWrapper} ${isMine ? styles.mine : styles.theirs}`}>
+                  <div className={styles.messageBubble}>
+                    {msg.message}
+                  </div>
+                  <div className={styles.messageTime}>
+                    {new Date(msg.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                  </div>
                 </div>
-                <div className={styles.messageTime}>
-                  {new Date(msg.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                </div>
+                {isMine && (
+                  <div className={styles.messageAvatarMine}>
+                    <User size={16} />
+                  </div>
+                )}
               </div>
             );
           })}

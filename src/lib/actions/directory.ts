@@ -63,28 +63,21 @@ export async function getDirectoryListings(searchParams?: {
   };
 
   if (searchParams?.q) {
-    // Format for Postgres full-text search (web development -> web | development)
-    const formattedQuery = searchParams.q
-      .trim()
-      .split(/\s+/)
-      .map(word => word.replace(/[^a-zA-Z0-9]/g, '')) // basic sanitization
-      .filter(word => word.length > 0)
-      .join(' | ');
-
-    if (formattedQuery) {
+    const q = searchParams.q.trim();
+    if (q) {
       whereClause.OR = [
-        { name: { search: formattedQuery } },
-        { shortDescription: { search: formattedQuery } },
-        { description: { search: formattedQuery } },
-        { category: { search: formattedQuery } },
-        { subcategory: { search: formattedQuery } },
-        { services: { search: formattedQuery } },
-        { skills: { search: formattedQuery } },
-        { keywords: { search: formattedQuery } },
-        { tags: { search: formattedQuery } },
-        { area: { search: formattedQuery } },
-        { city: { search: formattedQuery } },
-        { serviceArea: { search: formattedQuery } },
+        { name: { contains: q, mode: 'insensitive' } },
+        { shortDescription: { contains: q, mode: 'insensitive' } },
+        { description: { contains: q, mode: 'insensitive' } },
+        { category: { contains: q, mode: 'insensitive' } },
+        { subcategory: { contains: q, mode: 'insensitive' } },
+        { services: { contains: q, mode: 'insensitive' } },
+        { skills: { contains: q, mode: 'insensitive' } },
+        { keywords: { contains: q, mode: 'insensitive' } },
+        { tags: { contains: q, mode: 'insensitive' } },
+        { area: { contains: q, mode: 'insensitive' } },
+        { city: { contains: q, mode: 'insensitive' } },
+        { serviceArea: { contains: q, mode: 'insensitive' } },
       ];
     }
   }
@@ -105,7 +98,8 @@ export async function getDirectoryListings(searchParams?: {
           name: true,
           profilePhoto: true
         }
-      }
+      },
+      contact: true
     },
     orderBy: {
       createdAt: 'desc'
@@ -125,7 +119,8 @@ export async function getListingById(id: string) {
           name: true,
           profilePhoto: true
         }
-      }
+      },
+      contact: true
     }
   });
   return listing;

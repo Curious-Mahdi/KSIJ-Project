@@ -55,7 +55,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Desktop Navigation */}
         <nav className={styles.desktopNav}>
-          {['home', 'services', 'directory', 'marketplace', 'events'].map((route) => {
+          {['home', 'services', 'directory', 'venues', 'events'].map((route) => {
             const isActive = pathname.startsWith(`/${route}`);
             return (
               <Link key={route} href={`/${route}`} className={styles.navLink}>
@@ -140,9 +140,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Users size={24} />
           <span>Directory</span>
         </Link>
-        <Link href="/marketplace" className={`${styles.bottomNavItem} ${pathname.startsWith('/marketplace') ? styles.bottomNavActive : ''}`}>
+        <Link href="/venues" className={`${styles.bottomNavItem} ${pathname.startsWith('/venues') ? styles.bottomNavActive : ''}`}>
           <Store size={24} />
-          <span>Market</span>
+          <span>Venues</span>
         </Link>
         <Link href="/more" className={`${styles.bottomNavItem} ${pathname === '/more' ? styles.bottomNavActive : ''}`}>
           <MoreHorizontal size={24} />
