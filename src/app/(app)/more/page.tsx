@@ -38,7 +38,7 @@ export default function MorePage() {
         <button className={styles.actionItem}>
           <div className="flex-center gap-12">
             <Info className="text-primary" size={20} />
-            <span>About KSIJ Reload</span>
+            <span>About KSIJ One</span>
           </div>
           <ChevronRight size={20} className="text-secondary" />
         </button>
@@ -61,7 +61,7 @@ export default function MorePage() {
       </div>
       
       <div className={styles.footer}>
-        <p className="small-text">KSIJ Reload App v1.0.0</p>
+        <p className="small-text">KSIJ One App v1.0.0</p>
       </div>
     </div>
   );

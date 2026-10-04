@@ -6,7 +6,7 @@ import { Search, Building2, Briefcase, UserSquare2, ArrowRight } from "lucide-re
 import SearchForm from "./SearchForm";
 
 export const metadata = {
-  title: "Directory | KSIJ Reload",
+  title: "Directory | KSIJ One",
   description: "Find businesses, professionals and services across the community.",
 };
 

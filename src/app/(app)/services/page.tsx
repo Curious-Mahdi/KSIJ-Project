@@ -14,7 +14,7 @@ export default function ServicesLandingPage() {
         <h1 className={styles.mainHeading}>Support when you need it.</h1>
         <div className={styles.goldLine}></div>
         <p className={styles.subheading}>
-          Explore the community assistance services KSIJ Reload could bring together in one simple place — from education and medical support to welfare assistance and interest-free financial support.
+          Explore the community assistance services KSIJ One could bring together in one simple place — from education and medical support to welfare assistance and interest-free financial support.
         </p>
         <p className={styles.disclaimer}>
           Illustrative service concepts — eligibility, documentation and support may vary by programme.

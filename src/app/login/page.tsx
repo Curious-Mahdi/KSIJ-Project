@@ -13,7 +13,7 @@ export default function LoginPage() {
       <div className={styles.brandPanel}>
         <div>
           <div className={styles.brandLogo}>
-            KSIJ Reload
+            KSIJ One
           </div>
           
           <div className={styles.brandContent}>
@@ -42,7 +42,7 @@ export default function LoginPage() {
           
           <h2 className={`${styles.welcomeTitle} animateFadeUp`}>Welcome back</h2>
           <p className={`${styles.welcomeText} animateFadeUp delay-100`}>
-            Continue with your Google account to access KSIJ Reload and everything your community has to offer.
+            Continue with your Google account to access KSIJ One and everything your community has to offer.
           </p>
 
           <div className="animateFadeUp delay-200 w-full">
@@ -87,7 +87,7 @@ export default function LoginPage() {
           </div>
 
           <p className={`${styles.disclaimerText} animateFadeUp delay-400`}>
-            New accounts are reviewed and verified before access to KSIJ Reload is granted.
+            New accounts are reviewed and verified before access to KSIJ One is granted.
           </p>
 
           <div className={`${styles.legalLinks} animateFadeUp delay-400`}>

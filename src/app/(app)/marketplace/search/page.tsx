@@ -4,7 +4,7 @@ import styles from "../page.module.css";
 import { getMarketplaceListings, getCommunityProperties } from "@/lib/actions/marketplace";
 
 export const metadata = {
-  title: "Marketplace Search | KSIJ Reload",
+  title: "Marketplace Search | KSIJ One",
   description: "Search community properties and marketplace listings.",
 };
 
