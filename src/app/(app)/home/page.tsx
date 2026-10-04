@@ -72,8 +72,8 @@ export default function HomePage() {
         style={{ position: 'relative' }}
       >
         <div className={styles.heroContent}>
+          <div className={styles.heroEyebrow}>KSIJ ONE</div>
           <h1 className={styles.heroGreeting}>Salamun Alaykum{userName ? `, ${userName}` : ''}</h1>
-          <div className={styles.goldHairline}></div>
           <p className={styles.heroSubtitle}>Everything your community has to offer, in one place.</p>
           
           <div 
@@ -148,7 +148,7 @@ export default function HomePage() {
           <h2 className={styles.sectionTitle}>Quick access</h2>
           <div className={styles.quickAccessGrid}>
             
-            <Link href="/services" className={styles.qaCard}>
+            <Link href="/services" className={`${styles.qaCard} ${styles.qaCardFeatured}`}>
               <div className={styles.qaHeader}>
                 <div className={`${styles.qaIconWrap} ${styles.qaIconGreen}`}><Grid size={20} /></div>
               </div>
@@ -210,9 +210,9 @@ export default function HomePage() {
               {/* Highlighted Announcement */}
               <div className={styles.announcementCard}>
                 <div className={styles.announcementLabel}>IMPORTANT</div>
-                <h3 className={styles.announcementTitle}>Register for the NASR Cup</h3>
-                <p className={styles.announcementDesc}><strong>Sports and Logistics Department:</strong> Registration is now open for the upcoming NASR Football Cup. Form your teams and register before the deadline.</p>
-                <Link href="/updates/nasr-cup" className={styles.announcementLink}>Read announcement <span className={styles.linkArrow}>&rarr;</span></Link>
+                <h3 className={styles.announcementTitle}>Register for the Nasr Cup</h3>
+                <p className={styles.announcementDesc}><strong>Sports and Logistics Department:</strong> Registration is now open for the upcoming Nasr Football Cup. Form your teams and register before the deadline.</p>
+                <Link href="/events/nasr-cup" className={styles.announcementLink}>View details <span className={styles.linkArrow}>&rarr;</span></Link>
               </div>
 
               {/* Update Rows (Editorial Style) */}
