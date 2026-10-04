@@ -1,10 +1,13 @@
 "use client";
 
+import { useSession } from "next-auth/react";
+
 import Link from "next/link";
 import { Check, FileText, Upload } from "lucide-react";
 import styles from "./page.module.css";
 
 export default function ApplicationDetailPage({ params }: { params: { id: string } }) {
+  const { data: session } = useSession();
   // Demo application data
   const isActionRequired = params.id === "KSIJ-MED-2026-00318";
   
@@ -14,7 +17,7 @@ export default function ApplicationDetailPage({ params }: { params: { id: string
     status: isActionRequired ? "Additional Information Required" : "Under Review",
     statusCode: isActionRequired ? "action" : "review",
     submittedAt: "02 Oct 2026",
-    applicantName: "Ali Punjani",
+    applicantName: session?.user?.name || "Applicant",
     documents: [
       { name: "Aadhaar_Card.pdf" },
       { name: "Income_Certificate.pdf" },

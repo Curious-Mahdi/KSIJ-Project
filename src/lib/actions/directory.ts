@@ -90,7 +90,7 @@ export async function getDirectoryListings(searchParams?: {
   }
 
   if (searchParams?.type && searchParams.type !== 'All') {
-    whereClause.listingType = searchParams.type;
+    whereClause.listingType = searchParams.type.toUpperCase();
   }
 
   if (searchParams?.category && searchParams.category !== 'All') {

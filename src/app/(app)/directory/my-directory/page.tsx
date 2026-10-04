@@ -69,7 +69,9 @@ export default async function MyDirectoryPage() {
             <div className={styles.list}>
               {activeConversations.map(conv => {
                 const isOwner = conv.ownerId === userId;
-                const otherParty = isOwner ? conv.initiatedBy.name : conv.listing?.name || "Unknown Listing";
+                const otherParty = isOwner 
+                  ? conv.initiatedBy.name 
+                  : (conv.listing?.name || conv.marketplaceListing?.title || conv.communityProperty?.name || "Unknown Listing");
                 
                 return (
                   <Link href={`/directory/chat/${conv.id}`} key={conv.id} className={styles.card}>

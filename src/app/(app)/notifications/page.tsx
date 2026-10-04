@@ -31,7 +31,7 @@ export default async function NotificationsPage() {
       </div>
 
       <div className={styles.notificationList}>
-        {activeConversations.filter(c => c.ownerId === userId && c.status === 'NEW').map(conv => {
+        {activeConversations.filter(c => c.ownerId === userId && (c.status === 'NEW' || c.status === 'IN_CONVERSATION')).map(conv => {
           const entityName = conv.listing?.name || conv.marketplaceListing?.title || conv.communityProperty?.name || "a listing";
           return (
             <Link href={`/directory/chat/${conv.id}`} key={conv.id} style={{textDecoration: 'none', color: 'inherit'}}>

@@ -74,7 +74,7 @@ function ApplicationFormContent() {
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Full Name</label>
-                  <input type="text" className={styles.input} defaultValue="Ali Punjani" required />
+                  <input type="text" className={styles.input} defaultValue={session?.user?.name || ""} required />
                 </div>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Email Address</label>
