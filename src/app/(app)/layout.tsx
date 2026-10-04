@@ -12,10 +12,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  const isProtectedRoute = pathname.startsWith("/profile") || 
-                           pathname.startsWith("/notifications") || 
-                           pathname.startsWith("/directory/list-yourself") || 
-                           pathname.startsWith("/directory/my-directory");
+  const isProtectedRoute = pathname.startsWith("/profile") ||
+    pathname.startsWith("/notifications") ||
+    pathname.startsWith("/directory/list-yourself") ||
+    pathname.startsWith("/directory/my-directory");
 
   // Global polling to refresh Server Components (like Notifications and Chats)
   useEffect(() => {
@@ -59,7 +59,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Link href="/marketplace" className={`${styles.navLink} ${pathname.startsWith('/marketplace') ? styles.navLinkActive : ''}`}>Marketplace</Link>
           <Link href="/events" className={`${styles.navLink} ${pathname === '/events' ? styles.navLinkActive : ''}`}>Events</Link>
           {isAdmin && (
-            <Link href="/admin" className={styles.navLink} style={{ color: "#d97706", fontWeight: 600 }}>👑 Admin</Link>
+            <Link href="/admin" className={styles.navLink} style={{ color: "#d97706", fontWeight: 600 }}>Admin</Link>
           )}
         </nav>
 
@@ -82,8 +82,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </div>
             </>
           ) : (
-            <Link 
-              href="/login" 
+            <Link
+              href="/login"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
