@@ -53,7 +53,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Link href="/services" className={`${styles.navLink} ${pathname === '/services' ? styles.navLinkActive : ''}`}>Services</Link>
           <Link href="/directory" className={`${styles.navLink} ${pathname === '/directory' ? styles.navLinkActive : ''}`}>Directory</Link>
           <Link href="/marketplace" className={`${styles.navLink} ${pathname.startsWith('/marketplace') ? styles.navLinkActive : ''}`}>Marketplace</Link>
-          <Link href="/events" className={`${styles.navLink} ${pathname === '/events' ? styles.navLinkActive : ''}`}>Events</Link>
         </nav>
 
         {/* Header Actions */}

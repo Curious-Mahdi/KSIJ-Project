@@ -3,6 +3,7 @@
 import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { Upload, File, Check } from "lucide-react";
 import styles from "./page.module.css";
 import { services } from "@/lib/data/services";
@@ -10,6 +11,7 @@ import { services } from "@/lib/data/services";
 function ApplicationFormContent() {
   const searchParams = useSearchParams();
   const serviceId = searchParams.get("service");
+  const { data: session } = useSession();
   
   const service = services.find((s) => s.id === serviceId) || services[0];
 

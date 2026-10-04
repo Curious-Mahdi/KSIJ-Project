@@ -81,27 +81,10 @@ export default function HomePage() {
                     <ChevronRight className={styles.resultItemArrow} size={16} />
                   </Link>
                 </div>
-
-                <div className={styles.resultCategory}>
-                  <div className={styles.resultCategoryTitle}>Updates</div>
-                  <Link href="/updates/scholarship" className={styles.resultItem}>
-                    <span className={styles.resultItemTitle}>Higher Education Scholarship 2024</span>
-                    <ChevronRight className={styles.resultItemArrow} size={16} />
-                  </Link>
-                </div>
-
-                <div className={styles.resultCategory}>
-                  <div className={styles.resultCategoryTitle}>Events</div>
-                  <Link href="/events/townhall" className={styles.resultItem}>
-                    <span className={styles.resultItemTitle}>Community Townhall</span>
-                    <ChevronRight className={styles.resultItemArrow} size={16} />
-                  </Link>
-                </div>
-
               </div>
             )}
           </div>
-          <p className={styles.searchHelper}>Search services, events, people and resources</p>
+          <p className={styles.searchHelper}>Search services, people and resources</p>
         </div>
       </section>
 
@@ -129,137 +112,11 @@ export default function HomePage() {
               <ChevronRight className={styles.qaArrow} size={20} />
             </Link>
 
-            <Link href="/events" className={styles.qaCard}>
-              <div className={styles.qaHeader}>
-                <div className={`${styles.qaIconWrap} ${styles.qaIconYellow}`}><Calendar size={20} /></div>
-              </div>
-              <h3 className={styles.qaTitle}>Events</h3>
-              <p className={styles.qaDesc}>See upcoming community events</p>
-              <ChevronRight className={styles.qaArrow} size={20} />
-            </Link>
-
-            <Link href="/resources" className={styles.qaCard}>
-              <div className={styles.qaHeader}>
-                <div className={`${styles.qaIconWrap} ${styles.qaIconOrange}`}><Folder size={20} /></div>
-              </div>
-              <h3 className={styles.qaTitle}>Resources</h3>
-              <p className={styles.qaDesc}>Access useful information and documents</p>
-              <ChevronRight className={styles.qaArrow} size={20} />
-            </Link>
-
-            <Link href="/library" className={styles.qaCard}>
-              <div className={styles.qaHeader}>
-                <div className={`${styles.qaIconWrap} ${styles.qaIconBlue}`}><BookOpen size={20} /></div>
-              </div>
-              <h3 className={styles.qaTitle}>Library</h3>
-              <p className={styles.qaDesc}>Browse and borrow community books</p>
-              <ChevronRight className={styles.qaArrow} size={20} />
-            </Link>
-
           </div>
         </section>
       </div>
 
-      {/* Main Layout Container (2-Column) */}
-      <div className={styles.mainLayout}>
-        
-        {/* LEFT COLUMN: Main Content */}
-        <div className={`${styles.mainColumn} animateFadeUp delay-200`}>
-          
-          {/* Community Updates */}
-          <section className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <div>
-                <h2 className={styles.sectionTitle}>
-                  Community updates
-                </h2>
-                <p className={styles.sectionSubtitle}>Important information from across the community</p>
-              </div>
-            </div>
 
-            <div className={styles.feed}>
-              
-              {/* Highlighted Announcement */}
-              <div className={styles.announcementCard}>
-                <div className={styles.announcementLabel}>IMPORTANT</div>
-                <h3 className={styles.announcementTitle}>Register for the NASR Cup</h3>
-                <p className={styles.announcementDesc}><strong>Sports and Logistics Department:</strong> Registration is now open for the upcoming NASR Football Cup. Form your teams and register before the deadline.</p>
-                <Link href="/updates/nasr-cup" className={styles.announcementLink}>Read announcement <span className={styles.linkArrow}>&rarr;</span></Link>
-              </div>
-
-              {/* Update Rows (Editorial Style) */}
-              <Link href="/updates/hackathon" className={styles.updateRow}>
-                <div className={styles.updateSource}>
-                  <div className={styles.updateAvatar}>T</div>
-                  <div className={styles.updateMeta}>
-                    <span className={styles.updateAuthor}>Tech and AI Committee</span>
-                    <span className={styles.updateTime}>Technology &middot; 2 hours ago</span>
-                  </div>
-                </div>
-                <h3 className={styles.updateTitle}>Register for the Hackathon</h3>
-                <p className={styles.updateSummary}>Join the community hackathon at Khoja Masjid Imambada Hall Dongri. Build innovative solutions, collaborate with peers, and showcase your coding skills. Prizes for the top teams.</p>
-                <div className={styles.readMoreLink}>Read more <span className={styles.linkArrow}>&rarr;</span></div>
-              </Link>
-
-              <Link href="/updates/ai-bootcamp" className={styles.updateRow}>
-                <div className={styles.updateSource}>
-                  <div className={styles.updateAvatar} style={{backgroundColor: '#0284c7'}}>E</div>
-                  <div className={styles.updateMeta}>
-                    <span className={styles.updateAuthor}>Education Board</span>
-                    <span className={styles.updateTime}>Education &middot; 1 month ago</span>
-                  </div>
-                </div>
-                <h3 className={styles.updateTitle}>AI 2-Day Boot Camp</h3>
-                <p className={styles.updateSummary}>A successful conclusion to our intensive AI 2-day boot camp, where students learned the fundamentals of machine learning and modern AI development.</p>
-                <div className={styles.readMoreLink}>Read more <span className={styles.linkArrow}>&rarr;</span></div>
-              </Link>
-
-              <Link href="/updates" className={styles.viewAllBtn}>View all updates <span className={styles.linkArrow}>&rarr;</span></Link>
-            </div>
-          </section>
-        </div>
-
-        {/* RIGHT COLUMN: Sidebar (Editorial Style) */}
-        <aside className={`${styles.sidebar} animateFadeUp delay-300`}>
-          
-          <section className={styles.sidebarSection}>
-            <div className={styles.sidebarHeader}>
-              <h2 className={styles.sidebarTitle}>Upcoming events</h2>
-              <Link href="/events" className={styles.sidebarLink}>See all <span className={styles.linkArrow}>&rarr;</span></Link>
-            </div>
-            
-            <div className={styles.eventsList}>
-              <Link href="/events/hackathon" className={styles.eventRow}>
-                <div className={styles.eventDate}>
-                  <span className={styles.dateMonth}>OCT</span>
-                  <span className={styles.dateDay}>04</span>
-                  <div style={{ width: '2px', height: '16px', backgroundColor: 'var(--color-accent-gold)', marginTop: '4px', borderRadius: '2px' }}></div>
-                </div>
-                <div className={styles.eventDetails}>
-                  <h3 className={styles.eventTitle}>Hackathon</h3>
-                  <p className={styles.eventInfo}>Khoja Masjid Imambada Hall Dongri</p>
-                  <div className={styles.eventLink}>View event <span className={styles.linkArrow}>&rarr;</span></div>
-                </div>
-              </Link>
-
-              <Link href="/events/nasr-cup" className={styles.eventRow}>
-                <div className={styles.eventDate}>
-                  <span className={styles.dateMonth}>OCT</span>
-                  <span className={styles.dateDay}>11</span>
-                  <div style={{ width: '2px', height: '16px', backgroundColor: 'var(--color-accent-gold)', marginTop: '4px', borderRadius: '2px' }}></div>
-                </div>
-                <div className={styles.eventDetails}>
-                  <h3 className={styles.eventTitle}>NASR Football Cup</h3>
-                  <p className={styles.eventInfo}>Venue TBD</p>
-                  <div className={styles.eventLink}>View event <span className={styles.linkArrow}>&rarr;</span></div>
-                </div>
-              </Link>
-            </div>
-          </section>
-          
-        </aside>
-
-      </div>
     </div>
   );
 }
