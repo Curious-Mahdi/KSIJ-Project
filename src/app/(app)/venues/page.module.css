@@ -73,7 +73,7 @@
 
 .searchBtn {
   background: var(--color-primary);
-  color: white;
+  color: #FFFFFF !important;
   border: none;
   border-radius: var(--radius-full);
   width: 44px;
@@ -86,7 +86,19 @@
 }
 
 .searchBtn:hover {
-  background: var(--color-primary-dark);
+  background: var(--color-dark-green);
+  color: #FFFFFF !important;
+}
+
+.searchBtn:active {
+  background: var(--color-deep-forest);
+  color: #FFFFFF !important;
+}
+
+.searchBtn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  color: #FFFFFF !important;
 }
 
 .sectionHeader {

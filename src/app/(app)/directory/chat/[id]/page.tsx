@@ -51,6 +51,10 @@ export default async function ConversationPage({ params }: { params: Promise<{ i
     else otherUser = conversation.communityProperty.managedBy;
   }
 
+  if (!otherUser) {
+    notFound();
+  }
+
   return (
     <div className={styles.container}>
       

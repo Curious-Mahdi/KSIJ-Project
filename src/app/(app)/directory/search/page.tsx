@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { getDirectoryListings } from "@/lib/actions/directory";
 import styles from "./page.module.css";
-import { Search as SearchIcon, ArrowRight, MapPin } from "lucide-react";
+import { Search as SearchIcon, ArrowRight, MapPin, Phone, MessageCircle } from "lucide-react";
 import SearchForm from "../SearchForm";
 
 export const metadata = {
@@ -142,8 +142,17 @@ export default async function DirectorySearchPage({
                     </div>
 
                     <div className={styles.cardFooter}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <MapPin size={16} /> {listing.location || 'Remote'}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <MapPin size={16} /> {listing.location || 'Remote'}
+                        </div>
+                        {(listing as any).contact?.phone && (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-text-main)' }}>
+                            <Phone size={14} /> 
+                            <span style={{ fontSize: '0.875rem' }}>{(listing as any).contact.phone}</span>
+                            <MessageCircle size={14} color="#25D366" />
+                          </div>
+                        )}
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-primary)', fontWeight: 600 }}>
                         View profile 
@@ -161,7 +170,10 @@ export default async function DirectorySearchPage({
             <div className={styles.emptyState}>
               <SearchIcon size={48} color="var(--color-text-muted)" style={{ margin: '0 auto 16px' }} />
               <h2 style={{ fontSize: '1.25rem', marginBottom: '8px' }}>No matching listings found</h2>
-              <p style={{ color: 'var(--color-text-secondary)' }}>Try adjusting your filters or search keyword.</p>
+              <p style={{ color: 'var(--color-text-secondary)', marginBottom: '24px' }}>Try adjusting your filters or search keyword.</p>
+              <Link href="/directory/search" className="btn btn-secondary">
+                Clear filters
+              </Link>
             </div>
           )}
         </div>

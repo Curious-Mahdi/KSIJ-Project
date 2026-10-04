@@ -1,13 +1,18 @@
+import { FileText } from "lucide-react";
 import { Citation } from "@/lib/rag/types";
-import { BookOpen } from "lucide-react";
 
-export function SourceCard({ citation }: { citation: Citation }) {
+export function SourceCard({ citation, index }: { citation: Citation; index?: number }) {
+  const title = citation.title || citation.filename || "Community Document";
   return (
-    <div className="flex items-center gap-2 p-2 border border-gray-200 rounded-md bg-gray-50 text-xs">
-      <BookOpen size={14} className="text-blue-500" />
-      <div className="flex flex-col">
-        <span className="font-semibold">{citation.title || citation.filename || "Community Document"}</span>
-        {citation.section && <span className="text-gray-500">{citation.section}</span>}
+    <div className="flex max-w-full items-center gap-2 rounded-lg border border-[#0B4D36]/10 bg-white px-2.5 py-1.5 shadow-sm">
+      {index ? (
+        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#0B4D36]/10 text-[10.5px] font-bold text-[#0B4D36]">{index}</span>
+      ) : (
+        <FileText size={14} className="shrink-0 text-[#0B4D36]" />
+      )}
+      <div className="min-w-0 leading-tight">
+        <p className="truncate text-[12px] font-semibold text-gray-800">{title}</p>
+        {citation.section && <p className="truncate text-[10.5px] text-gray-500">{citation.section}</p>}
       </div>
     </div>
   );

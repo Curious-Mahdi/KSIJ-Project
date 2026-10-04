@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Send, CheckCircle2, Loader2, Mail, Phone, MapPin, HelpCircle } from "lucide-react";
 import { submitEnquiry } from "@/lib/actions/enquiries";
-import { ChatWidget } from "@/components/chatbot/ChatWidget";
 
 export default function ContactEnquiryPage() {
   const [formData, setFormData] = useState({
@@ -368,7 +367,6 @@ export default function ContactEnquiryPage() {
         </div>
       </div>
 
-      <ChatWidget />
     </div>
   );
 }

@@ -4,8 +4,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import * as motion from "framer-motion/client";
 import { MapPin, Building, Info, Users, ShieldCheck } from "lucide-react";
-import styles from "../../member-marketplace/[id]/page.module.css";
-import ClientActions from "./ClientActions";
+import styles from "./page.module.css";
+import BookingWidget from "./BookingWidget";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
@@ -29,7 +29,7 @@ export default async function CommunityPropertyDetailPage({ params }: { params: 
     <div className="w-full">
       <div className="container" style={{ paddingTop: '32px' }}>
         <div className={styles.breadcrumb}>
-          <Link href="/marketplace/community-properties">Community Properties</Link>
+          <Link href="/venues">Venues</Link>
           <span>/</span>
           <span style={{ color: 'var(--color-text-secondary)' }}>{property.name}</span>
         </div>
@@ -158,7 +158,7 @@ export default async function CommunityPropertyDetailPage({ params }: { params: 
             </div>
             
             <div className={styles.actionWrap}>
-              <ClientActions propertyId={property.id} isAdmin={isAdmin} />
+              <BookingWidget propertyId={property.id} price={property.pricing || ""} />
             </div>
           </div>
 

@@ -200,12 +200,8 @@
 
 .emptyState {
   text-align: center;
-  padding: var(--space-64);
-  background-color: var(--color-surface);
-  border-radius: 1.5rem;
-  border: 1px solid var(--color-border);
+  padding: var(--space-48) var(--space-24);
 }
-
 @media (max-width: 768px) {
   .layout {
     flex-direction: column;

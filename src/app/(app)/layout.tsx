@@ -4,8 +4,9 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Grid, Users, Store, MoreHorizontal, Bell } from "lucide-react";
+import { Home, Grid, Users, Store, Calendar, MoreHorizontal, Bell } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { ChatWidget } from "@/components/chatbot/ChatWidget";
 import styles from "./layout.module.css";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -13,26 +14,26 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  const isProtectedRoute = pathname.startsWith("/profile") || 
-                           pathname.startsWith("/notifications") || 
-                           pathname.startsWith("/directory/list-yourself") || 
-                           pathname.startsWith("/directory/my-directory");
+  const isProtectedRoute = pathname.startsWith("/profile") ||
+    pathname.startsWith("/notifications") ||
+    pathname.startsWith("/directory/list-yourself") ||
+    pathname.startsWith("/directory/my-directory");
+
+  // Global polling to refresh Server Components (like Notifications and Chats)
+  useEffect(() => {
+    if (status === "authenticated") {
+      const interval = setInterval(() => {
+        router.refresh();
+      }, 3000); // Poll every 3 seconds
+      return () => clearInterval(interval);
+    }
+  }, [status, router]);
 
   useEffect(() => {
     if (isProtectedRoute && status === "unauthenticated") {
       router.push("/login");
     }
   }, [isProtectedRoute, status, router]);
-
-  // Periodic refresh for authenticated active sessions (notifications, chats)
-  useEffect(() => {
-    if (status === "authenticated") {
-      const interval = setInterval(() => {
-        router.refresh();
-      }, 5000);
-      return () => clearInterval(interval);
-    }
-  }, [status, router]);
 
   if (isProtectedRoute && (status === "loading" || status === "unauthenticated")) {
     return null;
@@ -41,8 +42,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const user = session?.user;
   const avatarInitial = user?.name ? user.name.charAt(0).toUpperCase() : "?";
   const isAdmin = (user as any)?.role === "ADMIN" || (user as any)?.isAdmin === true;
-
-  const navRoutes = ['home', 'services', 'directory', 'marketplace', 'events', 'facilities'];
 
   return (
     <div className={styles.appLayout}>
@@ -54,9 +53,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {/* Mobile Title */}
         <span className={styles.mobileTitle}>KSIJ One</span>
 
-        {/* Desktop Navigation with Animated Tab Indicators */}
+        {/* Desktop Navigation */}
         <nav className={styles.desktopNav}>
-          {navRoutes.map((route) => {
+          {['home', 'services', 'directory', 'venues', 'events'].map((route) => {
             const isActive = pathname.startsWith(`/${route}`);
             return (
               <Link key={route} href={`/${route}`} className={styles.navLink}>
@@ -97,8 +96,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </div>
             </>
           ) : (
-            <Link 
-              href="/login" 
+            <Link
+              href="/login"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -138,7 +137,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Home size={24} />
           <span>Home</span>
         </Link>
-        <Link href="/services" className={`${styles.bottomNavItem} ${pathname.startsWith('/services') ? styles.bottomNavActive : ''}`}>
+        <Link href="/services" className={`${styles.bottomNavItem} ${pathname === '/services' ? styles.bottomNavActive : ''}`}>
           <Grid size={24} />
           <span>Services</span>
         </Link>
@@ -146,15 +145,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Users size={24} />
           <span>Directory</span>
         </Link>
-        <Link href="/marketplace" className={`${styles.bottomNavItem} ${pathname.startsWith('/marketplace') ? styles.bottomNavActive : ''}`}>
+        <Link href="/venues" className={`${styles.bottomNavItem} ${pathname.startsWith('/venues') ? styles.bottomNavActive : ''}`}>
           <Store size={24} />
-          <span>Market</span>
+          <span>Venues</span>
         </Link>
         <Link href="/more" className={`${styles.bottomNavItem} ${pathname === '/more' ? styles.bottomNavActive : ''}`}>
           <MoreHorizontal size={24} />
           <span>More</span>
         </Link>
       </nav>
+
+      {/* Site-wide Community Assistant Widget */}
+      <ChatWidget pathname={pathname} />
     </div>
   );
 }

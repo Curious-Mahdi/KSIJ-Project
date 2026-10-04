@@ -51,6 +51,28 @@ function parseSafeDate(rawDate: string | Date | undefined): Date {
 
 const DEFAULT_EVENTS = [
   {
+    title: "KSIJ Hackathon - Build for the Community",
+    description: "Join the complete KSIJ Hackathon! Featuring separate sections for girls and boys. Build innovative solutions that directly solve problems for our community and win exciting prizes. Powered by Tech and AI Committee.",
+    date: new Date("2026-10-04T09:00:00Z"),
+    time: "9:00 AM - 6:00 PM",
+    location: "Khoja Masjid Imambada Hall Dongri",
+    imageUrl: null,
+    registrationUrl: "https://forms.gle/ksij-hackathon",
+    isImportant: true,
+    status: "UPCOMING",
+  },
+  {
+    title: "NASR Football Cup",
+    description: "The Sports and Logistics Department brings you the much-awaited NASR Football Cup. Form your teams and participate in the biggest football tournament of the year. Registrations released on Oct 4th!",
+    date: new Date("2026-10-11T08:00:00Z"),
+    time: "8:00 AM Onwards",
+    location: "Kapaswadi Sports Complex",
+    imageUrl: null,
+    registrationUrl: null,
+    isImportant: true,
+    status: "UPCOMING",
+  },
+  {
     title: "Education Scheme Awareness Session",
     description: "Informative session for students and parents regarding available educational scholarships, eligibility criteria, and application processes.",
     date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days ahead
@@ -73,15 +95,26 @@ const DEFAULT_EVENTS = [
     status: "UPCOMING",
   },
   {
-    title: "Youth Employment & Internship Fair",
-    description: "Connect with community business owners, corporate partners, and recruitment specialists offering full-time and internship positions.",
-    date: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000), // 21 days ahead
-    time: "11:00 AM - 2:00 PM",
-    location: "Main Auditorium",
+    title: "2-Day AI Bootcamp",
+    description: "KSIJ Mumbai successfully conducted a 2-day AI bootcamp led by Ali Mehdi Hemani, founder of DIT (Digitalist Institute). Students mastered Generative AI on Day 1 and Agentic AI on Day 2.",
+    date: new Date("2026-09-15T09:00:00Z"),
+    time: "10:00 AM - 5:00 PM",
+    location: "KSIJ Mumbai",
     imageUrl: null,
-    registrationUrl: "https://forms.gle/employment-fair-registration",
+    registrationUrl: null,
     isImportant: false,
-    status: "UPCOMING",
+    status: "COMPLETED",
+  },
+  {
+    title: "Annual Free Medical Camp",
+    description: "A massive community-wide medical checkup drive helping over 500 members with free consultations, eye checkups, and basic health screenings.",
+    date: new Date("2026-08-22T09:00:00Z"),
+    time: "9:00 AM - 4:00 PM",
+    location: "Dongri Medical Center",
+    imageUrl: null,
+    registrationUrl: null,
+    isImportant: false,
+    status: "COMPLETED",
   },
 ];
 

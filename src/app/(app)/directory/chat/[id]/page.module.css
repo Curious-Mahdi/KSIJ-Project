@@ -83,19 +83,61 @@
   gap: var(--space-16);
 }
 
+.messageRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  width: 100%;
+}
+
+.mineRow {
+  justify-content: flex-end;
+}
+
+.theirsRow {
+  justify-content: flex-start;
+}
+
+.messageAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-alt);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border);
+}
+
+.messageAvatarMine {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
 .messageWrapper {
   display: flex;
   flex-direction: column;
-  max-width: 80%;
+  max-width: 75%;
 }
 
 .messageWrapper.mine {
-  align-self: flex-end;
   align-items: flex-end;
 }
 
 .messageWrapper.theirs {
-  align-self: flex-start;
   align-items: flex-start;
 }
 
@@ -205,7 +247,7 @@
 
 .sendBtn {
   background-color: var(--color-primary);
-  color: white;
+  color: #FFFFFF !important;
   width: 48px;
   height: 48px;
   border-radius: var(--radius-full);
@@ -219,8 +261,17 @@
 }
 
 .sendBtn:hover:not(:disabled) {
-  background-color: var(--color-primary-dark);
+  background-color: var(--color-dark-green);
   transform: translateY(-2px);
+}
+
+.sendBtn:active:not(:disabled) {
+  background-color: var(--color-deep-forest);
+}
+
+.sendBtn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .sendBtn:disabled {
@@ -250,12 +301,21 @@
 
 .actionBtn.primary {
   background-color: var(--color-primary);
-  color: white;
+  color: #FFFFFF !important;
   border-color: var(--color-primary);
 }
 
 .actionBtn.primary:hover {
-  background-color: var(--color-primary-dark);
+  background-color: var(--color-dark-green);
+}
+
+.actionBtn.primary:active {
+  background-color: var(--color-deep-forest);
+}
+
+.actionBtn.primary:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 /* Modal */

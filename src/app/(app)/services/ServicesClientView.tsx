@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChatWidget } from "@/components/chatbot/ChatWidget";
 import {
   Download,
   ChevronRight,
@@ -550,8 +549,6 @@ export default function ServicesClientView({
         </div>
       )}
 
-      {/* Floating Chat Widget */}
-      <ChatWidget />
     </div>
   );
 }

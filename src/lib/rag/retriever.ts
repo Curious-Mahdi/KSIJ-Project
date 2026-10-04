@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { getEmbeddingProvider } from "./embeddings";
 
 export interface RetrievedChunk {
   id: string;
@@ -14,7 +15,8 @@ export interface RetrievedChunk {
 export async function retrieveRelevantChunks(
   query: string,
   limit: number = 8,
-  threshold: number = 0.1
+  threshold: number = 0.1,
+  currentPage: string = "/"
 ): Promise<RetrievedChunk[]> {
   const queryLower = query.toLowerCase();
   const searchTerms = queryLower
@@ -56,7 +58,7 @@ export async function retrieveRelevantChunks(
         score += 1;
       }
 
-      if (score > 0 || searchTerms.length === 0) {
+      if (score >= 2 || searchTerms.length === 0) {
         let content = `${s.description}`;
         if (s.eligibility) content += `\nEligibility: ${s.eligibility}`;
         if (s.requiredDocuments) content += `\nRequired Documents: ${s.requiredDocuments}`;
@@ -107,7 +109,7 @@ export async function retrieveRelevantChunks(
         score += 1;
       }
 
-      if (score > 0) {
+      if (score >= 2 || searchTerms.length === 0) {
         const content = `Date: ${eventDateStr}\nTime: ${e.time}\nLocation: ${e.location}\nDetails: ${e.description}${
           e.registrationUrl ? `\nRegistration URL: ${e.registrationUrl}` : ""
         }`;
@@ -150,7 +152,7 @@ export async function retrieveRelevantChunks(
         score += 1;
       }
 
-      if (score > 0) {
+      if (score >= 2 || searchTerms.length === 0) {
         const content = `Location: ${f.location}\nCapacity: ${f.capacity} guests\nAmenities: ${f.amenities || "Standard"}\nDescription: ${f.description}${
           f.rules ? `\nRules: ${f.rules}` : ""
         }${f.contactInfo ? `\nContact: ${f.contactInfo}` : ""}`;
@@ -190,7 +192,7 @@ export async function retrieveRelevantChunks(
         score += 1;
       }
 
-      if (score > 0) {
+      if (score >= 2 || searchTerms.length === 0) {
         chunks.push({
           id: `announcement-${a.id}`,
           documentId: a.id,
@@ -207,43 +209,107 @@ export async function retrieveRelevantChunks(
     console.error("Error retrieving announcements for RAG:", err);
   }
 
-  // 5. Query existing Knowledge Documents / Chunks if any
+  // 5. Query Knowledge Documents via pgvector (Semantic Search)
   try {
-    const docs = await prisma.knowledgeDocument.findMany({
-      where: { status: "active" },
-      include: { chunks: true },
-    });
+    const provider = getEmbeddingProvider();
+    const queryEmbedding = await provider.embedText(query);
+    const pgvectorQuery = `[${queryEmbedding.join(",")}]`;
 
-    for (const d of docs) {
-      for (const c of d.chunks) {
-        let score = 0;
-        const textToSearch = [d.title, c.content, c.section || ""].join(" ").toLowerCase();
+    const vectorChunks = await prisma.$queryRaw<any[]>`
+      SELECT 
+        c.id, 
+        c."documentId", 
+        c.content, 
+        c.section, 
+        c."pageNumber", 
+        d.title,
+        1 - (c."embeddingJson"::vector <=> ${pgvectorQuery}::vector) as similarity
+      FROM "KnowledgeChunk" c
+      JOIN "KnowledgeDocument" d ON c."documentId" = d.id
+      WHERE d.status = 'active'
+      ORDER BY similarity DESC
+      LIMIT ${limit}
+    `;
 
-        for (const term of searchTerms) {
-          if (d.title.toLowerCase().includes(term)) score += 3;
-          else if (textToSearch.includes(term)) score += 1;
-        }
-
-        if (score > 0) {
-          chunks.push({
-            id: c.id,
-            documentId: d.id,
-            title: d.title,
-            content: c.content,
-            section: c.section,
-            pageNumber: c.pageNumber,
-            similarity: Math.min(score * 0.2, 1.0),
-            sourceUrl: `/library/${d.id}`,
-          });
-        }
+    for (const vc of vectorChunks) {
+      if (vc.similarity > threshold) {
+        chunks.push({
+          id: vc.id,
+          documentId: vc.documentId,
+          title: vc.title,
+          content: vc.content,
+          section: vc.section,
+          pageNumber: vc.pageNumber,
+          similarity: vc.similarity,
+          sourceUrl: `/library/${vc.documentId}`,
+        });
       }
     }
   } catch (err) {
-    console.error("Error retrieving knowledge documents for RAG:", err);
+    console.error("Error retrieving knowledge documents for RAG (vector search):", err);
+    // Fallback to keyword search if vector search fails
+    try {
+      const docs = await prisma.knowledgeDocument.findMany({
+        where: { status: "active" },
+        include: { chunks: true },
+      });
+
+      for (const d of docs) {
+        for (const c of d.chunks) {
+          let score = 0;
+          const textToSearch = [d.title, c.content, c.section || ""].join(" ").toLowerCase();
+
+          for (const term of searchTerms) {
+            if (d.title.toLowerCase().includes(term)) score += 3;
+            else if (textToSearch.includes(term)) score += 1;
+          }
+
+          if (score >= 2 || searchTerms.length === 0) {
+            chunks.push({
+              id: c.id,
+              documentId: d.id,
+              title: d.title,
+              content: c.content,
+              section: c.section,
+              pageNumber: c.pageNumber,
+              similarity: Math.min(score * 0.2, 1.0),
+              sourceUrl: `/library/${d.id}`,
+            });
+          }
+        }
+      }
+    } catch (fallbackErr) {
+      console.error("Fallback keyword search failed:", fallbackErr);
+    }
   }
 
-  // Sort descending by similarity score
-  chunks.sort((a, b) => b.similarity - a.similarity);
+  // 6. Page Context Relevance Boost
+  // If the user is on a specific page, slightly boost related chunks
+  for (const chunk of chunks) {
+    if (currentPage.startsWith("/services") && chunk.id.startsWith("service-")) {
+      chunk.similarity += 0.15;
+    } else if (currentPage.startsWith("/events") && chunk.id.startsWith("event-")) {
+      chunk.similarity += 0.15;
+    } else if (currentPage.startsWith("/facilities") && chunk.id.startsWith("facility-")) {
+      chunk.similarity += 0.15;
+    } else if (currentPage.startsWith("/directory") && chunk.id.startsWith("facility-")) {
+      chunk.similarity += 0.1;
+    }
+  }
 
-  return chunks.slice(0, limit);
+  // Merge and deduplicate by ID, keeping highest similarity
+  const dedupedMap = new Map<string, RetrievedChunk>();
+  for (const c of chunks) {
+    const existing = dedupedMap.get(c.id);
+    if (!existing || existing.similarity < c.similarity) {
+      dedupedMap.set(c.id, c);
+    }
+  }
+
+  const finalChunks = Array.from(dedupedMap.values());
+
+  // Sort descending by similarity score
+  finalChunks.sort((a, b) => b.similarity - a.similarity);
+
+  return finalChunks.slice(0, limit);
 }
