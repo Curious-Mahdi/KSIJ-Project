@@ -1,3 +1,6 @@
+"use client";
+
+import { use } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import React from "react";
@@ -50,8 +53,8 @@ const updateData: Record<string, { title: string; category: string; author: stri
   }
 };
 
-export default async function UpdateDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  const resolvedParams = await params;
+export default function UpdateDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = use(params);
   const data = updateData[resolvedParams.slug];
   
   const title = data?.title || resolvedParams.slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());

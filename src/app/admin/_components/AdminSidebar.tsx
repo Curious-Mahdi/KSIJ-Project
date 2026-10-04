@@ -10,6 +10,7 @@ import {
   Landmark,
   Megaphone,
   Inbox,
+  BarChart3,
 } from "lucide-react";
 import styles from "../admin.module.css";
 
@@ -25,6 +26,11 @@ const NAV_ITEMS: NavItem[] = [
     label: "Dashboard",
     href: "/admin",
     icon: LayoutDashboard,
+  },
+  {
+    label: "Analytics",
+    href: "/admin/analytics",
+    icon: BarChart3,
   },
   {
     label: "Services",

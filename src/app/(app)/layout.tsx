@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Grid, Users, Store, Calendar, MoreHorizontal, Bell } from "lucide-react";
+import { Home, Grid, Users, Store, MoreHorizontal, Bell } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { ChatWidget } from "@/components/chatbot/ChatWidget";
 import styles from "./layout.module.css";
@@ -19,22 +19,31 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     pathname.startsWith("/directory/list-yourself") ||
     pathname.startsWith("/directory/my-directory");
 
-  // Global polling to refresh Server Components (like Notifications and Chats)
-  useEffect(() => {
-    if (status === "authenticated") {
-      const interval = setInterval(() => {
-        router.refresh();
-      }, 3000); // Poll every 3 seconds
-      return () => clearInterval(interval);
-    }
-  }, [status, router]);
-
   useEffect(() => {
     if (isProtectedRoute && status === "unauthenticated") {
       router.push("/login");
     }
   }, [isProtectedRoute, status, router]);
 
+  // Periodic refresh for authenticated active sessions (notifications, chats)
+  useEffect(() => {
+    if (status === "authenticated") {
+      const interval = setInterval(() => {
+        router.refresh();
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [status, router]);
+
+<<<<<<< HEAD
+  useEffect(() => {
+    if (isProtectedRoute && status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [isProtectedRoute, status, router]);
+
+=======
+>>>>>>> 41789456288e707cc780c6a98a41ff48d807f8ed
   if (isProtectedRoute && (status === "loading" || status === "unauthenticated")) {
     return null;
   }
@@ -42,6 +51,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const user = session?.user;
   const avatarInitial = user?.name ? user.name.charAt(0).toUpperCase() : "?";
   const isAdmin = (user as any)?.role === "ADMIN" || (user as any)?.isAdmin === true;
+
+  const navRoutes = ['home', 'services', 'directory', 'marketplace', 'events', 'facilities'];
 
   return (
     <div className={styles.appLayout}>
@@ -53,28 +64,43 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {/* Mobile Title */}
         <span className={styles.mobileTitle}>KSIJ One</span>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation with Animated Tab Indicators */}
         <nav className={styles.desktopNav}>
-          {['home', 'services', 'directory', 'venues', 'events'].map((route) => {
-            const isActive = pathname.startsWith(`/${route}`);
-            return (
-              <Link key={route} href={`/${route}`} className={styles.navLink}>
-                {isActive && (
-                  <motion.div
-                    layoutId="activeNavIndicator"
-                    className={styles.activeIndicator}
-                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                  />
-                )}
-                <span style={{ position: 'relative', zIndex: 1, textTransform: 'capitalize' }}>{route}</span>
-              </Link>
-            );
-          })}
-        </nav>
+<<<<<<< HEAD
+  {
+    ['home', 'services', 'directory', 'venues', 'events'].map((route) => {
+=======
+          {navRoutes.map((route) => {
+>>>>>>> 41789456288e707cc780c6a98a41ff48d807f8ed
+      const isActive = pathname.startsWith(`/${route}`);
+      return (
+        <Link key={route} href={`/${route}`} className={styles.navLink}>
+          {isActive && (
+            <motion.div
+              layoutId="activeNavIndicator"
+              className={styles.activeIndicator}
+              transition={{ type: "spring", stiffness: 350, damping: 30 }}
+            />
+          )}
+          <span style={{ position: 'relative', zIndex: 1, textTransform: 'capitalize' }}>{route}</span>
+        </Link>
+      );
+    })
+  }
+<<<<<<< HEAD
+=======
+          {isAdmin && (
+            <Link href="/admin" className={styles.navLink} style={{ color: "#d97706", fontWeight: 600 }}>
+              <span style={{ position: 'relative', zIndex: 1 }}>👑 Admin</span>
+            </Link>
+          )}
+>>>>>>> 41789456288e707cc780c6a98a41ff48d807f8ed
+        </nav >
 
-        {/* Header Actions */}
-        <div className={styles.headerActions}>
-          {user ? (
+    {/* Header Actions */ }
+    < div className = { styles.headerActions } >
+    {
+      user?(
             <>
               <Link href="/notifications" className={styles.iconBtn}>
                 <Bell size={20} />
@@ -91,48 +117,49 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </div>
             </>
           ) : (
-            <Link
-              href="/login"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                padding: "6px 14px",
-                borderRadius: "8px",
-                backgroundColor: "#18181b",
-                color: "#ffffff",
-                fontSize: "0.8125rem",
-                fontWeight: 500,
-                textDecoration: "none"
-              }}
-            >
-              Sign In
-            </Link>
-          )}
-        </div>
-      </header>
+    <Link
+      href="/login"
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        padding: "6px 14px",
+        borderRadius: "8px",
+        backgroundColor: "#18181b",
+        color: "#ffffff",
+        fontSize: "0.8125rem",
+        fontWeight: 500,
+        textDecoration: "none"
+      }}
+    >
+      Sign In
+    </Link>
+  )
+}
+        </div >
+      </header >
 
-      {/* Main Content with Page Transitions */}
-      <main className={styles.mainContent}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={pathname}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {children}
-          </motion.div>
-        </AnimatePresence>
-      </main>
+  {/* Main Content with Page Transitions */ }
+  < main className = { styles.mainContent } >
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={pathname}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -16 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
+      </main >
 
-      {/* Mobile Bottom Navigation */}
-      <nav className={styles.bottomNav}>
+  {/* Mobile Bottom Navigation */ }
+  < nav className = { styles.bottomNav } >
         <Link href="/home" className={`${styles.bottomNavItem} ${pathname === '/home' ? styles.bottomNavActive : ''}`}>
           <Home size={24} />
           <span>Home</span>
         </Link>
-        <Link href="/services" className={`${styles.bottomNavItem} ${pathname === '/services' ? styles.bottomNavActive : ''}`}>
+        <Link href="/services" className={`${styles.bottomNavItem} ${pathname.startsWith('/services') ? styles.bottomNavActive : ''}`}>
           <Grid size={24} />
           <span>Services</span>
         </Link>
@@ -148,10 +175,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <MoreHorizontal size={24} />
           <span>More</span>
         </Link>
-      </nav>
+      </nav >
 
-      {/* Site-wide Community Assistant Widget */}
-      <ChatWidget pathname={pathname} />
-    </div>
+  {/* Site-wide Community Assistant Widget */ }
+  < ChatWidget pathname = { pathname } />
+    </div >
   );
 }
