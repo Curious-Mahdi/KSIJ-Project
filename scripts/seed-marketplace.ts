@@ -78,14 +78,14 @@ async function main() {
   // 2. Seed Member Marketplace Listings (Real-looking data)
   const marketplaceListings = [
     {
-      title: "Toyota Innova Crysta (2020) - Mint Condition",
-      shortDescription: "Mint condition Toyota Innova Crysta (Diesel) with original paint.",
-      description: "Selling our family car, a 2020 Toyota Innova Crysta (Diesel). It has been driven carefully by a single owner, fully serviced at authorized Toyota centers. Zero accidents, original paint, and brand new tires installed last month. Perfect vehicle for large families.",
-      category: "Vehicles",
-      transactionType: "SELL",
-      price: 1850000,
+      title: "Commercial Shop for Rent in Byculla",
+      shortDescription: "Prime commercial space perfect for retail or office.",
+      description: "Available immediately: A prime commercial shop on the main road in Byculla. Approx 400 sq.ft carpet area. Ideal for a boutique, small office, or wholesale business. Has attached washroom and 24/7 water supply. No heavy manufacturing allowed.",
+      category: "Real Estate",
+      transactionType: "RENT",
+      price: null,
       currency: "INR",
-      location: "Bandra West, Mumbai",
+      location: "Byculla, Mumbai",
       status: "PUBLISHED",
       sellerId: admin.id
     },
@@ -102,12 +102,12 @@ async function main() {
       sellerId: admin.id
     },
     {
-      title: "Brand New iPhone 15 Pro (256GB, Titanium)",
-      shortDescription: "Unboxed iPhone 15 Pro, 256GB Natural Titanium.",
-      description: "Unboxed but never used iPhone 15 Pro, 256GB Natural Titanium. Was gifted to me but I prefer Android. Comes with the original box, cable, and a 1-year Apple warranty starting from this month. Price is slightly negotiable for quick buyers.",
+      title: "Secondhand MacBook Air M1 (2020)",
+      shortDescription: "Well maintained MacBook Air M1, 8GB RAM, 256GB SSD.",
+      description: "Selling my MacBook Air M1. It's in great condition, mostly used for light web browsing and office work. Battery cycle count is around 150. Comes with the original charger and a sleek laptop sleeve.",
       category: "Electronics",
       transactionType: "SELL",
-      price: 125000,
+      price: 60000,
       currency: "INR",
       location: "Andheri, Mumbai",
       status: "PUBLISHED",
