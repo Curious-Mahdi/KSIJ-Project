@@ -64,13 +64,13 @@ export async function getDirectoryListings(searchParams?: {
 
   if (searchParams?.q) {
     whereClause.OR = [
-      { name: { contains: searchParams.q } },
-      { shortDescription: { contains: searchParams.q } },
-      { description: { contains: searchParams.q } },
-      { category: { contains: searchParams.q } },
-      { subcategory: { contains: searchParams.q } },
-      { services: { contains: searchParams.q } },
-      { skills: { contains: searchParams.q } },
+      { name: { contains: searchParams.q, mode: 'insensitive' } },
+      { shortDescription: { contains: searchParams.q, mode: 'insensitive' } },
+      { description: { contains: searchParams.q, mode: 'insensitive' } },
+      { category: { contains: searchParams.q, mode: 'insensitive' } },
+      { subcategory: { contains: searchParams.q, mode: 'insensitive' } },
+      { services: { contains: searchParams.q, mode: 'insensitive' } },
+      { skills: { contains: searchParams.q, mode: 'insensitive' } },
     ];
   }
 

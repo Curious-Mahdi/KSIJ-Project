@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { getDirectoryListings } from "@/lib/actions/directory";
 import styles from "./page.module.css";
 import { Search, Building2, Briefcase, UserSquare2, ArrowRight } from "lucide-react";
@@ -39,7 +40,9 @@ export default async function DirectoryPage() {
         </div>
 
         <div className={`${styles.searchContainer} animateFadeUp delay-100`}>
-          <SearchForm />
+          <Suspense fallback={<div style={{ padding: '16px', textAlign: 'center' }}>Loading search...</div>}>
+            <SearchForm />
+          </Suspense>
           
           <div className={styles.searchHelpers}>
             <Link href="/directory/search?q=Web Developer" className={styles.helperTag}>Try: Web Developer</Link>
