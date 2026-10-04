@@ -1,5 +1,6 @@
 import { getListingById } from "@/lib/actions/directory";
 import { notFound } from "next/navigation";
+import * as motion from "framer-motion/client";
 import styles from "./page.module.css";
 import { MapPin, MonitorSmartphone, Link as LinkIcon, User } from "lucide-react";
 import ConnectButton from "./ConnectButton";
@@ -34,36 +35,41 @@ export default async function ListingProfilePage({ params }: { params: Promise<{
   const allTags = [...services, ...skills];
 
   return (
-    <div className={styles.container}>
-      
-      <div className={`${styles.header} animateFadeUp`}>
-        <div className={styles.avatar}>
-          {listing.name.charAt(0).toUpperCase()}
+    <div className="w-full">
+      <section className={styles.hero}>
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className={styles.header}>
+            <div className={styles.avatar}>
+              {listing.name.charAt(0).toUpperCase()}
+            </div>
+            <div className={styles.type}>
+              {listing.listingType} &middot; {listing.category}
+              {listing.verificationStatus === 'VERIFIED' && <span style={{ marginLeft: '12px', fontSize: '0.75rem', backgroundColor: '#D4EDDA', color: '#155724', padding: '2px 8px', borderRadius: '12px', fontWeight: 500 }}>Verified</span>}
+              {listing.sourceType === 'COMMUNITY_DIRECTORY_SCAN' && <span style={{ marginLeft: '8px', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>From Directory</span>}
+            </div>
+            <h1 className="h1 mb-16" style={{ color: 'var(--color-primary-dark)' }}>{listing.name}</h1>
+            <p className={styles.subtitle}>{listing.shortDescription}</p>
+          </motion.div>
         </div>
-        <div className={styles.type}>
-          {listing.listingType} &middot; {listing.category}
-          {listing.verificationStatus === 'VERIFIED' && <span style={{ marginLeft: '12px', fontSize: '0.75rem', backgroundColor: '#D4EDDA', color: '#155724', padding: '2px 8px', borderRadius: '12px', fontWeight: 500 }}>Verified Community Profile</span>}
-          {listing.sourceType === 'COMMUNITY_DIRECTORY_SCAN' && <span style={{ marginLeft: '8px', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>From Community Directory</span>}
-        </div>
-        <h1 className={styles.title}>{listing.name}</h1>
-        <p className={styles.subtitle}>{listing.shortDescription}</p>
-      </div>
+      </section>
 
-      <div className={`${styles.layout} animateFadeUp delay-100`}>
+      <section className="section-padding">
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={styles.layout}>
         
         {/* Main Content */}
         <div className={styles.main}>
           
           {listing.description && (
             <div className={styles.section}>
-              <h2 className={styles.sectionTitle}>About</h2>
+              <h2 className="h2 mb-24" style={{ color: 'var(--color-primary-dark)' }}>About</h2>
               <div className={styles.about}>{listing.description}</div>
             </div>
           )}
 
           {allTags.length > 0 && (
             <div className={styles.section}>
-              <h2 className={styles.sectionTitle}>Services & Skills</h2>
+              <h2 className="h2 mb-24" style={{ color: 'var(--color-primary-dark)' }}>Services & Skills</h2>
               <div className={styles.tags}>
                 {allTags.map((tag: string, i: number) => (
                   <div key={i} className={styles.tag}>{tag}</div>
@@ -76,16 +82,15 @@ export default async function ListingProfilePage({ params }: { params: Promise<{
 
         {/* Sidebar */}
         <div className={styles.sidebar}>
-          
           <div className={styles.card}>
-            <h3 className={styles.cardTitle}>Details</h3>
+            <h3 className="h3 mb-24" style={{ color: 'var(--color-primary)' }}>Details</h3>
             
             <div className={styles.metaList}>
               {listing.subcategory && (
                 <div className={styles.metaItem}>
                   <User size={20} className={styles.metaIcon} />
                   <div>
-                    <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Specialty</div>
+                    <div className={styles.metaLabel}>Specialty</div>
                     <div className={styles.metaValue}>{listing.subcategory}</div>
                   </div>
                 </div>
@@ -94,7 +99,7 @@ export default async function ListingProfilePage({ params }: { params: Promise<{
               <div className={styles.metaItem}>
                 <MonitorSmartphone size={20} className={styles.metaIcon} />
                 <div>
-                  <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Service Mode</div>
+                  <div className={styles.metaLabel}>Service Mode</div>
                   <div className={styles.metaValue}>{listing.serviceMode || 'Not specified'}</div>
                 </div>
               </div>
@@ -103,7 +108,7 @@ export default async function ListingProfilePage({ params }: { params: Promise<{
                 <div className={styles.metaItem}>
                   <MapPin size={20} className={styles.metaIcon} />
                   <div>
-                    <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Location</div>
+                    <div className={styles.metaLabel}>Location</div>
                     <div className={styles.metaValue}>
                       {listing.addressLine1 && <div>{listing.addressLine1}</div>}
                       {listing.addressLine2 && <div>{listing.addressLine2}</div>}
@@ -118,7 +123,7 @@ export default async function ListingProfilePage({ params }: { params: Promise<{
                 <div className={styles.metaItem}>
                   <MapPin size={20} className={styles.metaIcon} />
                   <div>
-                    <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Service Area</div>
+                    <div className={styles.metaLabel}>Service Area</div>
                     <div className={styles.metaValue}>{listing.serviceArea}</div>
                   </div>
                 </div>
@@ -128,7 +133,7 @@ export default async function ListingProfilePage({ params }: { params: Promise<{
                 <div className={styles.metaItem}>
                   <LinkIcon size={20} className={styles.metaIcon} />
                   <div>
-                    <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Website</div>
+                    <div className={styles.metaLabel}>Website</div>
                     <a href={listing.website.startsWith('http') ? listing.website : `https://${listing.website}`} target="_blank" rel="noopener noreferrer" className={styles.metaValue} style={{ color: 'var(--color-primary)', textDecoration: 'none' }}>
                       {listing.website.replace(/^https?:\/\//, '')}
                     </a>
@@ -137,21 +142,24 @@ export default async function ListingProfilePage({ params }: { params: Promise<{
               )}
             </div>
 
-            {!isOwner && (
-              <ConnectButton listingId={listing.id} />
-            )}
-            
-            {isOwner && (
-              <div style={{ marginTop: '32px', textAlign: 'center', color: 'var(--color-primary)', fontWeight: 600, padding: '16px', backgroundColor: 'var(--color-surface-success)', borderRadius: '12px' }}>
-                This is your listing.
-              </div>
-            )}
+            <div style={{ marginTop: '32px' }}>
+              {!isOwner && (
+                <ConnectButton listingId={listing.id} />
+              )}
+              
+              {isOwner && (
+                <div style={{ textAlign: 'center', color: 'var(--color-primary-dark)', fontWeight: 600, padding: '16px', backgroundColor: 'var(--color-accent-gold)', borderRadius: 'var(--radius-xl)' }}>
+                  This is your listing.
+                </div>
+              )}
+            </div>
             
           </div>
-
         </div>
 
-      </div>
+          </motion.div>
+        </div>
+      </section>
 
     </div>
   );

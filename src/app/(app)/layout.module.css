@@ -16,7 +16,8 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background-color: var(--color-surface);
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--color-border);
   padding: 0 var(--space-24);
   height: 72px;
@@ -28,12 +29,13 @@
 
 .logo {
   font-family: var(--font-serif);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1.5rem;
   color: var(--color-primary);
   display: none;
   flex: 1;
   text-align: left;
+  letter-spacing: -0.02em;
 }
 @media (min-width: 768px) {
   .logo {
@@ -78,17 +80,13 @@
   height: 100%;
   display: flex;
   align-items: center;
+  padding: 0 12px;
   transition: color 0.2s ease;
 }
 .navLink:hover {
-  color: var(--color-primary);
+  color: var(--color-text-main);
 }
-.navLinkActive {
-  color: var(--color-primary);
-  font-weight: 600;
-}
-.navLink::after {
-  content: '';
+.activeIndicator {
   position: absolute;
   bottom: -1px;
   left: 0;
@@ -96,12 +94,7 @@
   height: 2px;
   background-color: var(--color-primary);
   border-radius: 2px 2px 0 0;
-  transform: scaleX(0);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-origin: center;
-}
-.navLink:hover::after, .navLinkActive::after {
-  transform: scaleX(1);
+  z-index: 0;
 }
 .navLink:active {
   transform: translateY(1px);
@@ -185,8 +178,10 @@
   align-items: center;
   gap: var(--space-4);
   color: var(--color-text-secondary);
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 500;
+  transition: color 0.2s ease;
+  padding: 4px;
 }
 .bottomNavActive {
   color: var(--color-primary);

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import { Home, Grid, Users, Store, MoreHorizontal, Bell } from "lucide-react";
 import { useSession } from "next-auth/react";
 import styles from "./layout.module.css";
@@ -41,6 +42,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const avatarInitial = user?.name ? user.name.charAt(0).toUpperCase() : "?";
   const isAdmin = (user as any)?.role === "ADMIN" || (user as any)?.isAdmin === true;
 
+  const navRoutes = ['home', 'services', 'directory', 'marketplace', 'events', 'facilities'];
+
   return (
     <div className={styles.appLayout}>
       {/* Top Header */}
@@ -51,16 +54,27 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         {/* Mobile Title */}
         <span className={styles.mobileTitle}>KSIJ One</span>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation with Animated Tab Indicators */}
         <nav className={styles.desktopNav}>
-          <Link href="/home" className={`${styles.navLink} ${pathname === '/home' ? styles.navLinkActive : ''}`}>Home</Link>
-          <Link href="/services" className={`${styles.navLink} ${pathname.startsWith('/services') ? styles.navLinkActive : ''}`}>Services</Link>
-          <Link href="/directory" className={`${styles.navLink} ${pathname.startsWith('/directory') ? styles.navLinkActive : ''}`}>Directory</Link>
-          <Link href="/marketplace" className={`${styles.navLink} ${pathname.startsWith('/marketplace') ? styles.navLinkActive : ''}`}>Marketplace</Link>
-          <Link href="/events" className={`${styles.navLink} ${pathname.startsWith('/events') ? styles.navLinkActive : ''}`}>Events</Link>
-          <Link href="/facilities" className={`${styles.navLink} ${pathname.startsWith('/facilities') ? styles.navLinkActive : ''}`}>Facilities</Link>
+          {navRoutes.map((route) => {
+            const isActive = pathname.startsWith(`/${route}`);
+            return (
+              <Link key={route} href={`/${route}`} className={styles.navLink}>
+                {isActive && (
+                  <motion.div
+                    layoutId="activeNavIndicator"
+                    className={styles.activeIndicator}
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  />
+                )}
+                <span style={{ position: 'relative', zIndex: 1, textTransform: 'capitalize' }}>{route}</span>
+              </Link>
+            );
+          })}
           {isAdmin && (
-            <Link href="/admin" className={styles.navLink} style={{ color: "#d97706", fontWeight: 600 }}>👑 Admin</Link>
+            <Link href="/admin" className={styles.navLink} style={{ color: "#d97706", fontWeight: 600 }}>
+              <span style={{ position: 'relative', zIndex: 1 }}>👑 Admin</span>
+            </Link>
           )}
         </nav>
 
@@ -103,9 +117,19 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* Main Content with Page Transitions */}
       <main className={styles.mainContent}>
-        {children}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={pathname}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {children}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* Mobile Bottom Navigation */}
