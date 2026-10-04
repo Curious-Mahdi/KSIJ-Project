@@ -1,19 +1,21 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import { use } from "react";
 
 import Link from "next/link";
 import { Check, FileText, Upload } from "lucide-react";
 import styles from "./page.module.css";
 
-export default function ApplicationDetailPage({ params }: { params: { id: string } }) {
+export default function ApplicationDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { data: session } = useSession();
+  const { id } = use(params);
   // Demo application data
-  const isActionRequired = params.id === "KSIJ-MED-2026-00318";
+  const isActionRequired = id === "KSIJ-MED-2026-00318";
   
   const appData = {
-    id: params.id,
-    title: params.id.includes("EDU") ? "Educational Scholarship" : params.id.includes("MED") ? "Medical Assistance" : "UNNATI Loan",
+    id: id,
+    title: id.includes("EDU") ? "Educational Scholarship" : id.includes("MED") ? "Medical Assistance" : "UNNATI Loan",
     status: isActionRequired ? "Additional Information Required" : "Under Review",
     statusCode: isActionRequired ? "action" : "review",
     submittedAt: "02 Oct 2026",

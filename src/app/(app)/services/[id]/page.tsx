@@ -4,8 +4,9 @@ import { Check, FileText } from "lucide-react";
 import styles from "./page.module.css";
 import { services } from "@/lib/data/services";
 
-export default function ServiceDetailPage({ params }: { params: { id: string } }) {
-  const service = services.find((s) => s.id === params.id);
+export default async function ServiceDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const service = services.find((s) => s.id === id);
 
   if (!service) {
     notFound();
