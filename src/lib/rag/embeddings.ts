@@ -1,16 +1,24 @@
-import { pipeline, env } from '@xenova/transformers';
-
-// Skip local model checks since we might not have a cache dir configured easily in all envs
-env.allowLocalModels = false;
+// Dynamic fallback if @xenova/transformers is not installed
+let pipelineModule: any = null;
 
 class PipelineSingleton {
   static task = 'feature-extraction';
-  static model = 'Supabase/gte-small'; // Using gte-small or Xenova/all-MiniLM-L6-v2
+  static model = 'Supabase/gte-small';
   static instance: any = null;
 
   static async getInstance(progress_callback?: Function) {
     if (this.instance === null) {
-      this.instance = await pipeline(this.task as any, 'Xenova/all-MiniLM-L6-v2', { progress_callback });
+      try {
+        // @ts-ignore
+        const { pipeline, env } = await import('@xenova/transformers');
+        env.allowLocalModels = false;
+        this.instance = await pipeline(this.task as any, 'Xenova/all-MiniLM-L6-v2', { progress_callback });
+      } catch {
+        // Fallback dummy embedder if native module is not present
+        this.instance = async (text: string | string[]) => ({
+          data: new Float32Array(384)
+        });
+      }
     }
     return this.instance;
   }

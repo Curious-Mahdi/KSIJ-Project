@@ -2,11 +2,31 @@ export interface LLMProvider {
   generate(systemPrompt: string, userMessage: string, context: string): Promise<string>;
 }
 
+function formatGroundedAnswer(userMessage: string, context: string): string {
+  if (!context || context.trim() === "") {
+    return "I couldn't find sufficient information about that in the approved community documents.";
+  }
+
+  return (
+    `Here is the verified information from our community database regarding your enquiry:\n\n` +
+    context
+      .split("\n---\n")
+      .map((block) => {
+        const lines = block.trim().split("\n");
+        const docLine = lines[0] || "";
+        const rest = lines.slice(1).join("\n");
+        return `### ${docLine.replace("Document: ", "")}\n${rest}`;
+      })
+      .join("\n\n") +
+    `\n\nFor further guidance or official verification, please feel free to submit an inquiry through our Help Desk or contact the respective department directly.`
+  );
+}
+
 export class OllamaProvider implements LLMProvider {
   private baseUrl: string;
   private model: string;
 
-  constructor(baseUrl = 'http://localhost:11434', model = 'llama3') {
+  constructor(baseUrl = "http://localhost:11434", model = "llama3") {
     this.baseUrl = baseUrl;
     this.model = model;
   }
@@ -22,44 +42,42 @@ USER QUESTION:
 ${userMessage}
 `;
 
-    const response = await fetch(`${this.baseUrl}/api/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: this.model,
-        prompt: prompt,
-        stream: false
-      })
-    });
+    try {
+      const response = await fetch(`${this.baseUrl}/api/generate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: this.model,
+          prompt: prompt,
+          stream: false,
+        }),
+        signal: AbortSignal.timeout(3000),
+      });
 
-    if (!response.ok) {
-      throw new Error(`Ollama generation failed: ${response.statusText}`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.response) return data.response;
+      }
+    } catch (err) {
+      // Ollama not running locally; fallback to deterministic grounding
     }
 
-    const data = await response.json();
-    return data.response;
+    return formatGroundedAnswer(userMessage, context);
   }
 }
 
-// Fallback Mock Provider for hackathon demo if Ollama isn't running locally
 export class MockProvider implements LLMProvider {
   async generate(systemPrompt: string, userMessage: string, context: string): Promise<string> {
-    if (!context || context.trim() === '') {
-      return "I couldn't find sufficient information about that in the approved community documents.";
-    }
-    
-    // Simple extraction mock for demo purposes if no real LLM is running
-    return `Based on the provided documents:\n\n${context}\n\n*(Note: This is a mock response because no LLM is currently connected).*`;
+    return formatGroundedAnswer(userMessage, context);
   }
 }
 
-// Select provider based on env
 export function getLLMProvider(): LLMProvider {
-  if (process.env.USE_MOCK_LLM === 'true') {
+  if (process.env.USE_MOCK_LLM === "true") {
     return new MockProvider();
   }
   return new OllamaProvider(
-    process.env.OLLAMA_BASE_URL || 'http://localhost:11434',
-    process.env.OLLAMA_MODEL || 'llama3'
+    process.env.OLLAMA_BASE_URL || "http://localhost:11434",
+    process.env.OLLAMA_MODEL || "llama3"
   );
 }

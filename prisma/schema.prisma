@@ -18,12 +18,13 @@ model User {
   profilePhoto String?
   jamaat       String?
   isAdmin      Boolean  @default(false)
+  role         String   @default("USER") // USER, ADMIN
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
   listings               DirectoryListing[]
-  initiatedConversations Conversation[]     @relation("InitiatedConversations")
-  ownedConversations     Conversation[]     @relation("OwnedConversations")
+  initiatedConversations Conversation[]       @relation("InitiatedConversations")
+  ownedConversations     Conversation[]       @relation("OwnedConversations")
   messages               Message[]
   contactShares          ContactShare[]
 
@@ -288,39 +289,133 @@ model MarketplaceReport {
   createdAt DateTime @default(now())
 }
 
+// -------------------------------------------------------------
+// Admin & Community Models (Services, Events, Facilities, Announcements, Enquiries, Knowledge)
+// -------------------------------------------------------------
+
 model KnowledgeDocument {
-  id            String   @id @default(cuid())
+  id            String           @id @default(cuid())
   title         String
   description   String?
   category      String?
   documentType  String?
   schemeId      String?
   version       String?
-  status        String   @default("active")
-  language      String   @default("en")
+  status        String           @default("active")
+  language      String           @default("en")
   jurisdiction  String?
   sourceUrl     String?
   effectiveFrom DateTime?
   effectiveTo   DateTime?
   fileName      String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
 
   chunks        KnowledgeChunk[]
 }
 
 model KnowledgeChunk {
-  id            String   @id @default(cuid())
+  id            String            @id @default(cuid())
   documentId    String
   content       String
   chunkIndex    Int
   section       String?
   pageNumber    Int?
-  
-  // 384 dimensions is standard for all-MiniLM-L6-v2
-  embedding     Unsupported("vector(384)")?
-
-  createdAt     DateTime @default(now())
+  embeddingJson String?
+  createdAt     DateTime          @default(now())
 
   document      KnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+}
+
+model Service {
+  id                String   @id @default(cuid())
+  title             String
+  description       String
+  category          String   @default("General")
+  eligibility       String?
+  requiredDocuments String?
+  process           String?
+  contactInfo       String?
+  faqs              String?
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Event {
+  id              String   @id @default(cuid())
+  title           String
+  description     String
+  date            DateTime
+  time            String
+  location        String
+  imageUrl        String?
+  registrationUrl String?
+  isImportant     Boolean  @default(false)
+  status          String   @default("UPCOMING")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Facility {
+  id          String            @id @default(cuid())
+  name        String
+  description String
+  location    String
+  capacity    Int               @default(50)
+  amenities   String?
+  imageUrl    String?
+  isAvailable Boolean           @default(true)
+  contactInfo String?
+  rules       String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  bookings    FacilityBooking[]
+}
+
+model FacilityBooking {
+  id          String   @id @default(cuid())
+  facilityId  String
+  facility    Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  
+  userId      String?
+  userName    String
+  userEmail   String
+  userPhone   String
+  eventDate   DateTime
+  timeSlot    String
+  purpose     String
+  status      String   @default("PENDING")
+  notes       String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Announcement {
+  id          String   @id @default(cuid())
+  title       String
+  content     String
+  category    String   @default("General")
+  isImportant Boolean  @default(false)
+  isPublished Boolean  @default(true)
+  linkUrl     String?
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Enquiry {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  subject     String
+  message     String
+  category    String   @default("General")
+  status      String   @default("PENDING")
+  adminNotes  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

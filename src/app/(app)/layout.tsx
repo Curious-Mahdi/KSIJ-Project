@@ -12,13 +12,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/login");
-    } else if (status === "authenticated" && !session?.user?.jamaat) {
-      router.push("/onboarding");
-    }
-  }, [status, session, router]);
+  const isProtectedRoute = pathname.startsWith("/profile") || 
+                           pathname.startsWith("/notifications") || 
+                           pathname.startsWith("/directory/list-yourself") || 
+                           pathname.startsWith("/directory/my-directory");
 
   // Global polling to refresh Server Components (like Notifications and Chats)
   useEffect(() => {
@@ -30,12 +27,19 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     }
   }, [status, router]);
 
-  if (status === "loading" || status === "unauthenticated" || (status === "authenticated" && !session?.user?.jamaat)) {
-    return null; // or a loading spinner
+  useEffect(() => {
+    if (isProtectedRoute && status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [isProtectedRoute, status, router]);
+
+  if (isProtectedRoute && (status === "loading" || status === "unauthenticated")) {
+    return null;
   }
 
   const user = session?.user;
   const avatarInitial = user?.name ? user.name.charAt(0).toUpperCase() : "?";
+  const isAdmin = (user as any)?.role === "ADMIN" || (user as any)?.isAdmin === true;
 
   return (
     <div className={styles.appLayout}>
@@ -54,23 +58,49 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Link href="/directory" className={`${styles.navLink} ${pathname === '/directory' ? styles.navLinkActive : ''}`}>Directory</Link>
           <Link href="/marketplace" className={`${styles.navLink} ${pathname.startsWith('/marketplace') ? styles.navLinkActive : ''}`}>Marketplace</Link>
           <Link href="/events" className={`${styles.navLink} ${pathname === '/events' ? styles.navLinkActive : ''}`}>Events</Link>
+          <Link href="/facilities" className={`${styles.navLink} ${pathname === '/facilities' ? styles.navLinkActive : ''}`}>Facilities</Link>
+          <Link href="/library" className={`${styles.navLink} ${pathname === '/library' ? styles.navLinkActive : ''}`}>Library</Link>
+          {isAdmin && (
+            <Link href="/admin" className={styles.navLink} style={{ color: "#d97706", fontWeight: 600 }}>👑 Admin</Link>
+          )}
         </nav>
 
         {/* Header Actions */}
         <div className={styles.headerActions}>
-          <Link href="/notifications" className={styles.iconBtn}>
-            <Bell size={20} />
-            <span className={styles.badge}></span>
-          </Link>
-          <div className="flex-center gap-8">
-            <Link href="/profile" className="avatar" style={{ width: '32px', height: '32px', fontSize: '0.875rem' }}>
-              {user?.image ? (
-                <img src={user.image} alt="Profile" style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
-              ) : (
-                avatarInitial
-              )}
+          {user ? (
+            <>
+              <Link href="/notifications" className={styles.iconBtn}>
+                <Bell size={20} />
+                <span className={styles.badge}></span>
+              </Link>
+              <div className="flex-center gap-8">
+                <Link href="/profile" className="avatar" style={{ width: '32px', height: '32px', fontSize: '0.875rem' }}>
+                  {user?.image ? (
+                    <img src={user.image} alt="Profile" style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
+                  ) : (
+                    avatarInitial
+                  )}
+                </Link>
+              </div>
+            </>
+          ) : (
+            <Link 
+              href="/login" 
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                padding: "6px 14px",
+                borderRadius: "8px",
+                backgroundColor: "#18181b",
+                color: "#ffffff",
+                fontSize: "0.8125rem",
+                fontWeight: 500,
+                textDecoration: "none"
+              }}
+            >
+              Sign In
             </Link>
-          </div>
+          )}
         </div>
       </header>
 
