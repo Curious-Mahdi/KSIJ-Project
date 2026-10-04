@@ -1,7 +1,13 @@
-.container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: var(--space-40) var(--space-16) var(--space-80);
+.hero {
+  text-align: center;
+  padding: 80px 0;
+  background-color: var(--color-surface);
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding: 120px 0;
+  }
 }
 
 .header {
@@ -9,23 +15,23 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-bottom: var(--space-64);
 }
 
 .avatar {
   width: 120px;
   height: 120px;
   border-radius: var(--radius-full);
-  background-color: var(--color-surface);
-  border: 4px solid var(--color-surface);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  background-color: var(--color-accent-gold);
+  border: 4px solid white;
+  box-shadow: var(--shadow-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3rem;
+  font-size: 3.5rem;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--color-very-dark);
   margin-bottom: var(--space-24);
+  font-family: var(--font-serif);
 }
 
 .type {
@@ -35,17 +41,9 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: var(--space-12);
-  background-color: var(--color-surface-success);
+  background-color: var(--color-light-green);
   padding: 6px 16px;
   border-radius: var(--radius-full);
-}
-
-.title {
-  font-family: var(--font-serif);
-  font-size: 3rem;
-  color: var(--color-text-main);
-  margin-bottom: var(--space-16);
-  letter-spacing: -0.02em;
 }
 
 .subtitle {
@@ -57,7 +55,7 @@
 
 .layout {
   display: flex;
-  gap: var(--space-40);
+  gap: var(--space-48);
   align-items: flex-start;
 }
 
@@ -73,21 +71,12 @@
 }
 
 .section {
-  margin-bottom: var(--space-40);
-}
-
-.sectionTitle {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: var(--space-16);
-  color: var(--color-text-main);
-  padding-bottom: var(--space-12);
-  border-bottom: 2px solid var(--color-border);
+  margin-bottom: var(--space-48);
 }
 
 .about {
   font-size: 1.125rem;
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--color-text-secondary);
   white-space: pre-wrap;
 }
@@ -101,86 +90,58 @@
 .tag {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
-  padding: 8px 16px;
+  padding: 12px 24px;
   border-radius: var(--radius-full);
   font-weight: 500;
   color: var(--color-text-main);
+  transition: all 0.2s ease;
+}
+
+.tag:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background-color: var(--color-light-green);
 }
 
 .card {
-  background-color: var(--color-surface);
-  border-radius: 1.5rem;
+  background-color: white;
+  border-radius: var(--radius-2xl);
   padding: var(--space-32);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 
-    inset 0 1px 1px rgba(255, 255, 255, 0.15),
-    0 0 0 1px rgba(0,0,0,0.04), 
-    0 8px 16px -4px rgba(0,0,0,0.04);
-}
-
-.cardTitle {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: var(--space-16);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
 }
 
 .metaList {
   display: flex;
   flex-direction: column;
-  gap: var(--space-16);
+  gap: var(--space-24);
 }
 
 .metaItem {
   display: flex;
-  gap: var(--space-12);
+  gap: var(--space-16);
   align-items: flex-start;
   color: var(--color-text-secondary);
 }
 
 .metaIcon {
   color: var(--color-primary);
-  margin-top: 2px;
+  margin-top: 4px;
+}
+
+.metaLabel {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+  font-weight: 700;
 }
 
 .metaValue {
   font-weight: 500;
   color: var(--color-text-main);
-}
-
-.ctaBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 16px;
-  background-color: var(--color-primary);
-  color: white;
-  border-radius: var(--radius-full);
-  font-size: 1.125rem;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-  box-shadow: 0 8px 16px rgba(11,81,51,0.2);
-}
-
-.ctaBtn:hover {
-  transform: translateY(-2px);
-  background-color: var(--color-primary-dark);
-  box-shadow: 0 12px 24px rgba(11,81,51,0.3);
-}
-
-.ctaBtn:active {
-  transform: translateY(0);
-}
-
-.privacyNote {
-  font-size: 0.8125rem;
-  color: var(--color-text-secondary);
-  text-align: center;
-  margin-top: var(--space-12);
-  line-height: 1.4;
+  font-size: 1rem;
 }
 
 @media (max-width: 768px) {

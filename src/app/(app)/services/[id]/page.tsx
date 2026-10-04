@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import * as motion from "framer-motion/client";
 import { Check, FileText } from "lucide-react";
 import styles from "./page.module.css";
 import { services } from "@/lib/data/services";
@@ -13,28 +14,32 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
   }
 
   return (
-    <div className={styles.pageWrapper}>
+    <div className="w-full">
       {/* Header */}
-      <header className={styles.headerSection}>
-        <div className={styles.headerContent}>
-          <div className={styles.breadcrumb}>
-            <Link href="/services">Community Services</Link> / {service.title}
-          </div>
-          <div className={styles.iconWrapper}>{service.icon}</div>
-          <h1 className={styles.serviceTitle}>{service.title}</h1>
-          <p className={styles.serviceSubtitle}>{service.subtitle}</p>
-          <div className={styles.goldLine}></div>
-          <div className={styles.proposedBadge}>PROPOSED SERVICE</div>
-          <p className={styles.headerDisclaimer}>
-            This page demonstrates a possible KSIJ One service workflow. Final eligibility, documents, approval criteria and programme terms would be determined by the respective Jamaat/committee.
-          </p>
+      <section className={styles.headerSection}>
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className={styles.headerContent}>
+            <div className={styles.breadcrumb}>
+              <Link href="/services">Community Services</Link> / {service.title}
+            </div>
+            <div className={styles.iconWrapper}>{service.icon}</div>
+            <h1 className={styles.serviceTitle}>{service.title}</h1>
+            <p className={styles.serviceSubtitle}>{service.subtitle}</p>
+            <div className={styles.goldLine}></div>
+            <div className={styles.proposedBadge}>PROPOSED SERVICE</div>
+            <p className={styles.headerDisclaimer}>
+              This page demonstrates a possible KSIJ One service workflow. Final eligibility, documents, approval criteria and programme terms would be determined by the respective Jamaat/committee.
+            </p>
+          </motion.div>
         </div>
-      </header>
+      </section>
 
       {/* Main Layout */}
-      <div className={styles.mainLayout}>
-        {/* Left Content */}
-        <div className={styles.mainContent}>
+      <section className="section-padding" style={{ paddingTop: 0 }}>
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={styles.mainLayout}>
+            {/* Left Content */}
+            <div className={styles.mainContent}>
           
           <section>
             <h2 className={styles.sectionHeading}>What the service could provide</h2>
@@ -125,21 +130,23 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           <div className={styles.footerDisclaimer}>
             <strong>Important:</strong> The information shown on this page is an illustrative KSIJ One concept. Actual eligibility criteria, required documents, assistance amounts, approval procedures and programme terms will be determined by the responsible Jamaat, trust or committee before launch.
           </div>
+            </div>
+            
+            {/* Right Panel (Sticky) */}
+            <div>
+              <div className={styles.stickyPanel}>
+                <h3 className={styles.panelTitle}>Apply for {service.title}</h3>
+                <p className={styles.panelText}>
+                  Start a new application for this service. You will be able to save your progress and upload documents in the next step.
+                </p>
+                <Link href={`/services/applications/new?service=${service.id}`} className={styles.startButton}>
+                  Start Application
+                </Link>
+              </div>
+            </div>
+          </motion.div>
         </div>
-
-        {/* Right Panel (Sticky) */}
-        <div>
-          <div className={styles.stickyPanel}>
-            <h3 className={styles.panelTitle}>Apply for {service.title}</h3>
-            <p className={styles.panelText}>
-              Start a new application for this service. You will be able to save your progress and upload documents in the next step.
-            </p>
-            <Link href={`/services/applications/new?service=${service.id}`} className={styles.startButton}>
-              Start Application
-            </Link>
-          </div>
-        </div>
-      </div>
+      </section>
     </div>
   );
 }

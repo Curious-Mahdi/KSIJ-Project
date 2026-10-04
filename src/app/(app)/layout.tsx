@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import { Home, Grid, Users, Store, Calendar, MoreHorizontal, Bell } from "lucide-react";
 import { useSession } from "next-auth/react";
 import styles from "./layout.module.css";
@@ -53,14 +54,21 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Desktop Navigation */}
         <nav className={styles.desktopNav}>
-          <Link href="/home" className={`${styles.navLink} ${pathname === '/home' ? styles.navLinkActive : ''}`}>Home</Link>
-          <Link href="/services" className={`${styles.navLink} ${pathname === '/services' ? styles.navLinkActive : ''}`}>Services</Link>
-          <Link href="/directory" className={`${styles.navLink} ${pathname === '/directory' ? styles.navLinkActive : ''}`}>Directory</Link>
-          <Link href="/marketplace" className={`${styles.navLink} ${pathname.startsWith('/marketplace') ? styles.navLinkActive : ''}`}>Marketplace</Link>
-          <Link href="/events" className={`${styles.navLink} ${pathname === '/events' ? styles.navLinkActive : ''}`}>Events</Link>
-          {isAdmin && (
-            <Link href="/admin" className={styles.navLink} style={{ color: "#d97706", fontWeight: 600 }}>Admin</Link>
-          )}
+          {['home', 'services', 'directory', 'marketplace', 'events'].map((route) => {
+            const isActive = pathname.startsWith(`/${route}`);
+            return (
+              <Link key={route} href={`/${route}`} className={styles.navLink}>
+                {isActive && (
+                  <motion.div
+                    layoutId="activeNavIndicator"
+                    className={styles.activeIndicator}
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  />
+                )}
+                <span style={{ position: 'relative', zIndex: 1, textTransform: 'capitalize' }}>{route}</span>
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Header Actions */}
@@ -102,9 +110,19 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* Main Content with Page Transitions */}
       <main className={styles.mainContent}>
-        {children}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={pathname}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {children}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* Mobile Bottom Navigation */}

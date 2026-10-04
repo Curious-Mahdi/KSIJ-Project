@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getMarketplaceListingById } from "@/lib/actions/marketplace";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import * as motion from "framer-motion/client";
 import { MapPin, Building, Calendar, Info, Tag, BedDouble, Bath, Maximize } from "lucide-react";
 import styles from "./page.module.css";
 import ClientActions from "./ClientActions";
@@ -20,44 +21,48 @@ export default async function MemberListingDetailPage({ params }: { params: Prom
   const isOwner = currentUserId === listing.sellerId;
 
   return (
-    <div className={styles.container}>
-      <div className={styles.breadcrumb}>
-        <Link href="/marketplace/member-marketplace">Member Marketplace</Link>
-        <span>/</span>
-        <span className="text-muted">{listing.title}</span>
+    <div className="w-full">
+      <div className="container" style={{ paddingTop: '32px' }}>
+        <div className={styles.breadcrumb}>
+          <Link href="/marketplace/member-marketplace">Member Marketplace</Link>
+          <span>/</span>
+          <span style={{ color: 'var(--color-text-secondary)' }}>{listing.title}</span>
+        </div>
       </div>
 
-      <div className={styles.layout}>
-        <div className={styles.mainCol}>
-          {/* Gallery */}
-          <div className={styles.gallery}>
-            {listing.images?.length > 0 ? (
-              <img src={listing.images[0].url} alt={listing.title} className={styles.mainImage} />
-            ) : (
-              <div className="flex-center" style={{ height: '400px', background: '#e2e8f0', color: '#94a3b8' }}>
-                <Building size={64} />
+      <section className="section-padding" style={{ paddingTop: 0 }}>
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className={styles.layout}>
+            <div className={styles.mainCol}>
+              {/* Gallery */}
+              <div className={styles.gallery}>
+                {listing.images?.length > 0 ? (
+                  <img src={listing.images[0].url} alt={listing.title} className={styles.mainImage} />
+                ) : (
+                  <div className="flex-center" style={{ height: '400px', background: 'var(--color-surface)', color: 'var(--color-text-muted)' }}>
+                    <Building size={64} />
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          {/* Title & Mobile Header */}
-          <div className={styles.titleSection}>
-            <div className={styles.metaBadge}>{listing.category}</div>
-            <h1 className={styles.title}>{listing.title}</h1>
-            <div className={styles.location}>
-              <MapPin size={16} />
-              {listing.location || listing.city || "Location not specified"}
-            </div>
-            
-            <div className={styles.mobilePriceBox}>
-              <div className={styles.price}>
-                {listing.price ? `${listing.currency === 'INR' ? '₹' : listing.currency} ${listing.price.toLocaleString()}` : "Price Not Specified"}
+              {/* Title & Mobile Header */}
+              <div className={styles.titleSection}>
+                <div className={styles.metaBadge}>{listing.category}</div>
+                <h1 className={styles.title}>{listing.title}</h1>
+                <div className={styles.location}>
+                  <MapPin size={16} />
+                  {listing.location || listing.city || "Location not specified"}
+                </div>
+                
+                <div className={styles.mobilePriceBox}>
+                  <div className={styles.price}>
+                    {listing.price ? `${listing.currency === 'INR' ? '₹' : listing.currency} ${listing.price.toLocaleString()}` : "Price Not Specified"}
+                  </div>
+                  <div className={styles.transactionType}>{listing.transactionType}</div>
+                </div>
               </div>
-              <div className={styles.transactionType}>{listing.transactionType}</div>
-            </div>
-          </div>
 
-          <div className={styles.divider}></div>
+              <div className={styles.divider}></div>
 
           {/* Description */}
           <section className={styles.section}>
@@ -134,14 +139,16 @@ export default async function MemberListingDetailPage({ params }: { params: Prom
               </div>
               <div>
                 <div className={styles.sellerName}>{listing.seller?.name || "Community Member"}</div>
-                <div className="text-muted small-text">Member</div>
+                <div style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>Member</div>
               </div>
             </div>
           </div>
           
           <button className={styles.reportBtn}>Report Listing</button>
         </div>
-      </div>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 }

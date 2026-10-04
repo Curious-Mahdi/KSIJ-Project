@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Search, MapPin, Building, Plus } from "lucide-react";
+import * as motion from "framer-motion/client";
+import { Search, MapPin, Building, Plus, ArrowRight } from "lucide-react";
 import styles from "./page.module.css";
 import { getMarketplaceListings, getCommunityProperties } from "@/lib/actions/marketplace";
 
@@ -9,43 +10,50 @@ export default async function MarketplacePage() {
   const memberListings = await getMarketplaceListings();
 
   return (
-    <div className={styles.container}>
+    <div className="w-full">
       <section className={styles.hero}>
-        <h1>Marketplace</h1>
-        <p>Discover community spaces, properties and items available within the community.</p>
-        
-        <div className={styles.searchContainer}>
-          <form className={styles.searchBar} action="/marketplace/search">
-            <input 
-              type="text" 
-              name="q"
-              placeholder="Search properties, venues, vehicles, electronics and more..." 
-              className={styles.searchInput}
-            />
-            <button type="submit" className={styles.searchBtn}>
-              <Search size={20} />
-            </button>
-          </form>
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <span className={styles.heroEyebrow}>MARKETPLACE</span>
+            <h1 className="h1 mb-16" style={{ color: 'var(--color-primary-dark)' }}>Discover the community.</h1>
+            <p className={styles.subtitle}>Discover community spaces, properties and items available within the community.</p>
+            
+            <div className={styles.searchContainer}>
+              <form className={styles.searchBar} action="/marketplace/search">
+                <input 
+                  type="text" 
+                  name="q"
+                  placeholder="Search properties, venues, vehicles, electronics and more..." 
+                  className={styles.searchInput}
+                />
+                <button type="submit" className={styles.searchBtn}>
+                  <Search size={20} />
+                </button>
+              </form>
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Community Properties Section */}
-      <section className={styles.section}>
-        <div className={styles.sectionHeader}>
-          <div>
-            <h2 className={styles.sectionTitle}>Community Properties</h2>
-            <p className={styles.sectionSubtitle}>Explore venues and facilities managed by the Jamaat and community organizations.</p>
-          </div>
-          <Link href="/marketplace/community-properties" className={styles.viewAllBtn}>
-            Explore Community Properties
-          </Link>
-        </div>
+      <section className="section-padding bg-light-green">
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <div className={styles.sectionHeader}>
+              <div>
+                <h2 className="h2 mb-8">Community Properties</h2>
+                <p className={styles.sectionSubtitle}>Explore venues and facilities managed by the Jamaat and community organizations.</p>
+              </div>
+              <Link href="/marketplace/community-properties" className="btn btn-secondary">
+                Explore Community Properties
+              </Link>
+            </div>
         
         <div className={styles.grid}>
           {communityProperties.length > 0 ? communityProperties.slice(0, 3).map((prop: any) => (
             <Link href={`/marketplace/community-properties/${prop.id}`} key={prop.id} className={styles.card}>
               <div className={styles.cardImgWrap} style={{ aspectRatio: '4/3' }}>
-                <div className={styles.cardBadge} style={{ background: 'var(--color-primary)', color: 'white' }}>OFFICIAL COMMUNITY PROPERTY</div>
+                <div className={styles.cardBadge} style={{ background: 'var(--color-primary)', color: 'white' }}>OFFICIAL PROPERTY</div>
                 {prop.images?.[0]?.url ? (
                   <img src={prop.images[0].url} alt={prop.name} className={styles.cardImg} />
                 ) : (
@@ -79,25 +87,29 @@ export default async function MarketplacePage() {
             <p className="text-muted">No community properties listed yet.</p>
           )}
         </div>
+        </motion.div>
+        </div>
       </section>
 
       {/* Member Marketplace Section */}
-      <section className={styles.section}>
-        <div className={styles.sectionHeader}>
-          <div>
-            <h2 className={styles.sectionTitle}>Member Marketplace</h2>
-            <p className={styles.sectionSubtitle}>Buy, sell or rent directly with members of the community.</p>
-          </div>
-          <Link href="/marketplace/member-marketplace" className={styles.viewAllBtn}>
-            Browse Marketplace
-          </Link>
-        </div>
+      <section className="section-padding bg-white">
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <div className={styles.sectionHeader}>
+              <div>
+                <h2 className="h2 mb-8">Member Marketplace</h2>
+                <p className={styles.sectionSubtitle}>Buy, sell or rent directly with members of the community.</p>
+              </div>
+              <Link href="/marketplace/member-marketplace" className="btn btn-secondary">
+                Browse Marketplace
+              </Link>
+            </div>
         
         <div className={styles.grid}>
           {memberListings.length > 0 ? memberListings.slice(0, 4).map((listing: any) => (
             <Link href={`/marketplace/member-marketplace/${listing.id}`} key={listing.id} className={styles.card}>
               <div className={styles.cardImgWrap}>
-                <div className={styles.cardBadge} style={{ background: 'var(--color-ink)', color: 'white' }}>
+                <div className={styles.cardBadge} style={{ background: 'var(--color-very-dark)', color: 'white' }}>
                   {listing.transactionType}
                 </div>
                 {listing.images?.[0]?.url ? (
@@ -119,7 +131,7 @@ export default async function MarketplacePage() {
                 </div>
                 <div className={styles.cardMeta} style={{ marginTop: 'auto', paddingTop: '12px' }}>
                   <span style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>{listing.category}</span>
-                  <span style={{ fontSize: '0.7rem', background: '#e2e8f0', color: '#475569', padding: '4px 8px', borderRadius: '4px', fontWeight: 600 }}>
+                  <span style={{ fontSize: '0.7rem', background: 'var(--color-border)', color: 'var(--color-text-main)', padding: '4px 8px', borderRadius: '4px', fontWeight: 600 }}>
                     MEMBER LISTING
                   </span>
                 </div>
@@ -128,6 +140,8 @@ export default async function MarketplacePage() {
           )) : (
             <p className="text-muted">No member listings yet.</p>
           )}
+        </div>
+        </motion.div>
         </div>
       </section>
 

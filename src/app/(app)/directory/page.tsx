@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import * as motion from "framer-motion/client";
 import { getDirectoryListings } from "@/lib/actions/directory";
 import styles from "./page.module.css";
 import { Search, Building2, Briefcase, UserSquare2, ArrowRight } from "lucide-react";
@@ -21,41 +22,47 @@ export default async function DirectoryPage() {
   const recentListings = listings.slice(0, 6); // Just take the latest 6
 
   return (
-    <div className={styles.container}>
+    <div className="w-full">
       
-      {/* Hero & Search */}
-      <div className={styles.hero}>
-        <div className="animateFadeUp">
-          <h1 className={styles.title}>Directory</h1>
-          <p className={styles.subtitle}>Find businesses, professionals and services across the community.</p>
-          
-          <div className={styles.headerActions}>
-            <Link href="/directory/my-directory" className={styles.secondaryBtn}>
-              My Dashboard & Chats
-            </Link>
-            <Link href="/directory/list-yourself" className={styles.primaryBtn}>
-              List Yourself <ArrowRight size={16} style={{marginLeft: '8px'}} />
-            </Link>
-          </div>
-        </div>
+      {/* Hero & Search (Full Bleed) */}
+      <section className={styles.hero}>
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <span className={styles.heroEyebrow}>DIRECTORY</span>
+            <h1 className="h1 mb-16" style={{ color: 'var(--color-primary-dark)' }}>Find your community.</h1>
+            <p className={styles.subtitle}>Find businesses, professionals and services across the community.</p>
+            
+            <div className={styles.headerActions}>
+              <Link href="/directory/my-directory" className="btn btn-secondary">
+                My Dashboard & Chats
+              </Link>
+              <Link href="/directory/list-yourself" className="btn btn-primary">
+                List Yourself <ArrowRight size={16} />
+              </Link>
+            </div>
+          </motion.div>
 
-        <div className={`${styles.searchContainer} animateFadeUp delay-100`}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.6 }} className={styles.searchContainer}>
           <Suspense fallback={<div style={{ padding: '16px', textAlign: 'center' }}>Loading search...</div>}>
             <SearchForm />
           </Suspense>
           
           <div className={styles.searchHelpers}>
-            <Link href="/directory/search?q=Web Developer" className={styles.helperTag}>Try: Web Developer</Link>
-            <Link href="/directory/search?q=AC Repair" className={styles.helperTag}>Try: AC Repair</Link>
-            <Link href="/directory/search?q=Dentist" className={styles.helperTag}>Try: Dentist</Link>
+            <span style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', marginRight: '8px' }}>Try:</span>
+            <Link href="/directory/search?q=Web Developer" className={styles.helperTag}>Web Developer</Link>
+            <Link href="/directory/search?q=AC Repair" className={styles.helperTag}>AC Repair</Link>
+            <Link href="/directory/search?q=Dentist" className={styles.helperTag}>Dentist</Link>
           </div>
+        </motion.div>
         </div>
-      </div>
+      </section>
 
       {/* Browse by Type */}
-      <div className={`${styles.section} animateFadeUp delay-200`}>
-        <h2 className={styles.sectionTitle}>Browse by type</h2>
-        <div className={styles.typeGrid}>
+      <section className="section-padding bg-light-green">
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <h2 className="h2 mb-48" style={{ textAlign: 'center' }}>Browse by type</h2>
+            <div className={styles.typeGrid}>
           <Link href="/directory/search?type=Business" className={styles.typeCard}>
             <div className={styles.typeIcon}><Building2 size={32} /></div>
             <div className={styles.typeName}>Businesses</div>
@@ -73,24 +80,32 @@ export default async function DirectoryPage() {
             <div className={styles.typeName}>Professionals</div>
             <div className={styles.typeDesc}>Doctors, lawyers, engineers and consultants</div>
           </Link>
+            </div>
+          </motion.div>
         </div>
-      </div>
+      </section>
 
       {/* Popular Categories */}
-      <div className={`${styles.section} animateFadeUp delay-300`}>
-        <h2 className={styles.sectionTitle}>Popular categories</h2>
-        <div className={styles.catGrid}>
-          {CATEGORIES.map(cat => (
-            <Link key={cat} href={`/directory/search?category=${encodeURIComponent(cat)}`} className={styles.catPill}>
-              {cat}
-            </Link>
-          ))}
+      <section className="section-padding bg-white">
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <h2 className="h2 mb-32">Popular categories</h2>
+            <div className={styles.catGrid}>
+              {CATEGORIES.map(cat => (
+                <Link key={cat} href={`/directory/search?category=${encodeURIComponent(cat)}`} className={styles.catPill}>
+                  {cat}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
         </div>
-      </div>
+      </section>
 
       {/* Featured / Recently Added */}
-      <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Recently added</h2>
+      <section className="section-padding bg-light-green">
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <h2 className="h2 mb-32">Recently added</h2>
         
         {recentListings.length > 0 ? (
           <div className={styles.listingGrid}>
@@ -116,16 +131,22 @@ export default async function DirectoryPage() {
             <p style={{color: 'var(--color-text-secondary)'}}>Be the first to list your business, service, or profession!</p>
           </div>
         )}
-      </div>
+          </motion.div>
+        </div>
+      </section>
 
       {/* CTA */}
-      <div className={styles.ctaBox}>
-        <h2 className={styles.ctaTitle}>Want to be listed?</h2>
-        <p className={styles.ctaDesc}>Add your business, service or professional profile to the community directory to reach more people.</p>
-        <Link href="/directory/list-yourself" className={styles.ctaBtn}>
-          List Yourself <ArrowRight size={20} />
-        </Link>
-      </div>
+      <section className="section-padding bg-dark-green" style={{ color: 'white' }}>
+        <div className="container">
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className={styles.ctaBox}>
+            <h2 className="h1 mb-16" style={{ color: 'white' }}>Want to be listed?</h2>
+            <p className={styles.ctaDesc}>Add your business, service or professional profile to the community directory to reach more people.</p>
+            <Link href="/directory/list-yourself" className="btn btn-primary" style={{ backgroundColor: 'var(--color-accent-gold)', color: 'var(--color-very-dark)' }}>
+              List Yourself <ArrowRight size={20} />
+            </Link>
+          </motion.div>
+        </div>
+      </section>
 
     </div>
   );
