@@ -20,7 +20,7 @@ export default async function CommunityPropertiesPage({ searchParams }: { search
   }
 
   const types = ["Hall / Venue", "Resort", "Other Community Property"];
-  const usageTagsList = ["Majlis", "Niyaz", "Nikah", "Walima", "Wedding", "Community Function", "Religious Gathering", "Other"];
+  const usageTagsList = ["Majlis", "Niyaz", "Nikah / Walima", "Community Program", "Religious Gathering"];
 
   return (
     <div className={styles.container}>

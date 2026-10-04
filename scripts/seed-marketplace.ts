@@ -27,6 +27,23 @@ async function main() {
     });
   }
 
+  // Create a separate test user to own member listings so the current user can chat with them
+  let testSeller = await prisma.user.findFirst({
+    where: { email: 'test.seller@ksijreload.local' }
+  });
+
+  if (!testSeller) {
+    console.log('Creating Test Seller user...');
+    testSeller = await prisma.user.create({
+      data: {
+        googleId: 'test-seller-google-id',
+        name: 'Community Member (Test Seller)',
+        email: 'test.seller@ksijreload.local',
+        isAdmin: false
+      }
+    });
+  }
+
   const properties = [
     {
       name: 'KSIJ Masjid Dongri — Masjid & Imambara Hall',
@@ -38,8 +55,8 @@ async function main() {
       area: 'Dongri',
       city: 'Mumbai',
       location: 'Dongri, Mumbai 400009',
-      usageTags: 'Majlis, Niyaz, Nikah, Walima, Wedding, Religious Gathering, Community Function, Other Functions',
-      pricing: 'Rates vary by function',
+      usageTags: 'Nikah / Walima, Majlis, Niyaz, Community Program, Religious Gathering',
+      pricing: 'Pricing as per official Trust resolution',
       pricingDetails: JSON.stringify({
         masjid: {
           gentsMajlis: '₹500',
@@ -251,14 +268,17 @@ async function main() {
       console.log(`Demo listing ${listing.title} already exists, updating...`);
       await prisma.marketplaceListing.update({
         where: { id: existing.id },
-        data: listing
+        data: {
+          ...listing,
+          sellerId: testSeller.id,
+        }
       });
     } else {
       console.log(`Creating demo listing ${listing.title}...`);
       await prisma.marketplaceListing.create({
         data: {
           ...listing,
-          sellerId: admin.id,
+          sellerId: testSeller.id,
         }
       });
     }
