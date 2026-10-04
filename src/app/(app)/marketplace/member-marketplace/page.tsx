@@ -8,10 +8,10 @@ export default async function MemberMarketplacePage({ searchParams }: { searchPa
   const listings = await getMarketplaceListings(searchParams);
 
   const categories = [
-    "PROPERTY", "VEHICLES", "ELECTRONICS", "FURNITURE", 
-    "HOME_APPLIANCES", "BOOKS_EDUCATION", "CLOTHING_ACCESSORIES", "OTHER"
+    "Property", "Vehicles", "Electronics", "Furniture", 
+    "Home Appliances", "Books & Education", "Clothing & Accessories", "Other"
   ];
-  const types = ["SALE", "RENT", "LEASE", "FREE", "OTHER"];
+  const types = ["Sale", "Rent", "Lease", "Free", "Other"];
 
   return (
     <div className={styles.container}>
@@ -38,7 +38,7 @@ export default async function MemberMarketplacePage({ searchParams }: { searchPa
             {categories.map(c => (
               <div key={c} className={styles.filterItem}>
                 <Link href={`/marketplace/member-marketplace?category=${c}`} style={{color: 'inherit', textDecoration: 'none', fontWeight: searchParams.category === c ? 'bold' : 'normal'}}>
-                  {c.replace('_', ' ')}
+                  {c}
                 </Link>
               </div>
             ))}
@@ -78,17 +78,17 @@ export default async function MemberMarketplacePage({ searchParams }: { searchPa
                     )}
                   </div>
                   <div className={cardStyles.cardContent}>
-                    <div className={cardStyles.cardPrice}>
-                      {listing.price ? `${listing.currency} ${listing.price.toLocaleString()}` : "Price Not Specified"}
+                    <div className={cardStyles.cardPrice} style={{ fontWeight: 700, color: 'var(--color-primary)', fontSize: '1.1rem', marginBottom: '4px' }}>
+                      {listing.price ? `${listing.currency === 'INR' ? '₹' : listing.currency} ${listing.price.toLocaleString()}` : "Price Not Specified"}
                     </div>
                     <h3 className={cardStyles.cardTitle} style={{ fontSize: '1rem' }}>{listing.title}</h3>
                     <div className={cardStyles.cardLocation}>
                       <MapPin size={14} />
                       {listing.location || listing.city || "Location not specified"}
                     </div>
-                    <div className={cardStyles.cardMeta}>
-                      <span>{listing.category}</span>
-                      <span style={{ fontSize: '0.7rem', background: '#f1f5f9', padding: '2px 8px', borderRadius: '12px' }}>
+                    <div className={cardStyles.cardMeta} style={{ marginTop: 'auto', paddingTop: '12px' }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>{listing.category}</span>
+                      <span style={{ fontSize: '0.7rem', background: '#e2e8f0', color: '#475569', padding: '4px 8px', borderRadius: '4px', fontWeight: 600 }}>
                         MEMBER LISTING
                       </span>
                     </div>

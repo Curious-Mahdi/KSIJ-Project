@@ -100,6 +100,12 @@ model Conversation {
   
   status       String   @default("NEW") // NEW, IN_CONVERSATION, CONTACT_SHARED, COMPLETED, CLOSED
   
+  // Community Property Enquiry fields
+  purpose      String?
+  preferredDate String?
+  preferredTime String?
+  guestCount   Int?
+  
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -200,18 +206,27 @@ model MarketplaceImage {
 model CommunityProperty {
   id               String   @id @default(cuid())
   name             String
-  propertyType     String   // Hall, Imambara, Resort, Event Space, Sports Facility, Other
+  propertyType     String   // "Hall / Venue", "Resort", "Other Community Property"
+  shortDescription String
   description      String
   
   managedById      String
   managedBy        User     @relation("ManagedProperties", fields: [managedById], references: [id], onDelete: Cascade)
   
-  location         String?
+  address          String?
+  area             String?
   city             String?
+  location         String?
   
-  capacity         Int?
-  pricing          String?  // E.g. "₹5,000 onwards"
+  usageTags        String?  // JSON or CSV
   facilities       String?  // JSON or CSV
+  capacity         Int?
+  
+  pricing          String?  // Short summary e.g. "Rates vary by function"
+  pricingDetails   String?  // Detailed JSON or text
+  functionTimings  String?
+  termsAndConditions String?
+  contactInformation String?
   availabilityInfo String?
   
   status           String   @default("PUBLISHED") // DRAFT, PUBLISHED, PAUSED, ARCHIVED

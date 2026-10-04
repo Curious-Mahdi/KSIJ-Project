@@ -42,6 +42,14 @@ export async function getCommunityProperties(params: any = {}) {
       { location: { contains: params.query, mode: 'insensitive' } }
     ];
   }
+  
+  if (params.type && params.type !== 'All Types') {
+    where.propertyType = params.type;
+  }
+  
+  if (params.usage && params.usage !== 'All Uses') {
+    where.usageTags = { contains: params.usage, mode: 'insensitive' };
+  }
 
   const properties = await prisma.communityProperty.findMany({
     where,
@@ -147,7 +155,7 @@ export async function getCommunityPropertyById(id: string) {
   });
 }
 
-export async function initiateCommunityPropertyConversation(propertyId: string) {
+export async function initiateCommunityPropertyConversation(propertyId: string, enquiryData?: { purpose?: string, preferredDate?: string, preferredTime?: string, guestCount?: number, message?: string }) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) throw new Error("Unauthorized");
   const userId = (session.user as any).id;
@@ -159,6 +167,9 @@ export async function initiateCommunityPropertyConversation(propertyId: string) 
     throw new Error("Cannot start conversation with yourself");
   }
 
+  // Always create a new conversation for a new enquiry, or reuse if we prefer. 
+  // For enquiries, creating a new conversation might be better if they enquire multiple times. 
+  // Let's stick to reusing if there's already one, but updating it with new enquiry info.
   let conversation = await prisma.conversation.findFirst({
     where: {
       communityPropertyId: propertyId,
@@ -172,7 +183,34 @@ export async function initiateCommunityPropertyConversation(propertyId: string) 
         communityPropertyId: propertyId,
         initiatedById: userId,
         ownerId: property.managedById,
-        status: "NEW"
+        status: "NEW",
+        purpose: enquiryData?.purpose,
+        preferredDate: enquiryData?.preferredDate,
+        preferredTime: enquiryData?.preferredTime,
+        guestCount: enquiryData?.guestCount
+      }
+    });
+  } else if (enquiryData) {
+    // Update existing conversation with new enquiry details
+    conversation = await prisma.conversation.update({
+      where: { id: conversation.id },
+      data: {
+        purpose: enquiryData.purpose,
+        preferredDate: enquiryData.preferredDate,
+        preferredTime: enquiryData.preferredTime,
+        guestCount: enquiryData.guestCount,
+        status: "NEW" // Re-open or mark as new enquiry
+      }
+    });
+  }
+
+  // If there's an initial message, send it
+  if (enquiryData?.message) {
+    await prisma.message.create({
+      data: {
+        conversationId: conversation.id,
+        senderId: userId,
+        message: enquiryData.message
       }
     });
   }

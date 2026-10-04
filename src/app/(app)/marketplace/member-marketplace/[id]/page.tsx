@@ -50,7 +50,7 @@ export default async function MemberListingDetailPage({ params }: { params: { id
             
             <div className={styles.mobilePriceBox}>
               <div className={styles.price}>
-                {listing.price ? `${listing.currency} ${listing.price.toLocaleString()}` : "Price Not Specified"}
+                {listing.price ? `${listing.currency === 'INR' ? '₹' : listing.currency} ${listing.price.toLocaleString()}` : "Price Not Specified"}
               </div>
               <div className={styles.transactionType}>{listing.transactionType}</div>
             </div>
@@ -116,7 +116,7 @@ export default async function MemberListingDetailPage({ params }: { params: { id
           <div className={styles.priceCard}>
             <div className={styles.priceLabel}>{listing.transactionType}</div>
             <div className={styles.priceLarge}>
-              {listing.price ? `${listing.currency} ${listing.price.toLocaleString()}` : "Contact for Price"}
+              {listing.price ? `${listing.currency === 'INR' ? '₹' : listing.currency} ${listing.price.toLocaleString()}` : "Contact for Price"}
             </div>
             {listing.isNegotiable && <div className={styles.negotiable}>Price Negotiable</div>}
             

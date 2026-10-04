@@ -18,7 +18,8 @@ export default async function CommunityPropertiesPage({ searchParams }: { search
     isAdmin = !!user?.isAdmin;
   }
 
-  const types = ["Hall", "Imambara", "Resort", "Event Space", "Sports Facility", "Other"];
+  const types = ["Hall / Venue", "Resort", "Other Community Property"];
+  const usageTagsList = ["Majlis", "Niyaz", "Nikah", "Walima", "Wedding", "Community Function", "Religious Gathering", "Other"];
 
   return (
     <div className={styles.container}>
@@ -52,6 +53,20 @@ export default async function CommunityPropertiesPage({ searchParams }: { search
               </div>
             ))}
           </div>
+
+          <div className={styles.filterGroup} style={{ marginTop: '2rem' }}>
+            <h3 className={styles.filterTitle}>Usage / Purpose</h3>
+            <div className={styles.filterItem}>
+              <Link href="/marketplace/community-properties" style={{color: 'inherit', textDecoration: 'none'}}>All Uses</Link>
+            </div>
+            {usageTagsList.map(t => (
+              <div key={t} className={styles.filterItem}>
+                <Link href={`/marketplace/community-properties?usage=${t}`} style={{color: 'inherit', textDecoration: 'none', fontWeight: searchParams.usage === t ? 'bold' : 'normal'}}>
+                  {t}
+                </Link>
+              </div>
+            ))}
+          </div>
         </aside>
 
         <main>
@@ -63,8 +78,8 @@ export default async function CommunityPropertiesPage({ searchParams }: { search
             <div className={styles.grid}>
               {properties.map((prop: any) => (
                 <Link href={`/marketplace/community-properties/${prop.id}`} key={prop.id} className={cardStyles.card}>
-                  <div className={cardStyles.cardImgWrap}>
-                    <div className={cardStyles.cardBadge}>COMMUNITY PROPERTY</div>
+                  <div className={cardStyles.cardImgWrap} style={{ aspectRatio: '4/3' }}>
+                    <div className={cardStyles.cardBadge} style={{ background: 'var(--color-primary)', color: 'white' }}>OFFICIAL COMMUNITY PROPERTY</div>
                     {prop.images?.[0]?.url ? (
                       <img src={prop.images[0].url} alt={prop.name} className={cardStyles.cardImg} />
                     ) : (
@@ -76,16 +91,21 @@ export default async function CommunityPropertiesPage({ searchParams }: { search
                   <div className={cardStyles.cardContent}>
                     <h3 className={cardStyles.cardTitle}>{prop.name}</h3>
                     <div className={cardStyles.cardLocation}>
-                      <MapPin size={14} />
-                      {prop.location || prop.city || "Location not specified"}
-                    </div>
-                    <div className={cardStyles.cardMeta}>
                       <span>{prop.propertyType}</span>
-                      {prop.capacity && (
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          <Users size={14} /> {prop.capacity}
-                        </span>
-                      )}
+                      <span>{prop.location || prop.city || "Location not specified"}</span>
+                    </div>
+                    {prop.usageTags && (
+                      <div style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', marginBottom: '8px' }}>
+                        {prop.usageTags.split(',').join(' · ')}
+                      </div>
+                    )}
+                    {prop.pricing && (
+                      <div style={{ fontWeight: 600, color: 'var(--color-primary)', fontSize: '0.9rem', marginBottom: '12px' }}>
+                        {prop.pricing}
+                      </div>
+                    )}
+                    <div style={{ marginTop: 'auto', textAlign: 'center', padding: '8px', border: '1px solid var(--color-border)', borderRadius: '6px', color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.875rem' }}>
+                      View Property
                     </div>
                   </div>
                 </Link>
