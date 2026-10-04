@@ -6,9 +6,34 @@ import { retrieveRelevantChunks } from "@/lib/rag/retriever";
 import { getLLMProvider } from "@/lib/ai/provider";
 import { randomUUID } from "crypto";
 
+// Simple in-memory rate limiter (10 requests per minute per IP)
+const rateLimitMap = new Map<string, { count: number, resetTime: number }>();
+const RATE_LIMIT_WINDOW = 60 * 1000;
+const RATE_LIMIT_MAX = 10;
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+  if (!entry || now > entry.resetTime) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+    return true;
+  }
+  if (entry.count >= RATE_LIMIT_MAX) {
+    return false;
+  }
+  entry.count++;
+  return true;
+}
+
 export async function POST(request: Request) {
   const requestId = randomUUID();
   const startTime = Date.now();
+  
+  // Basic IP extraction for rate limiting
+  const ip = request.headers.get("x-forwarded-for") || "unknown-ip";
+  if (!checkRateLimit(ip)) {
+    return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
+  }
 
   try {
     const body = await request.json();
@@ -21,20 +46,21 @@ export async function POST(request: Request) {
       );
     }
 
-    const { message } = result.data;
+    const { message, history, currentPage } = result.data;
     
     // Retrieve context from Postgres via pgvector
-    const maxResults = parseInt(process.env.RAG_MAX_RESULTS || "8", 10);
-    const retrievedChunks = await retrieveRelevantChunks(message, maxResults, 0.5);
+    const maxResults = parseInt(process.env.RAG_MAX_RESULTS || "4", 10);
+    // Passing currentPage to the retriever for contextual boosting
+    const retrievedChunks = await retrieveRelevantChunks(message, maxResults, 0.5, currentPage);
 
     // Build context block
     let contextStr = retrievedChunks.map(chunk => 
-      `Document: ${chunk.title}\nSection: ${chunk.section || 'General'}\nContent: ${chunk.content}\n`
+      `Document: ${chunk.title}\nSection: ${chunk.section || 'General'}\nURL: ${chunk.sourceUrl || `/library/${chunk.documentId}`}\nContent: ${chunk.content}\n`
     ).join('\n---\n');
 
     // Get LLM response
     const llm = getLLMProvider();
-    const answer = await llm.generate(SYSTEM_PROMPT, message, contextStr);
+    const answer = await llm.generate(SYSTEM_PROMPT, message, contextStr, history);
     
     const isAbstention = answer.includes("I couldn't find sufficient information") || 
                          answer.includes("does not have sufficient information") ||
@@ -60,12 +86,20 @@ export async function POST(request: Request) {
 
     const grounded = citations.length > 0 && !isAbstention;
 
+    // Confidence scoring
+    let confidence: "high" | "medium" | "low" = "low";
+    if (grounded) {
+      // Basic confidence heuristic
+      confidence = retrievedChunks.length > 2 ? "high" : "medium";
+    }
+
     const chatResponse: ChatResponse = {
       answer: isAbstention && retrievedChunks.length === 0 
         ? "I couldn't find sufficient information about that in the approved community documents." 
         : answer,
       grounded,
       citations: isAbstention ? [] : citations,
+      confidence,
       requestId,
     };
 

@@ -12,7 +12,6 @@ import {
   ArrowRight,
   Filter,
 } from "lucide-react";
-import { ChatWidget } from "@/components/chatbot/ChatWidget";
 
 interface EventItem {
   id: string;
@@ -418,8 +417,6 @@ export default function EventsClientView({ events }: { events: EventItem[] }) {
         </div>
       </div>
 
-      {/* Floating Chat Widget */}
-      <ChatWidget />
     </div>
   );
 }

@@ -5,8 +5,8 @@ import styles from "./page.module.css";
 import { services } from "@/lib/data/services";
 
 export const metadata = {
-  title: "Community Services & Support | KSIJ Reload",
-  description: "Explore the community assistance services KSIJ Reload brings together in one place.",
+  title: "Community Services & Support | KSIJ One",
+  description: "Explore the community assistance services KSIJ One brings together in one place.",
 };
 
 export default function ServicesLandingPage() {

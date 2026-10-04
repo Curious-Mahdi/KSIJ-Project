@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Home, Grid, Users, Store, Calendar, MoreHorizontal, Bell } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { ChatWidget } from "@/components/chatbot/ChatWidget";
 import styles from "./layout.module.css";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -148,6 +149,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <span>More</span>
         </Link>
       </nav>
+
+      {/* Site-wide Community Assistant Widget */}
+      <ChatWidget pathname={pathname} />
     </div>
   );
 }
