@@ -11,16 +11,16 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  googleId     String   @unique
-  name         String?
-  email        String?  @unique
-  profilePhoto String?
-  jamaat       String?
-  isAdmin      Boolean  @default(false)
-  role         String   @default("USER") // USER, ADMIN
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                     String               @id @default(cuid())
+  googleId               String               @unique
+  name                   String?
+  email                  String?              @unique
+  profilePhoto           String?
+  jamaat                 String?
+  isAdmin                Boolean              @default(false)
+  role                   String               @default("USER") // USER, ADMIN
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @updatedAt
 
   listings               DirectoryListing[]
   initiatedConversations Conversation[]       @relation("InitiatedConversations")
@@ -31,262 +31,379 @@ model User {
   marketplaceListings    MarketplaceListing[]
   communityProperties    CommunityProperty[]  @relation("ManagedProperties")
   marketplaceReports     MarketplaceReport[]
+  postedOpportunities    Opportunity[]            @relation("PostedOpportunities")
+  opportunityApplications OpportunityApplication[] @relation("OpportunityApplications")
 }
 
 model DirectoryListing {
-  id      String @id @default(cuid())
-  ownerId String
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-
-  listingType      String // BUSINESS, SERVICE, PROFESSIONAL
-  name             String // Business name or Professional name
-  shortDescription String
-  description      String?
-
-  category    String
-  subcategory String?
-  services    String // JSON string or comma separated
-  skills      String? // JSON string or comma separated
-  keywords    String? // JSON string or comma separated
-  tags        String? // JSON string or comma separated
-
-  // Address fields
-  addressLine1 String?
-  addressLine2 String?
-  area         String?
-  city         String?
-  state        String?
-  pincode      String?
-  country      String?
-  latitude     Float?
-  longitude    Float?
-
-  location    String? // Legacy / combined string
-  serviceArea String?
-  serviceMode String? // Online, In-person, Both
-
-  image      String? // Used as logo
-  coverImage String?
-  website    String?
-
-  status String @default("PUBLISHED") // DRAFT, PUBLISHED, PAUSED, ARCHIVED
-
-  // Verification & Source Data
-  sourceType         String? // e.g. "COMMUNITY_DIRECTORY_SCAN"
-  sourceReference    String?
-  sourcePage         String?
+  id                 String            @id @default(cuid())
+  ownerId            String
+  listingType        String
+  name               String
+  shortDescription   String
+  description        String?
+  category           String
+  subcategory        String?
+  services           String
+  skills             String?
+  keywords           String?
+  location           String?
+  serviceArea        String?
+  serviceMode        String?
+  image              String?
+  website            String?
+  status             String            @default("PUBLISHED")
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  addressLine1       String?
+  addressLine2       String?
+  area               String?
+  city               String?
+  country            String?
+  coverImage         String?
+  latitude           Float?
+  longitude          Float?
+  pincode            String?
+  publishedAt        DateTime?
   sourceNotes        String?
-  verificationStatus String  @default("UNVERIFIED") // UNVERIFIED, VERIFIED, REJECTED
+  sourcePage         String?
+  sourceReference    String?
+  sourceType         String?
+  state              String?
+  tags               String?
+  verificationStatus String            @default("UNVERIFIED")
   verifiedAt         DateTime?
   verifiedById       String?
-  publishedAt        DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  contact       DirectoryContact?
-  conversations Conversation[]
+  conversations      Conversation[]
+  contact            DirectoryContact?
+  owner              User              @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 }
 
 model DirectoryContact {
-  id        String           @id @default(cuid())
-  listingId String           @unique
-  listing   DirectoryListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
-
-  phone    String?
-  whatsapp String?
-  email    String?
-
-  phoneVisibility    String @default("CHAT_ONLY") // PUBLIC, CHAT_ONLY, PRIVATE
-  whatsappVisibility String @default("CHAT_ONLY")
-  emailVisibility    String @default("CHAT_ONLY")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                 String           @id @default(cuid())
+  listingId          String           @unique
+  phone              String?
+  whatsapp           String?
+  email              String?
+  phoneVisibility    String           @default("CHAT_ONLY")
+  whatsappVisibility String           @default("CHAT_ONLY")
+  emailVisibility    String           @default("CHAT_ONLY")
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  listing            DirectoryListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 }
 
 model Conversation {
-  id String @id @default(cuid())
-
-  // Polymorphic relations (one of these will be set)
-  listingId String?
-  listing   DirectoryListing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
-
+  id                   String              @id @default(cuid())
+  listingId            String?
+  initiatedById        String
+  ownerId              String
+  status               String              @default("NEW")
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  communityPropertyId  String?
   marketplaceListingId String?
+  guestCount           Int?
+  preferredDate        String?
+  preferredTime        String?
+  purpose              String?
+  contactShares        ContactShare[]
+  communityProperty    CommunityProperty?  @relation(fields: [communityPropertyId], references: [id], onDelete: Cascade)
+  initiatedBy          User                @relation("InitiatedConversations", fields: [initiatedById], references: [id], onDelete: Cascade)
+  listing              DirectoryListing?   @relation(fields: [listingId], references: [id], onDelete: Cascade)
   marketplaceListing   MarketplaceListing? @relation(fields: [marketplaceListingId], references: [id], onDelete: Cascade)
-
-  communityPropertyId String?
-  communityProperty   CommunityProperty? @relation(fields: [communityPropertyId], references: [id], onDelete: Cascade)
-
-  initiatedById String
-  initiatedBy   User   @relation("InitiatedConversations", fields: [initiatedById], references: [id], onDelete: Cascade)
-
-  ownerId String
-  owner   User   @relation("OwnedConversations", fields: [ownerId], references: [id], onDelete: Cascade)
-
-  status String @default("NEW") // NEW, IN_CONVERSATION, CONTACT_SHARED, COMPLETED, CLOSED
-
-  // Community Property Enquiry fields
-  purpose       String?
-  preferredDate String?
-  preferredTime String?
-  guestCount    Int?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  messages      Message[]
-  contactShares ContactShare[]
+  owner                User                @relation("OwnedConversations", fields: [ownerId], references: [id], onDelete: Cascade)
+  messages             Message[]
 }
 
 model Message {
   id             String       @id @default(cuid())
   conversationId String
+  senderId       String
+  message        String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-
-  senderId String
-  sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
-
-  message String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
 }
 
 model ContactShare {
   id             String       @id @default(cuid())
   conversationId String
+  sharedById     String
+  phoneShared    Boolean      @default(false)
+  whatsappShared Boolean      @default(false)
+  emailShared    Boolean      @default(false)
+  createdAt      DateTime     @default(now())
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-
-  sharedById String
-  sharedBy   User   @relation(fields: [sharedById], references: [id], onDelete: Cascade)
-
-  phoneShared    Boolean @default(false)
-  whatsappShared Boolean @default(false)
-  emailShared    Boolean @default(false)
-
-  createdAt DateTime @default(now())
+  sharedBy       User         @relation(fields: [sharedById], references: [id], onDelete: Cascade)
 }
 
-// ==========================================
-// MARKETPLACE MODELS
-// ==========================================
-
 model MarketplaceListing {
-  id       String @id @default(cuid())
-  sellerId String
-  seller   User   @relation(fields: [sellerId], references: [id], onDelete: Cascade)
-
-  category        String // PROPERTY, VEHICLES, ELECTRONICS, FURNITURE, HOME_APPLIANCES, BOOKS_EDUCATION, CLOTHING_ACCESSORIES, OTHER
-  transactionType String // SALE, RENT, LEASE, FREE, OTHER
-
+  id               String              @id @default(cuid())
+  sellerId         String
+  category         String
+  transactionType  String
   title            String
   shortDescription String
   description      String?
-
-  price        Float?
-  currency     String  @default("INR")
-  isNegotiable Boolean @default(false)
-
-  condition String? // New, Used - Good, Used - Fair
-
-  // Location
-  location String?
-  city     String?
-  area     String?
-
-  // Property Specific fields
-  propertyType String? // Residential, Commercial, Land, Other
-  bedrooms     Int?
-  bathrooms    Int?
-  propertyArea String?
-  furnishing   String? // Furnished, Semi-furnished, Unfurnished
-  features     String? // JSON or CSV
-
-  // Vehicle Specific fields
-  vehicleType String?
-  brand       String?
-  model       String?
-  year        Int?
-  kilometers  Int?
-
-  status String @default("PUBLISHED") // DRAFT, PUBLISHED, PAUSED, SOLD, RENTED, CLOSED, ARCHIVED
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  images        MarketplaceImage[]
-  conversations Conversation[]
-  reports       MarketplaceReport[]
+  price            Float?
+  currency         String              @default("INR")
+  isNegotiable     Boolean             @default(false)
+  condition        String?
+  location         String?
+  city             String?
+  area             String?
+  propertyType     String?
+  bedrooms         Int?
+  bathrooms        Int?
+  propertyArea     String?
+  furnishing       String?
+  features         String?
+  vehicleType      String?
+  brand            String?
+  model            String?
+  year             Int?
+  kilometers       Int?
+  status           String              @default("PUBLISHED")
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  conversations    Conversation[]
+  images           MarketplaceImage[]
+  seller           User                @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  reports          MarketplaceReport[]
 }
 
 model MarketplaceImage {
   id        String             @id @default(cuid())
   listingId String
-  listing   MarketplaceListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
   url       String
   sortOrder Int                @default(0)
   createdAt DateTime           @default(now())
+  listing   MarketplaceListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 }
 
 model CommunityProperty {
-  id               String @id @default(cuid())
-  name             String
-  propertyType     String // "Hall / Venue", "Resort", "Other Community Property"
-  shortDescription String
-  description      String
-
-  managedById String
-  managedBy   User   @relation("ManagedProperties", fields: [managedById], references: [id], onDelete: Cascade)
-
-  address  String?
-  area     String?
-  city     String?
-  location String?
-
-  usageTags  String? // JSON or CSV
-  facilities String? // JSON or CSV
-  capacity   Int?
-
-  pricing            String? // Short summary e.g. "Rates vary by function"
-  pricingDetails     String? // Detailed JSON or text
-  functionTimings    String?
-  termsAndConditions String?
-  contactInformation String?
+  id                 String                   @id @default(cuid())
+  name               String
+  propertyType       String
+  description        String
+  managedById        String
+  location           String?
+  city               String?
+  capacity           Int?
+  pricing            String?
+  facilities         String?
   availabilityInfo   String?
-
-  status String @default("PUBLISHED") // DRAFT, PUBLISHED, PAUSED, ARCHIVED
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  images    CommunityPropertyImage[]
-  enquiries Conversation[]
+  status             String                   @default("PUBLISHED")
+  createdAt          DateTime                 @default(now())
+  updatedAt          DateTime                 @updatedAt
+  address            String?
+  area               String?
+  contactInformation String?
+  functionTimings    String?
+  pricingDetails     String?
+  shortDescription   String
+  termsAndConditions String?
+  usageTags          String?
+  managedBy          User                     @relation("ManagedProperties", fields: [managedById], references: [id], onDelete: Cascade)
+  images             CommunityPropertyImage[]
+  enquiries          Conversation[]
 }
 
 model CommunityPropertyImage {
   id         String            @id @default(cuid())
   propertyId String
-  property   CommunityProperty @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   url        String
   sortOrder  Int               @default(0)
   createdAt  DateTime          @default(now())
+  property   CommunityProperty @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 }
 
 model MarketplaceReport {
-  id        String             @id @default(cuid())
-  listingId String
-  listing   MarketplaceListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
-
+  id         String             @id @default(cuid())
+  listingId  String
   reporterId String
-  reporter   User   @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  reason     String
+  details    String?
+  status     String             @default("PENDING")
+  createdAt  DateTime           @default(now())
+  listing    MarketplaceListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  reporter   User               @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+}
 
-  reason  String // Scam, Misleading, Prohibited, Inappropriate, Duplicate, Other
-  details String?
+model Announcement {
+  id          String   @id
+  title       String
+  content     String
+  category    String   @default("General")
+  isImportant Boolean  @default(false)
+  isPublished Boolean  @default(true)
+  linkUrl     String?
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
 
-  status String @default("PENDING") // PENDING, REVIEWED, DISMISSED, ACTION_TAKEN
+model Enquiry {
+  id         String   @id
+  name       String
+  email      String
+  phone      String?
+  subject    String
+  message    String
+  category   String   @default("General")
+  status     String   @default("PENDING")
+  adminNotes String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+}
 
-  createdAt DateTime @default(now())
+model Event {
+  id              String   @id
+  title           String
+  description     String
+  date            DateTime
+  time            String
+  location        String
+  imageUrl        String?
+  registrationUrl String?
+  isImportant     Boolean  @default(false)
+  status          String   @default("UPCOMING")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime
+}
+
+model Facility {
+  id          String   @id
+  name        String
+  description String
+  location    String
+  capacity    Int      @default(50)
+  amenities   String?
+  imageUrl    String?
+  isAvailable Boolean  @default(true)
+  contactInfo String?
+  rules       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+}
+
+model FacilityBooking {
+  id         String   @id
+  facilityId String
+  userId     String?
+  userName   String
+  userEmail  String
+  userPhone  String
+  eventDate  DateTime
+  timeSlot   String
+  purpose    String
+  status     String   @default("PENDING")
+  notes      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+}
+
+model KnowledgeChunk {
+  id            String   @id
+  documentId    String
+  content       String
+  chunkIndex    Int
+  section       String?
+  pageNumber    Int?
+  embeddingJson String?
+  createdAt     DateTime @default(now())
+}
+
+model KnowledgeDocument {
+  id            String    @id
+  title         String
+  description   String?
+  category      String?
+  documentType  String?
+  schemeId      String?
+  version       String?
+  status        String    @default("active")
+  language      String    @default("en")
+  jurisdiction  String?
+  sourceUrl     String?
+  effectiveFrom DateTime?
+  effectiveTo   DateTime?
+  fileName      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime
+}
+
+model Service {
+  id                String   @id
+  title             String
+  description       String
+  category          String   @default("General")
+  eligibility       String?
+  requiredDocuments String?
+  process           String?
+  contactInfo       String?
+  faqs              String?
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime
+}
+
+
+// ==========================================
+// OPPORTUNITIES MODELS
+// ==========================================
+
+model Opportunity {
+  id                   String   @id @default(cuid())
+  type                 String   // JOB, INTERNSHIP, MENTORSHIP, PROJECT, VOLUNTEERING
+  title                String
+  slug                 String?  @unique
+  organisationName     String
+  organisationId       String?  // Optional link to DirectoryListing
+  postedByUserId       String
+  postedByUser         User     @relation("PostedOpportunities", fields: [postedByUserId], references: [id], onDelete: Cascade)
+  description          String
+  category             String
+  skills               String?  // JSON or CSV
+  location             String?
+  workMode             String?  // REMOTE, HYBRID, ONSITE
+  experienceLevel      String?
+  employmentType       String?  // FULL_TIME, PART_TIME, CONTRACT, etc.
+  compensationMin      Float?
+  compensationMax      Float?
+  compensationPeriod   String?
+  currency             String   @default("INR")
+  duration             String?
+  startDate            String?
+  applicationDeadline  DateTime?
+  applicationMethod    String?  // KSIJ_ONE, EXTERNAL
+  externalApplicationUrl String?
+  status               String   @default("PUBLISHED") // DRAFT, PENDING_REVIEW, PUBLISHED, PAUSED, CLOSED, EXPIRED
+  verificationStatus   String   @default("UNVERIFIED") // UNVERIFIED, VERIFIED
+  
+  mentorCapacity       Int?
+  timeCommitment       String?
+
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  applications         OpportunityApplication[]
+}
+
+model OpportunityApplication {
+  id               String      @id @default(cuid())
+  opportunityId    String
+  opportunity      Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  userId           String
+  user             User        @relation("OpportunityApplications", fields: [userId], references: [id], onDelete: Cascade)
+  resumeUrl        String?
+  coverMessage     String?
+  status           String      @default("SUBMITTED") // SUBMITTED, UNDER_REVIEW, SHORTLISTED, INTERVIEW, SELECTED, REJECTED, WITHDRAWN
+  
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
 }
 
 // -------------------------------------------------------------

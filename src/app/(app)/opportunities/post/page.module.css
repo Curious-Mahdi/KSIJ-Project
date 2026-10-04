@@ -1,0 +1,124 @@
+.container {
+  min-height: 100vh;
+  background-color: #FAF9F5;
+  color: #122019;
+  padding: 48px 24px;
+}
+
+.contentWrapper {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #68756F;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 32px;
+  transition: color 0.2s;
+}
+.backLink:hover {
+  color: #063F2B;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  color: #063F2B;
+  margin-bottom: 8px;
+}
+.subtitle {
+  color: #68756F;
+  margin-bottom: 32px;
+}
+
+.formCard {
+  background: white;
+  border: 1px solid #DDE5DF;
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.formGroup {
+  margin-bottom: 24px;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #122019;
+  margin-bottom: 8px;
+}
+.hint {
+  display: block;
+  font-size: 0.875rem;
+  color: #68756F;
+  margin-bottom: 8px;
+}
+
+.input, .textarea, .select {
+  width: 100%;
+  padding: 12px 16px;
+  background: #FAF9F5;
+  border: 1px solid #DDE5DF;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #122019;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+.input:focus, .textarea:focus, .select:focus {
+  border-color: #0B5D3B;
+}
+.textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.submitBtn {
+  width: 100%;
+  background: #0B5D3B;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 16px;
+}
+.submitBtn:hover {
+  background: #063F2B;
+}
+.submitBtn:disabled {
+  background: #68756F;
+  cursor: not-allowed;
+}
+
+.successState {
+  text-align: center;
+  padding: 48px 0;
+}
+.successIcon {
+  color: #0B5D3B;
+  margin-bottom: 16px;
+}
+.successTitle {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: #063F2B;
+  margin-bottom: 12px;
+}
