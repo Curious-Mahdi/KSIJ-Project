@@ -63,6 +63,59 @@ export default function LoginPage() {
             </button>
           </div>
 
+          {/* Quick Demo & Admin Access */}
+          <div className="animateFadeUp delay-200 w-full" style={{ marginTop: "1rem", marginBottom: "0.5rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", margin: "0.75rem 0" }}>
+              <div style={{ flex: 1, height: "1px", background: "rgba(0,0,0,0.1)" }} />
+              <span style={{ fontSize: "0.72rem", color: "#888", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 600 }}>Quick Access</span>
+              <div style={{ flex: 1, height: "1px", background: "rgba(0,0,0,0.1)" }} />
+            </div>
+            
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+              <button
+                type="button"
+                onClick={() => signIn("credentials", { email: "mmahdijamani7@gmail.com", callbackUrl: "/admin" })}
+                style={{
+                  padding: "0.625rem 0.75rem",
+                  borderRadius: "8px",
+                  border: "1px solid #27272a",
+                  background: "#18181b",
+                  color: "#ffffff",
+                  fontSize: "0.8125rem",
+                  fontWeight: 500,
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "0.375rem"
+                }}
+              >
+                <span>👑 Admin Portal</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => signIn("credentials", { email: "fakeuser1@example.com", callbackUrl: "/home" })}
+                style={{
+                  padding: "0.625rem 0.75rem",
+                  borderRadius: "8px",
+                  border: "1px solid #d4d4d8",
+                  background: "#ffffff",
+                  color: "#18181b",
+                  fontSize: "0.8125rem",
+                  fontWeight: 500,
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "0.375rem"
+                }}
+              >
+                <span>🏠 Member Home</span>
+              </button>
+            </div>
+          </div>
+
           <div className="animateFadeUp delay-300 w-full">
             <button className={styles.oneIdBtn} disabled>
             <span className={styles.comingSoonBadge}>COMING SOON</span>

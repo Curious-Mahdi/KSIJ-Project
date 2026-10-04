@@ -29,7 +29,10 @@ export default async function ConversationPage({ params }: { params: Promise<{ i
   }
 
   const isOwner = conversation.ownerId === userId;
-  const otherUser = isOwner ? conversation.initiatedBy : conversation.listing.owner;
+  const otherUser = isOwner ? conversation.initiatedBy : conversation.listing?.owner;
+  if (!otherUser) {
+    notFound();
+  }
 
   return (
     <div className={styles.container}>
@@ -44,7 +47,7 @@ export default async function ConversationPage({ params }: { params: Promise<{ i
           </div>
           <div>
             <div className={styles.listingName}>
-              {isOwner ? otherUser.name : conversation.listing.name}
+              {isOwner ? otherUser.name : (conversation.listing?.name || "Conversation")}
             </div>
             <div className={styles.status}>
               <div className={styles.statusIndicator} style={{ 

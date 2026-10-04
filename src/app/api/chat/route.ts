@@ -50,7 +50,7 @@ export async function POST(request: Request) {
         citations.push({
           id: chunk.documentId,
           filename: chunk.title,
-          sourceUrl: `/library/${chunk.documentId}`,
+          sourceUrl: chunk.sourceUrl || `/library/${chunk.documentId}`,
           title: chunk.title,
           section: chunk.section || undefined,
           page: chunk.pageNumber || undefined
