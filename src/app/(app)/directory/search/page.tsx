@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { getDirectoryListings } from "@/lib/actions/directory";
 import styles from "./page.module.css";
 import { Search as SearchIcon, ArrowRight, MapPin } from "lucide-react";
@@ -35,7 +36,9 @@ export default async function DirectorySearchPage({
       <div className={`${styles.header} animateFadeUp`}>
         <h1 className={styles.title}>Directory Search</h1>
         <div style={{ maxWidth: '600px' }}>
-          <SearchForm initialQuery={q} />
+          <Suspense fallback={<div className={styles.searchInput}>Loading search...</div>}>
+            <SearchForm initialQuery={q} />
+          </Suspense>
         </div>
       </div>
 
