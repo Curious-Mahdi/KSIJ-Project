@@ -665,7 +665,16 @@ export default function HomePage() {
         </div>
       </section>
 
-
+      {/* OUR LEGACY BANNER */}
+      <section className={styles.legacySection} style={{ width: '100%', overflow: 'hidden', backgroundColor: '#F8F7F3', borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)' }}>
+        <div style={{ maxWidth: '1600px', margin: '0 auto', position: 'relative' }}>
+          <img 
+            src="/images/our_legacy_banner.jpg" 
+            alt="Our Legacy - Faith, Community, Service, Generations" 
+            style={{ width: '100%', height: 'auto', display: 'block' }} 
+          />
+        </div>
+      </section>
 
       {/* WHAT'S HAPPENING (NEW ACTIVITY STRIP) */}
       <section className="section-padding bg-background">
