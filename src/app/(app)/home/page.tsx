@@ -296,7 +296,7 @@ export default function HomePage() {
 
   const yHero = useTransform(scrollY, [0, 500], [0, 100]);
   const opacityHero = useTransform(scrollY, [0, 300], [1, 0]);
-  
+
   // Subtle logo parallax for desktop
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
@@ -367,7 +367,7 @@ export default function HomePage() {
 
   return (
     <div className={styles.pageWrapper}>
-      
+
       {!skipAnimation && (
         <AnimatePresence>
           {showIntro && (
@@ -378,7 +378,7 @@ export default function HomePage() {
               transition={{ duration: 1.2, ease: "easeInOut" }}
               className={styles.introOverlay}
             >
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
@@ -394,7 +394,7 @@ export default function HomePage() {
       {/* HEADER / HERO SECTION */}
       <section className={styles.heroSection} onMouseMove={handleMouseMove}>
         <motion.div style={{ y: yHero, opacity: opacityHero }} className={styles.heroContainer}>
-          
+
           {/* LEFT: Text & Search */}
           <div className={styles.heroContent}>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.8 }}>
@@ -413,15 +413,15 @@ export default function HomePage() {
             {/* ACTUAL MODAL SEARCH OVERLAY */}
             <AnimatePresence>
               {isSearchFocused && (
-                <motion.div 
+                <motion.div
                   className={styles.searchOverlay}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 >
                   <div className={styles.searchBackdrop} onClick={() => setIsSearchFocused(false)} />
-                  
-                  <motion.div 
+
+                  <motion.div
                     className={styles.searchModal}
                     initial={{ scale: 0.95, opacity: 0, y: -20 }}
                     animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -430,10 +430,10 @@ export default function HomePage() {
                   >
                     <div className={styles.searchModalHeader}>
                       <Search className={styles.searchModalIcon} size={28} color="#075C3A" />
-                      <input 
+                      <input
                         ref={(input) => input && input.focus()}
-                        type="text" 
-                        placeholder={t("searchPlaceholder")} 
+                        type="text"
+                        placeholder={t("searchPlaceholder")}
                         className={styles.searchModalInput}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -513,12 +513,12 @@ export default function HomePage() {
             </AnimatePresence>
 
             {/* DUMMY HERO SEARCH TRIGGER */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }}
               className={styles.searchBlock}
             >
               <div className={styles.searchLabel}>{t("searchLabel")}</div>
-              <div 
+              <div
                 className={styles.searchWrapper}
                 onClick={() => setIsSearchFocused(true)}
                 style={{ cursor: 'text' }}
@@ -539,15 +539,15 @@ export default function HomePage() {
 
           {/* RIGHT: REAL KSIJ LOGO */}
           <div className={styles.heroVisual}>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ 
-                opacity: 1, 
+              animate={{
+                opacity: 1,
                 scale: 1,
                 x: mousePos.x,
                 y: mousePos.y
               }}
-              transition={{ 
+              transition={{
                 opacity: { duration: 1.2, delay: 0.2 },
                 scale: { duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] },
                 x: { type: "spring", stiffness: 50, damping: 20 },
@@ -563,14 +563,14 @@ export default function HomePage() {
               <div className={styles.logoPlaceholder}>KSIJ</div>
             </motion.div>
           </div>
-          
+
         </motion.div>
       </section>
 
       {/* QUICK ACCESS - BENTO COMPOSITION */}
       <section className={styles.bentoSection}>
         <div className="container">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
@@ -626,7 +626,7 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="h3 mb-24" style={{ fontFamily: 'var(--font-serif)', color: 'var(--color-primary-dark)' }}>{t("myKsijTitle")}</h2>
-            
+
             {isAuthenticated ? (
               <div className={styles.personalizedGrid}>
                 <Link href="/profile" className={styles.personalCard}>
@@ -665,17 +665,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* OUR LEGACY BANNER */}
-      <section className={styles.legacySection} style={{ width: '100%', overflow: 'hidden', backgroundColor: '#F8F7F3', borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)' }}>
-        <div style={{ maxWidth: '1600px', margin: '0 auto', position: 'relative' }}>
-          <img 
-            src="/images/our_legacy_banner.jpg" 
-            alt="Our Legacy - Faith, Community, Service, Generations" 
-            style={{ width: '100%', height: 'auto', display: 'block' }} 
-          />
-        </div>
-      </section>
-
       {/* WHAT'S HAPPENING (NEW ACTIVITY STRIP) */}
       <section className="section-padding bg-background">
         <div className="container">
@@ -701,10 +690,10 @@ export default function HomePage() {
       <section className="section-padding bg-white">
         <div className="container">
           <div className={styles.editorialSplit}>
-            
+
             <div className={styles.editorialLeft}>
               <h2 className="h2 mb-32" style={{ fontFamily: 'var(--font-serif)', color: 'var(--color-primary-dark)' }}>{t("communityUpdates")}</h2>
-              
+
               <div className={styles.updatesList}>
                 {homepageUpdates.map((update, idx) => {
                   if (update.label) {
@@ -741,7 +730,7 @@ export default function HomePage() {
 
             <div className={styles.editorialRight}>
               <h2 className="h2 mb-32" style={{ fontFamily: 'var(--font-serif)', color: 'var(--color-primary-dark)' }}>{t("upcomingEvents")}</h2>
-              
+
               <div className={styles.eventsList}>
                 {upcomingEventsData.map((ev, idx) => (
                   <Link href={ev.href} className={styles.editorialEvent} key={idx}>
@@ -767,7 +756,7 @@ export default function HomePage() {
       {/* COMMUNITY PULSE - NOW BELOW UPDATES */}
       <section className={styles.pulseSection}>
         <div className="container">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -776,7 +765,7 @@ export default function HomePage() {
             <h2 className={styles.pulseHeader}>{t("communityPulse")}</h2>
             <div className={styles.pulseGrid}>
               <div className={styles.pulseItem}>
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
@@ -786,7 +775,7 @@ export default function HomePage() {
                 <div className={styles.pulseLabel}>{t("pulseUpcomingEvents")}</div>
               </div>
               <div className={styles.pulseItem}>
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
@@ -796,7 +785,7 @@ export default function HomePage() {
                 <div className={styles.pulseLabel}>{t("pulseDirListings")}</div>
               </div>
               <div className={styles.pulseItem}>
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
@@ -806,7 +795,7 @@ export default function HomePage() {
                 <div className={styles.pulseLabel}>{t("pulseServices")}</div>
               </div>
               <div className={styles.pulseItem}>
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, scale: 0.5 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
@@ -827,7 +816,7 @@ export default function HomePage() {
             <div className={styles.footerBrand}>KSIJ One</div>
             <div className={styles.footerTagline}>{t("footerTagline")}</div>
             <div className={styles.footerGoldLine}></div>
-            
+
             <div className={styles.footerLinks}>
               <Link href="/home">{t("navHome")}</Link>
               <Link href="/services">{t("navServices")}</Link>
