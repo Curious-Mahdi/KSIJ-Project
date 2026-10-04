@@ -80,6 +80,11 @@ export async function getDirectoryListings(searchParams?: {
         { subcategory: { search: formattedQuery } },
         { services: { search: formattedQuery } },
         { skills: { search: formattedQuery } },
+        { keywords: { search: formattedQuery } },
+        { tags: { search: formattedQuery } },
+        { area: { search: formattedQuery } },
+        { city: { search: formattedQuery } },
+        { serviceArea: { search: formattedQuery } },
       ];
     }
   }
