@@ -1,9 +1,10 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { services } from "@/lib/data/services";
 
 export async function globalSearch(query: string) {
-  if (!query || query.trim().length === 0) return { directory: [], marketplace: [] };
+  if (!query || query.trim().length === 0) return { directory: [], marketplace: [], services: [] };
 
   const searchStr = query.trim();
 
@@ -45,8 +46,22 @@ export async function globalSearch(query: string) {
     }
   });
 
+  // Search Services
+  const searchLower = searchStr.toLowerCase();
+  const serviceResults = services.filter(service => 
+    service.title.toLowerCase().includes(searchLower) ||
+    service.description.toLowerCase().includes(searchLower) ||
+    service.category.toLowerCase().includes(searchLower)
+  ).map(service => ({
+    id: service.id,
+    title: service.title,
+    category: service.category,
+    description: service.description
+  })).slice(0, 3);
+
   return {
     directory: directoryResults,
-    marketplace: marketplaceResults
+    marketplace: marketplaceResults,
+    services: serviceResults
   };
 }

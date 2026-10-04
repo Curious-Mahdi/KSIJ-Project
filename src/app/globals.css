@@ -5,6 +5,9 @@
   /* Core Colors - KSIJ One Final Round Theme */
   --color-background: #FFFFFF;
   --color-surface: #FFFFFF;
+  --color-surface-alt: #F3F4F6;
+  --color-surface-hover: #F9FAFB;
+  --color-surface-success: #ECFDF5;
   
   /* The Greens */
   --color-primary: #075C3A;
@@ -238,11 +241,34 @@ input, select, textarea {
 
 .btn-primary {
   background-color: var(--color-primary);
-  color: #FFFFFF;
+  color: #FFFFFF !important;
 }
 .btn-primary:hover {
   background-color: var(--color-dark-green);
   box-shadow: 0 8px 16px -4px rgba(7, 92, 58, 0.3);
+  color: #FFFFFF !important;
+}
+.btn-primary:active {
+  background-color: var(--color-deep-forest);
+  transform: scale(0.96);
+  color: #FFFFFF !important;
+}
+.btn-primary:focus, .btn-primary:focus-visible {
+  background-color: var(--color-primary);
+  color: #FFFFFF !important;
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.btn-primary:disabled {
+  background-color: var(--color-text-muted);
+  color: #FFFFFF !important;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.btn-primary.loading {
+  background-color: var(--color-primary);
+  color: #FFFFFF !important;
+  cursor: wait;
 }
 
 .btn-secondary {

@@ -1,7 +1,7 @@
 .container {
-  max-width: 1000px;
+  max-width: 1500px;
   margin: 0 auto;
-  padding: var(--space-40) var(--space-16) var(--space-80);
+  padding: var(--space-64) var(--space-24) var(--space-96);
 }
 
 .title {
@@ -107,12 +107,29 @@
 .actionBtn {
   display: inline-block;
   background-color: var(--color-primary);
-  color: white;
-  padding: 8px 16px;
+  color: #FFFFFF !important;
+  padding: 12px 24px;
   border-radius: var(--radius-full);
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.actionBtn:hover {
+  background-color: var(--color-dark-green);
+  color: #FFFFFF !important;
+}
+
+.actionBtn:active {
+  background-color: var(--color-deep-forest);
+  color: #FFFFFF !important;
+}
+
+.actionBtn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  color: #FFFFFF !important;
 }
 
 @media (max-width: 768px) {

@@ -79,7 +79,7 @@ export default function ServicesLandingPage() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
             >
-              <Link href={`/services/${service.id}`} className="card" style={{display: 'flex', flexDirection: 'column', height: '100%', textDecoration: 'none'}}>
+              <Link href={`/services/${service.id}`} className={`card ${i === 0 ? styles.featuredCard : ''}`} style={{display: 'flex', flexDirection: 'column', height: '100%', textDecoration: 'none'}}>
                 <div className={styles.iconContainer}>{service.icon}</div>
                 <span className={styles.cardCategory}>{service.category}</span>
                 <h3 className={styles.cardTitle}>{service.title}</h3>

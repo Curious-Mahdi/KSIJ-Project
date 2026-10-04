@@ -67,7 +67,23 @@ function ApplicationFormContent() {
         </div>
         
         <h1 className={styles.pageTitle}>Apply for {service.title}</h1>
-        <p className={styles.subtitle}>Step {step} of 2</p>
+        
+        <div className={styles.stepperContainer}>
+          {[
+            { num: 1, label: "Basic Info" },
+            { num: 2, label: "Service Details" },
+            { num: 3, label: "Documents" },
+            { num: 4, label: "Review" },
+            { num: 5, label: "Submit" }
+          ].map((s) => (
+            <div key={s.num} className={`${styles.stepItem} ${step >= s.num ? styles.stepActive : ''}`}>
+              <div className={styles.stepCircle}>
+                {step > s.num ? <Check size={14} /> : s.num}
+              </div>
+              <span className={styles.stepLabel}>{s.label}</span>
+            </div>
+          ))}
+        </div>
 
         <form className={styles.formCard} onSubmit={handleSubmit}>
           {step === 1 ? (

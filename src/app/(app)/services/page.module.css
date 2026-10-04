@@ -148,6 +148,9 @@
   .grid {
     grid-template-columns: repeat(3, 1fr);
   }
+  .featuredCard {
+    grid-column: span 2;
+  }
 }
 
 .iconContainer {

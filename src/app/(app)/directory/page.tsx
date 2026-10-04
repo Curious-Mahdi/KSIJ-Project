@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import * as motion from "framer-motion/client";
 import { getDirectoryListings } from "@/lib/actions/directory";
 import styles from "./page.module.css";
-import { Search, Building2, Briefcase, UserSquare2, ArrowRight } from "lucide-react";
+import { Search, Building2, Briefcase, UserSquare2, ArrowRight, Phone, MessageCircle } from "lucide-react";
 import SearchForm from "./SearchForm";
 
 export const metadata = {
@@ -117,7 +117,16 @@ export default async function DirectoryPage() {
                 <h3 className={styles.listingName}>{listing.name}</h3>
                 <p className={styles.listingDesc}>{listing.shortDescription}</p>
                 <div className={styles.listingFooter}>
-                  <span>{listing.location || 'Remote'}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <span>{listing.location || 'Remote'}</span>
+                    {(listing as any).contact?.phone && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-text-main)' }}>
+                        <Phone size={14} /> 
+                        <span style={{ fontSize: '0.875rem' }}>{(listing as any).contact.phone}</span>
+                        <MessageCircle size={14} color="#25D366" />
+                      </div>
+                    )}
+                  </div>
                   <span style={{ color: 'var(--color-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
                     View profile <ArrowRight size={14} />
                   </span>

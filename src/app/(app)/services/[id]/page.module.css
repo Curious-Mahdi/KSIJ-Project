@@ -96,11 +96,11 @@
 }
 
 .mainLayout {
-  max-width: 1200px;
+  max-width: 1500px;
   margin: var(--space-64) auto 0;
-  padding: 0 24px;
+  padding: 0;
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: minmax(0, 7fr) minmax(320px, 3fr);
   gap: var(--space-48);
   align-items: start;
 }
@@ -334,13 +334,13 @@
 }
 
 .startButton {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   padding: 16px;
   background-color: var(--color-primary);
-  color: white;
+  color: #FFFFFF !important;
   border: none;
   border-radius: var(--radius-full);
   font-size: 1.125rem;
@@ -352,9 +352,23 @@
 }
 
 .startButton:hover {
-  background-color: var(--color-primary-dark);
+  background-color: var(--color-dark-green);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+  color: #FFFFFF !important;
+}
+
+.startButton:active {
+  background-color: var(--color-deep-forest);
+  transform: scale(0.96);
+  color: #FFFFFF !important;
+}
+
+.startButton:focus-visible {
+  background-color: var(--color-primary);
+  color: #FFFFFF !important;
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 @media (max-width: 1024px) {
@@ -364,6 +378,11 @@
   .stickyPanel {
     position: static;
     margin-top: var(--space-40);
+    border: none;
+    box-shadow: none;
+    padding: var(--space-32) 0;
+    border-top: 1px solid var(--color-border);
+    border-radius: 0;
   }
 }
 
