@@ -8,8 +8,9 @@ import ClientActions from "./ClientActions";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
-export default async function CommunityPropertyDetailPage({ params }: { params: { id: string } }) {
-  const property = await getCommunityPropertyById(params.id);
+export default async function CommunityPropertyDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const property = await getCommunityPropertyById(resolvedParams.id);
   
   if (!property) {
     notFound();

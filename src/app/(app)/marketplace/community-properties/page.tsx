@@ -7,8 +7,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
 
-export default async function CommunityPropertiesPage({ searchParams }: { searchParams: any }) {
-  const properties = await getCommunityProperties(searchParams);
+export default async function CommunityPropertiesPage({ searchParams }: { searchParams: Promise<any> }) {
+  const resolvedSearchParams = await searchParams;
+  const properties = await getCommunityProperties(resolvedSearchParams);
   
   const session = await getServerSession(authOptions);
   let isAdmin = false;
@@ -47,7 +48,7 @@ export default async function CommunityPropertiesPage({ searchParams }: { search
             </div>
             {types.map(t => (
               <div key={t} className={styles.filterItem}>
-                <Link href={`/marketplace/community-properties?type=${t}`} style={{color: 'inherit', textDecoration: 'none', fontWeight: searchParams.type === t ? 'bold' : 'normal'}}>
+                <Link href={`/marketplace/community-properties?type=${t}`} style={{color: 'inherit', textDecoration: 'none', fontWeight: resolvedSearchParams.type === t ? 'bold' : 'normal'}}>
                   {t}
                 </Link>
               </div>
@@ -61,7 +62,7 @@ export default async function CommunityPropertiesPage({ searchParams }: { search
             </div>
             {usageTagsList.map(t => (
               <div key={t} className={styles.filterItem}>
-                <Link href={`/marketplace/community-properties?usage=${t}`} style={{color: 'inherit', textDecoration: 'none', fontWeight: searchParams.usage === t ? 'bold' : 'normal'}}>
+                <Link href={`/marketplace/community-properties?usage=${t}`} style={{color: 'inherit', textDecoration: 'none', fontWeight: resolvedSearchParams.usage === t ? 'bold' : 'normal'}}>
                   {t}
                 </Link>
               </div>
