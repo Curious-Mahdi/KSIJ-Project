@@ -420,37 +420,6 @@ model Enquiry {
   updatedAt   DateTime @updatedAt
 }
 
-model Opportunity {
-  id                    String    @id @default(cuid())
-  type                  String
-  title                 String
-  slug                  String?
-  organisationName      String
-  organisationId        String?
-  postedByUserId        String
-  description           String
-  category              String
-  skills                String?
-  location              String?
-  workMode              String?
-  experienceLevel       String?
-  employmentType        String?
-  compensationMin       Float?
-  compensationMax       Float?
-  compensationPeriod    String?
-  currency              String    @default("INR")
-  duration              String?
-  startDate             String?
-  applicationDeadline   DateTime?
-  applicationMethod     String?
-  externalApplicationUrl String?
-  status                String    @default("ACTIVE")
-  verificationStatus    String    @default("UNVERIFIED")
-  mentorCapacity        Int?
-  timeCommitment        String?
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
-}
 
 // ==========================================
 // CENTRALIZED ASSISTANCE REGISTRY MODELS

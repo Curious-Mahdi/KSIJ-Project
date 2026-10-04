@@ -48,6 +48,10 @@ export default function VerificationClientView({ organizations, initialAuditLogs
   );
   const activeOrg = organizations.find((o) => o.id === selectedOrgId) || organizations[0];
 
+  if (!activeOrg) {
+    return <div style={{ padding: 48, textAlign: "center" }}>No active verification organizations found.</div>;
+  }
+
   // 2. Verification Form State
   const [beneficiaryRef, setBeneficiaryRef] = useState<string>("BEN-000123");
   const [selectedCategory, setSelectedCategory] = useState<string>("Medical Assistance");
