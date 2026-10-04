@@ -31,23 +31,30 @@ export async function POST(req: NextRequest) {
 
     const cleanRef = beneficiaryReference.trim();
     const cleanCategory = assistanceType.trim();
+    const cleanDigits = cleanRef.replace(/\D/g, "");
 
     // 2. Query Central Verification Layer (Data-Minimization: No access to originating org's private database)
     // Check if beneficiary exists in central identity registry
+    const orConditions: any[] = [
+      { beneficiaryId: { equals: cleanRef, mode: "insensitive" } },
+      { name: { contains: cleanRef, mode: "insensitive" } },
+    ];
+    if (cleanDigits.length >= 3) {
+      orConditions.push({ phone: { contains: cleanDigits } });
+    }
+
     const beneficiary = await prisma.beneficiary.findFirst({
-      where: {
-        OR: [
-          { beneficiaryId: { equals: cleanRef, mode: "insensitive" } },
-          { phone: { equals: cleanRef.replace(/\D/g, "") } },
-        ],
-      },
+      where: { OR: orConditions },
     });
+
+    const targetRef = beneficiary ? beneficiary.beneficiaryId : cleanRef;
+    const categoryStem = cleanCategory.split(" ")[0].toLowerCase();
 
     // Check CentralVerificationRecord for category
     const relevantAttestation = await prisma.centralVerificationRecord.findFirst({
       where: {
-        beneficiaryReference: { equals: cleanRef, mode: "insensitive" },
-        category: { contains: cleanCategory.split(" ")[0], mode: "insensitive" },
+        beneficiaryReference: { equals: targetRef, mode: "insensitive" },
+        category: { contains: categoryStem, mode: "insensitive" },
         status: "ACTIVE",
       },
       orderBy: { lastAssistanceDate: "desc" },
@@ -63,7 +70,7 @@ export async function POST(req: NextRequest) {
       await prisma.verificationAuditLog.create({
         data: {
           organizationId: callerOrg.id,
-          beneficiaryReference: cleanRef,
+          beneficiaryReference: targetRef,
           category: cleanCategory,
           action: "VERIFICATION_CHECK",
           result: hasPrevious ? "RELEVANT_ASSISTANCE_FOUND" : "CLEARED",

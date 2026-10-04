@@ -263,6 +263,65 @@ export default function VerificationClientView({ organizations, initialAuditLogs
           </button>
         </form>
 
+        {/* Demo Quick-Select Shortcuts */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 14, flexWrap: "wrap" }}>
+          <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#64748B" }}>Demo Test Cases:</span>
+          <button
+            type="button"
+            onClick={() => {
+              setBeneficiaryRef("BEN-000123");
+              setSelectedCategory("Medical Assistance");
+            }}
+            style={{
+              background: "#F1F5F9",
+              border: "1px solid #CBD5E1",
+              borderRadius: 6,
+              padding: "4px 10px",
+              fontSize: "0.75rem",
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+          >
+            Ahmed Khan (BEN-000123) • Medical Aid
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setBeneficiaryRef("BEN-000104");
+              setSelectedCategory("Food Support");
+            }}
+            style={{
+              background: "#F1F5F9",
+              border: "1px solid #CBD5E1",
+              borderRadius: 6,
+              padding: "4px 10px",
+              fontSize: "0.75rem",
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+          >
+            Fatima Shaikh (BEN-000104) • Food Support
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setBeneficiaryRef("BEN-000118");
+              setSelectedCategory("Medical Assistance");
+            }}
+            style={{
+              background: "#F1F5F9",
+              border: "1px solid #CBD5E1",
+              borderRadius: 6,
+              padding: "4px 10px",
+              fontSize: "0.75rem",
+              fontWeight: 600,
+              cursor: "pointer",
+            }}
+          >
+            Ibrahim Sayed (BEN-000118) • Clean Case
+          </button>
+        </div>
+
         {/* ─── Verification Result Alert Card ──────────────────────── */}
         {verificationResult && (
           <div
@@ -283,7 +342,7 @@ export default function VerificationClientView({ organizations, initialAuditLogs
                   <h3 style={{ margin: 0, fontSize: "1.125rem", fontWeight: 800, color: verificationResult.relevantAssistance ? "#991B1B" : "#065F46" }}>
                     {verificationResult.relevantAssistance
                       ? "PREVIOUS RELEVANT ASSISTANCE DETECTED"
-                      : "NO PREVIOUS ASSISTANCE DETECTED"}
+                      : "NO PREVIOUS ASSISTANCE DETECTED IN THIS CATEGORY"}
                   </h3>
                   <p style={{ margin: "2px 0 0 0", fontSize: "0.8125rem", color: "#64748B" }}>
                     Verified across all participating Jamaat foundations via Central Verification Network.
@@ -345,6 +404,13 @@ export default function VerificationClientView({ organizations, initialAuditLogs
               </div>
             </div>
 
+            {/* If other category exists on record */}
+            {verificationResult.otherCategoryOnRecord && (
+              <div style={{ background: "#FEF3C7", padding: "10px 14px", borderRadius: 6, fontSize: "0.8125rem", color: "#92400E" }}>
+                ℹ️ <strong>Additional History Noted:</strong> Applicant also has prior recorded assistance in <strong>{verificationResult.otherCategoryOnRecord}</strong> on {verificationResult.otherDateOnRecord}.
+              </div>
+            )}
+
             {/* Privacy Shield Box: Demonstrating Data Minimization */}
             <div className={styles.privacyShieldBox}>
               <EyeOff size={20} color="#075C3A" style={{ flexShrink: 0, marginTop: 2 }} />
@@ -353,9 +419,24 @@ export default function VerificationClientView({ organizations, initialAuditLogs
                 <div>
                   {activeOrg.name} is strictly restricted from viewing the donor foundation&apos;s identity,
                   exact grant amounts, private trustee notes, or confidential medical case records.
-                  Only the attestation that assistance exists in this category was transmitted.
+                  Only the attestation that assistance exists was transmitted.
                 </div>
               </div>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, marginTop: 4 }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setFormBenRef(verificationResult.beneficiaryReference);
+                  setFormCategory(verificationResult.category);
+                  setIsModalOpen(true);
+                }}
+                className={styles.primaryBtn}
+              >
+                <Plus size={16} />
+                {verificationResult.relevantAssistance ? "Continue & Record Grant Anyway" : "Issue New Grant Record"}
+              </button>
             </div>
           </div>
         )}
