@@ -6,7 +6,7 @@ import { sendMessage, shareContact, markConversationCompleted, markConversationR
 import styles from "./page.module.css";
 import { Send, Phone, Mail, CheckCircle2 } from "lucide-react";
 
-export default function ChatInterface({ conversation, currentUserId }: { conversation: any, currentUserId: string }) {
+export default function ChatInterface({ conversation, currentUserId, entityName = "the listing" }: { conversation: any, currentUserId: string, entityName?: string }) {
   const [text, setText] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -79,8 +79,20 @@ export default function ChatInterface({ conversation, currentUserId }: { convers
         <div className={styles.messageList}>
           
           <div className={styles.systemMessage}>
-            Conversation started regarding <strong>{conversation.listing.name}</strong>
+            Conversation started regarding <strong>{entityName}</strong>
           </div>
+          
+          {(conversation.purpose || conversation.preferredDate || conversation.preferredTime || conversation.guestCount) && (
+            <div style={{ margin: '16px auto', maxWidth: '80%', background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', fontSize: '0.9rem' }}>
+              <div style={{ fontWeight: 600, color: 'var(--color-primary)', marginBottom: '8px' }}>Enquiry Details</div>
+              <ul style={{ margin: 0, paddingLeft: '20px', color: '#475569', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                {conversation.purpose && <li><strong>Purpose:</strong> {conversation.purpose}</li>}
+                {conversation.preferredDate && <li><strong>Date:</strong> {conversation.preferredDate}</li>}
+                {conversation.preferredTime && <li><strong>Time:</strong> {conversation.preferredTime}</li>}
+                {conversation.guestCount && <li><strong>Guests:</strong> {conversation.guestCount}</li>}
+              </ul>
+            </div>
+          )}
 
           {conversation.messages.map((msg: any) => {
             const isMine = msg.senderId === currentUserId;

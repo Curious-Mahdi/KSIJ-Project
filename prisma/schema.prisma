@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions", "fullTextSearch"]
 }
 
 datasource db {
@@ -11,118 +11,281 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(cuid())
-  googleId       String   @unique
-  name           String?
-  email          String?  @unique
-  profilePhoto   String?
-  jamaat         String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id           String   @id @default(cuid())
+  googleId     String   @unique
+  name         String?
+  email        String?  @unique
+  profilePhoto String?
+  jamaat       String?
+  isAdmin      Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   listings               DirectoryListing[]
   initiatedConversations Conversation[]     @relation("InitiatedConversations")
   ownedConversations     Conversation[]     @relation("OwnedConversations")
   messages               Message[]
   contactShares          ContactShare[]
+
+  marketplaceListings MarketplaceListing[]
+  communityProperties CommunityProperty[]  @relation("ManagedProperties")
+  marketplaceReports  MarketplaceReport[]
 }
 
 model DirectoryListing {
-  id               String   @id @default(cuid())
-  ownerId          String
-  owner            User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  
-  listingType      String   // BUSINESS, SERVICE, PROFESSIONAL
-  name             String   // Business name or Professional name
+  id      String @id @default(cuid())
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  listingType      String // BUSINESS, SERVICE, PROFESSIONAL
+  name             String // Business name or Professional name
   shortDescription String
   description      String?
-  
-  category         String
-  subcategory      String?
-  services         String   // JSON string or comma separated
-  skills           String?  // JSON string or comma separated
-  keywords         String?  // JSON string or comma separated
-  
-  location         String?
-  serviceArea      String?
-  serviceMode      String?  // Online, In-person, Both
-  
-  image            String?
-  website          String?
-  
-  status           String   @default("PUBLISHED") // DRAFT, PUBLISHED, PAUSED, ARCHIVED
-  
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
 
-  contact          DirectoryContact?
-  conversations    Conversation[]
+  category    String
+  subcategory String?
+  services    String // JSON string or comma separated
+  skills      String? // JSON string or comma separated
+  keywords    String? // JSON string or comma separated
+  tags        String? // JSON string or comma separated
+
+  // Address fields
+  addressLine1 String?
+  addressLine2 String?
+  area         String?
+  city         String?
+  state        String?
+  pincode      String?
+  country      String?
+  latitude     Float?
+  longitude    Float?
+
+  location    String? // Legacy / combined string
+  serviceArea String?
+  serviceMode String? // Online, In-person, Both
+
+  image      String? // Used as logo
+  coverImage String?
+  website    String?
+
+  status String @default("PUBLISHED") // DRAFT, PUBLISHED, PAUSED, ARCHIVED
+
+  // Verification & Source Data
+  sourceType         String? // e.g. "COMMUNITY_DIRECTORY_SCAN"
+  sourceReference    String?
+  sourcePage         String?
+  sourceNotes        String?
+  verificationStatus String  @default("UNVERIFIED") // UNVERIFIED, VERIFIED, REJECTED
+  verifiedAt         DateTime?
+  verifiedById       String?
+  publishedAt        DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contact       DirectoryContact?
+  conversations Conversation[]
 }
 
 model DirectoryContact {
-  id                 String   @id @default(cuid())
-  listingId          String   @unique
-  listing            DirectoryListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
-  
-  phone              String?
-  whatsapp           String?
-  email              String?
-  
-  phoneVisibility    String   @default("CHAT_ONLY") // PUBLIC, CHAT_ONLY, PRIVATE
-  whatsappVisibility String   @default("CHAT_ONLY")
-  emailVisibility    String   @default("CHAT_ONLY")
-  
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id        String           @id @default(cuid())
+  listingId String           @unique
+  listing   DirectoryListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  phone    String?
+  whatsapp String?
+  email    String?
+
+  phoneVisibility    String @default("CHAT_ONLY") // PUBLIC, CHAT_ONLY, PRIVATE
+  whatsappVisibility String @default("CHAT_ONLY")
+  emailVisibility    String @default("CHAT_ONLY")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Conversation {
-  id           String   @id @default(cuid())
-  listingId    String
-  listing      DirectoryListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
-  
-  initiatedById String
-  initiatedBy  User     @relation("InitiatedConversations", fields: [initiatedById], references: [id], onDelete: Cascade)
-  
-  ownerId      String
-  owner        User     @relation("OwnedConversations", fields: [ownerId], references: [id], onDelete: Cascade)
-  
-  status       String   @default("NEW") // NEW, IN_CONVERSATION, CONTACT_SHARED, COMPLETED, CLOSED
-  
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id String @id @default(cuid())
 
-  messages       Message[]
-  contactShares  ContactShare[]
+  // Polymorphic relations (one of these will be set)
+  listingId String?
+  listing   DirectoryListing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  marketplaceListingId String?
+  marketplaceListing   MarketplaceListing? @relation(fields: [marketplaceListingId], references: [id], onDelete: Cascade)
+
+  communityPropertyId String?
+  communityProperty   CommunityProperty? @relation(fields: [communityPropertyId], references: [id], onDelete: Cascade)
+
+  initiatedById String
+  initiatedBy   User   @relation("InitiatedConversations", fields: [initiatedById], references: [id], onDelete: Cascade)
+
+  ownerId String
+  owner   User   @relation("OwnedConversations", fields: [ownerId], references: [id], onDelete: Cascade)
+
+  status String @default("NEW") // NEW, IN_CONVERSATION, CONTACT_SHARED, COMPLETED, CLOSED
+
+  // Community Property Enquiry fields
+  purpose       String?
+  preferredDate String?
+  preferredTime String?
+  guestCount    Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages      Message[]
+  contactShares ContactShare[]
 }
 
 model Message {
-  id             String   @id @default(cuid())
+  id             String       @id @default(cuid())
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  
-  senderId       String
-  sender         User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
-  
-  message        String
-  
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+
+  senderId String
+  sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  message String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ContactShare {
-  id             String   @id @default(cuid())
+  id             String       @id @default(cuid())
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  
-  sharedById     String
-  sharedBy       User     @relation(fields: [sharedById], references: [id], onDelete: Cascade)
-  
-  phoneShared    Boolean  @default(false)
-  whatsappShared Boolean  @default(false)
-  emailShared    Boolean  @default(false)
-  
-  createdAt      DateTime @default(now())
+
+  sharedById String
+  sharedBy   User   @relation(fields: [sharedById], references: [id], onDelete: Cascade)
+
+  phoneShared    Boolean @default(false)
+  whatsappShared Boolean @default(false)
+  emailShared    Boolean @default(false)
+
+  createdAt DateTime @default(now())
+}
+
+// ==========================================
+// MARKETPLACE MODELS
+// ==========================================
+
+model MarketplaceListing {
+  id       String @id @default(cuid())
+  sellerId String
+  seller   User   @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+
+  category        String // PROPERTY, VEHICLES, ELECTRONICS, FURNITURE, HOME_APPLIANCES, BOOKS_EDUCATION, CLOTHING_ACCESSORIES, OTHER
+  transactionType String // SALE, RENT, LEASE, FREE, OTHER
+
+  title            String
+  shortDescription String
+  description      String?
+
+  price        Float?
+  currency     String  @default("INR")
+  isNegotiable Boolean @default(false)
+
+  condition String? // New, Used - Good, Used - Fair
+
+  // Location
+  location String?
+  city     String?
+  area     String?
+
+  // Property Specific fields
+  propertyType String? // Residential, Commercial, Land, Other
+  bedrooms     Int?
+  bathrooms    Int?
+  propertyArea String?
+  furnishing   String? // Furnished, Semi-furnished, Unfurnished
+  features     String? // JSON or CSV
+
+  // Vehicle Specific fields
+  vehicleType String?
+  brand       String?
+  model       String?
+  year        Int?
+  kilometers  Int?
+
+  status String @default("PUBLISHED") // DRAFT, PUBLISHED, PAUSED, SOLD, RENTED, CLOSED, ARCHIVED
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  images        MarketplaceImage[]
+  conversations Conversation[]
+  reports       MarketplaceReport[]
+}
+
+model MarketplaceImage {
+  id        String             @id @default(cuid())
+  listingId String
+  listing   MarketplaceListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  url       String
+  sortOrder Int                @default(0)
+  createdAt DateTime           @default(now())
+}
+
+model CommunityProperty {
+  id               String @id @default(cuid())
+  name             String
+  propertyType     String // "Hall / Venue", "Resort", "Other Community Property"
+  shortDescription String
+  description      String
+
+  managedById String
+  managedBy   User   @relation("ManagedProperties", fields: [managedById], references: [id], onDelete: Cascade)
+
+  address  String?
+  area     String?
+  city     String?
+  location String?
+
+  usageTags  String? // JSON or CSV
+  facilities String? // JSON or CSV
+  capacity   Int?
+
+  pricing            String? // Short summary e.g. "Rates vary by function"
+  pricingDetails     String? // Detailed JSON or text
+  functionTimings    String?
+  termsAndConditions String?
+  contactInformation String?
+  availabilityInfo   String?
+
+  status String @default("PUBLISHED") // DRAFT, PUBLISHED, PAUSED, ARCHIVED
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  images    CommunityPropertyImage[]
+  enquiries Conversation[]
+}
+
+model CommunityPropertyImage {
+  id         String            @id @default(cuid())
+  propertyId String
+  property   CommunityProperty @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  url        String
+  sortOrder  Int               @default(0)
+  createdAt  DateTime          @default(now())
+}
+
+model MarketplaceReport {
+  id        String             @id @default(cuid())
+  listingId String
+  listing   MarketplaceListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  reporterId String
+  reporter   User   @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+
+  reason  String // Scam, Misleading, Prohibited, Inappropriate, Duplicate, Other
+  details String?
+
+  status String @default("PENDING") // PENDING, REVIEWED, DISMISSED, ACTION_TAKEN
+
+  createdAt DateTime @default(now())
 }
 
 model KnowledgeDocument {

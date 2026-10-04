@@ -63,19 +63,34 @@ export async function getDirectoryListings(searchParams?: {
   };
 
   if (searchParams?.q) {
-    whereClause.OR = [
-      { name: { contains: searchParams.q } },
-      { shortDescription: { contains: searchParams.q } },
-      { description: { contains: searchParams.q } },
-      { category: { contains: searchParams.q } },
-      { subcategory: { contains: searchParams.q } },
-      { services: { contains: searchParams.q } },
-      { skills: { contains: searchParams.q } },
-    ];
+    // Format for Postgres full-text search (web development -> web | development)
+    const formattedQuery = searchParams.q
+      .trim()
+      .split(/\s+/)
+      .map(word => word.replace(/[^a-zA-Z0-9]/g, '')) // basic sanitization
+      .filter(word => word.length > 0)
+      .join(' | ');
+
+    if (formattedQuery) {
+      whereClause.OR = [
+        { name: { search: formattedQuery } },
+        { shortDescription: { search: formattedQuery } },
+        { description: { search: formattedQuery } },
+        { category: { search: formattedQuery } },
+        { subcategory: { search: formattedQuery } },
+        { services: { search: formattedQuery } },
+        { skills: { search: formattedQuery } },
+        { keywords: { search: formattedQuery } },
+        { tags: { search: formattedQuery } },
+        { area: { search: formattedQuery } },
+        { city: { search: formattedQuery } },
+        { serviceArea: { search: formattedQuery } },
+      ];
+    }
   }
 
   if (searchParams?.type && searchParams.type !== 'All') {
-    whereClause.listingType = searchParams.type;
+    whereClause.listingType = searchParams.type.toUpperCase();
   }
 
   if (searchParams?.category && searchParams.category !== 'All') {
@@ -168,6 +183,12 @@ export async function getConversation(conversationId: string) {
           owner: { select: { id: true, name: true, profilePhoto: true } },
           contact: true
         }
+      },
+      marketplaceListing: {
+        include: { seller: { select: { id: true, name: true, profilePhoto: true } } }
+      },
+      communityProperty: {
+        include: { managedBy: { select: { id: true, name: true, profilePhoto: true } } }
       },
       initiatedBy: { select: { id: true, name: true, profilePhoto: true } },
       messages: {
@@ -299,6 +320,8 @@ export async function getMyDirectory() {
     },
     include: {
       listing: { select: { name: true } },
+      marketplaceListing: { select: { title: true } },
+      communityProperty: { select: { name: true } },
       initiatedBy: { select: { name: true } },
       owner: { select: { name: true } }
     },

@@ -42,6 +42,8 @@ export default async function ListingProfilePage({ params }: { params: Promise<{
         </div>
         <div className={styles.type}>
           {listing.listingType} &middot; {listing.category}
+          {listing.verificationStatus === 'VERIFIED' && <span style={{ marginLeft: '12px', fontSize: '0.75rem', backgroundColor: '#D4EDDA', color: '#155724', padding: '2px 8px', borderRadius: '12px', fontWeight: 500 }}>Verified Community Profile</span>}
+          {listing.sourceType === 'COMMUNITY_DIRECTORY_SCAN' && <span style={{ marginLeft: '8px', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>From Community Directory</span>}
         </div>
         <h1 className={styles.title}>{listing.name}</h1>
         <p className={styles.subtitle}>{listing.shortDescription}</p>
@@ -97,12 +99,27 @@ export default async function ListingProfilePage({ params }: { params: Promise<{
                 </div>
               </div>
 
-              {listing.location && (
+              {listing.location || listing.city || listing.area ? (
                 <div className={styles.metaItem}>
                   <MapPin size={20} className={styles.metaIcon} />
                   <div>
                     <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Location</div>
-                    <div className={styles.metaValue}>{listing.location}</div>
+                    <div className={styles.metaValue}>
+                      {listing.addressLine1 && <div>{listing.addressLine1}</div>}
+                      {listing.addressLine2 && <div>{listing.addressLine2}</div>}
+                      <div>{[listing.area, listing.city, listing.pincode].filter(Boolean).join(', ')}</div>
+                      {(!listing.addressLine1 && !listing.area && !listing.city) && <div>{listing.location}</div>}
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+
+              {listing.serviceArea && (
+                <div className={styles.metaItem}>
+                  <MapPin size={20} className={styles.metaIcon} />
+                  <div>
+                    <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Service Area</div>
+                    <div className={styles.metaValue}>{listing.serviceArea}</div>
                   </div>
                 </div>
               )}

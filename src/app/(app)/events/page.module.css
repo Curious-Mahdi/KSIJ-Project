@@ -1,0 +1,149 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-family: var(--font-heading);
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+
+.pageSubtitle {
+  color: var(--color-secondary);
+  font-size: 16px;
+}
+
+.section {
+  margin-bottom: 48px;
+}
+
+.sectionTitle {
+  font-size: 20px;
+  font-family: var(--font-heading);
+  color: var(--color-text);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.eventCard {
+  display: flex;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.eventCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.eventDateBox {
+  background: rgba(14, 80, 62, 0.05);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  border-right: 1px solid var(--color-border);
+}
+
+.dateMonth {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.dateDay {
+  font-size: 28px;
+  font-family: var(--font-heading);
+  color: var(--color-text);
+  line-height: 1;
+  margin-top: 4px;
+}
+
+.dateYear {
+  font-size: 12px;
+  color: var(--color-secondary);
+  margin-top: 4px;
+}
+
+.eventContent {
+  padding: 24px;
+  flex: 1;
+}
+
+.eventTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--color-text);
+}
+
+.eventDetails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.eventDetailItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--color-secondary);
+}
+
+.eventDescription {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+.pastEventCard {
+  opacity: 0.8;
+}
+
+.pastEventCard .eventDateBox {
+  background: var(--color-background);
+}
+
+.pastEventCard .dateMonth {
+  color: var(--color-secondary);
+}
+
+@media (max-width: 600px) {
+  .eventCard {
+    flex-direction: column;
+  }
+  
+  .eventDateBox {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    padding: 16px;
+    flex-direction: row;
+    gap: 12px;
+    justify-content: flex-start;
+  }
+  
+  .dateMonth, .dateDay, .dateYear {
+    margin: 0;
+  }
+}

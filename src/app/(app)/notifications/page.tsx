@@ -3,10 +3,19 @@ import { Bell, MessageCircle } from "lucide-react";
 import { getMyDirectory } from "@/lib/actions/directory";
 import Link from "next/link";
 
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
 export default async function NotificationsPage() {
   let activeConversations: any[] = [];
+  let userId = "";
   try {
+    const session = await getServerSession(authOptions);
+    userId = (session?.user as any)?.id || "";
+    
     const data = await getMyDirectory();
+    // Only show notifications for conversations where we are the OWNER and it's a NEW inquiry
+    // or if we want to show all active chats, we should format the text correctly based on role.
     activeConversations = data.activeConversations;
   } catch (e) {}
 
@@ -22,23 +31,26 @@ export default async function NotificationsPage() {
       </div>
 
       <div className={styles.notificationList}>
-        {activeConversations.map(conv => (
-          <Link href={`/directory/chat/${conv.id}`} key={conv.id} style={{textDecoration: 'none', color: 'inherit'}}>
-            <div className={`${styles.notificationCard} ${conv.status === 'NEW' ? styles.unread : ''}`}>
-              <div className={styles.iconWrapper} style={{ backgroundColor: 'var(--color-primary)', color: 'white' }}>
-                <MessageCircle size={20} />
+        {activeConversations.filter(c => c.ownerId === userId && (c.status === 'NEW' || c.status === 'IN_CONVERSATION')).map(conv => {
+          const entityName = conv.listing?.name || conv.marketplaceListing?.title || conv.communityProperty?.name || "a listing";
+          return (
+            <Link href={`/directory/chat/${conv.id}`} key={conv.id} style={{textDecoration: 'none', color: 'inherit'}}>
+              <div className={`${styles.notificationCard} ${styles.unread}`}>
+                <div className={styles.iconWrapper} style={{ backgroundColor: 'var(--color-primary)', color: 'white' }}>
+                  <MessageCircle size={20} />
+                </div>
+                <div className={styles.content}>
+                  <h4 className="h3" style={{ fontSize: '1rem', marginBottom: '4px' }}>
+                    New Inquiry from {conv.initiatedBy?.name || "Someone"}
+                  </h4>
+                  <p className="small-text">You have a new inquiry regarding your listing: {entityName}</p>
+                  <span className={styles.time}>Just now</span>
+                </div>
+                <div className={styles.unreadDot}></div>
               </div>
-              <div className={styles.content}>
-                <h4 className="h3" style={{ fontSize: '1rem', marginBottom: '4px' }}>
-                  New Message from {conv.initiatedBy?.name || conv.listing?.name}
-                </h4>
-                <p className="small-text">You have an active inquiry regarding your directory listing.</p>
-                <span className={styles.time}>Just now</span>
-              </div>
-              {conv.status === 'NEW' && <div className={styles.unreadDot}></div>}
-            </div>
-          </Link>
-        ))}
+            </Link>
+          );
+        })}
 
         {/* Sample Notification 1 */}
         <div className={`${styles.notificationCard} ${styles.unread}`}>

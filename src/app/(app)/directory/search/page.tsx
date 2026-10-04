@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { getDirectoryListings } from "@/lib/actions/directory";
 import styles from "./page.module.css";
 import { Search as SearchIcon, ArrowRight, MapPin } from "lucide-react";
@@ -9,9 +10,9 @@ export const metadata = {
 };
 
 const CATEGORIES = [
-  "Healthcare", "Education", "Technology & Digital", "Food & Dining",
-  "Retail & Shopping", "Professional Services", "Home Services",
-  "Travel & Transport", "Personal Services", "Other"
+  "Healthcare", "Construction & Real Estate", "Events & Decor", "Travel & Transport",
+  "Hospitality & Food", "Retail & Shopping", "Technology & Digital", "Education",
+  "Professional Services", "Import & Export", "Manufacturing & Industrial", "Media & Publishing", "Other"
 ];
 
 // Note: In Next.js 15, searchParams is a Promise. We need to await it.
@@ -35,7 +36,9 @@ export default async function DirectorySearchPage({
       <div className={`${styles.header} animateFadeUp`}>
         <h1 className={styles.title}>Directory Search</h1>
         <div style={{ maxWidth: '600px' }}>
-          <SearchForm initialQuery={q} />
+          <Suspense fallback={<div className={styles.searchInput}>Loading search...</div>}>
+            <SearchForm initialQuery={q} />
+          </Suspense>
         </div>
       </div>
 

@@ -1,0 +1,237 @@
+"use server";
+
+import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { revalidatePath } from "next/cache";
+
+export async function getMarketplaceListings(params: any = {}) {
+  // Build query
+  const where: any = { status: "PUBLISHED" };
+  
+  if (params.category) {
+    where.category = params.category;
+  }
+  if (params.transactionType) {
+    where.transactionType = params.transactionType;
+  }
+  if (params.query) {
+    const formattedQuery = params.query
+      .trim()
+      .split(/\s+/)
+      .map((word: string) => word.replace(/[^a-zA-Z0-9]/g, ''))
+      .filter((word: string) => word.length > 0)
+      .join(' | ');
+
+    if (formattedQuery) {
+      where.OR = [
+        { title: { search: formattedQuery } },
+        { description: { search: formattedQuery } },
+        { location: { search: formattedQuery } }
+      ];
+    }
+  }
+
+  const listings = await prisma.marketplaceListing.findMany({
+    where,
+    include: { images: true, seller: true },
+    orderBy: { createdAt: 'desc' }
+  });
+
+  return listings;
+}
+
+export async function getCommunityProperties(params: any = {}) {
+  const where: any = { status: "PUBLISHED" };
+  
+  if (params.query) {
+    const formattedQuery = params.query
+      .trim()
+      .split(/\s+/)
+      .map((word: string) => word.replace(/[^a-zA-Z0-9]/g, ''))
+      .filter((word: string) => word.length > 0)
+      .join(' | ');
+
+    if (formattedQuery) {
+      where.OR = [
+        { name: { search: formattedQuery } },
+        { description: { search: formattedQuery } },
+        { location: { search: formattedQuery } }
+      ];
+    }
+  }
+  
+  if (params.type && params.type !== 'All Types') {
+    where.propertyType = params.type;
+  }
+  
+  if (params.usage && params.usage !== 'All Uses') {
+    where.usageTags = { contains: params.usage, mode: 'insensitive' };
+  }
+
+  const properties = await prisma.communityProperty.findMany({
+    where,
+    include: { images: true },
+    orderBy: { createdAt: 'desc' }
+  });
+
+  return properties;
+}
+
+export async function createMarketplaceListing(data: any) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) throw new Error("Unauthorized");
+  const userId = (session.user as any).id;
+
+  const { images, ...rest } = data;
+
+  const listing = await prisma.marketplaceListing.create({
+    data: {
+      ...rest,
+      sellerId: userId,
+      images: {
+        create: images?.map((url: string, index: number) => ({ url, sortOrder: index })) || []
+      }
+    }
+  });
+
+  revalidatePath("/marketplace/member-marketplace");
+  revalidatePath("/marketplace");
+  return listing;
+}
+
+// Stub for now, can be expanded
+export async function createCommunityProperty(data: any) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) throw new Error("Unauthorized");
+  
+  const user = await prisma.user.findUnique({ where: { id: (session.user as any).id } });
+  if (!user?.isAdmin) throw new Error("Only admins can create Community Properties");
+
+  const { images, ...rest } = data;
+
+  const property = await prisma.communityProperty.create({
+    data: {
+      ...rest,
+      managedById: user.id,
+      images: {
+        create: images?.map((url: string, index: number) => ({ url, sortOrder: index })) || []
+      }
+    }
+  });
+
+  revalidatePath("/marketplace/community-properties");
+  revalidatePath("/marketplace");
+  return property;
+}
+
+export async function getMarketplaceListingById(id: string) {
+  return await prisma.marketplaceListing.findUnique({
+    where: { id },
+    include: { images: true, seller: true }
+  });
+}
+
+export async function initiateMarketplaceConversation(listingId: string) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) throw new Error("Unauthorized");
+  const userId = (session.user as any).id;
+
+  const listing = await prisma.marketplaceListing.findUnique({ where: { id: listingId } });
+  if (!listing) throw new Error("Listing not found");
+
+  if (listing.sellerId === userId) {
+    throw new Error("Cannot start conversation with yourself");
+  }
+
+  // Check if conversation already exists
+  let conversation = await prisma.conversation.findFirst({
+    where: {
+      marketplaceListingId: listingId,
+      initiatedById: userId
+    }
+  });
+
+  if (!conversation) {
+    conversation = await prisma.conversation.create({
+      data: {
+        marketplaceListingId: listingId,
+        initiatedById: userId,
+        ownerId: listing.sellerId,
+        status: "NEW"
+      }
+    });
+  }
+
+  return conversation;
+}
+
+export async function getCommunityPropertyById(id: string) {
+  return await prisma.communityProperty.findUnique({
+    where: { id },
+    include: { images: true, managedBy: true }
+  });
+}
+
+export async function initiateCommunityPropertyConversation(propertyId: string, enquiryData?: { purpose?: string, preferredDate?: string, preferredTime?: string, guestCount?: number, message?: string }) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) throw new Error("Unauthorized");
+  const userId = (session.user as any).id;
+
+  const property = await prisma.communityProperty.findUnique({ where: { id: propertyId } });
+  if (!property) throw new Error("Property not found");
+
+  if (property.managedById === userId) {
+    throw new Error("Cannot start conversation with yourself");
+  }
+
+  // Always create a new conversation for a new enquiry, or reuse if we prefer. 
+  // For enquiries, creating a new conversation might be better if they enquire multiple times. 
+  // Let's stick to reusing if there's already one, but updating it with new enquiry info.
+  let conversation = await prisma.conversation.findFirst({
+    where: {
+      communityPropertyId: propertyId,
+      initiatedById: userId
+    }
+  });
+
+  if (!conversation) {
+    conversation = await prisma.conversation.create({
+      data: {
+        communityPropertyId: propertyId,
+        initiatedById: userId,
+        ownerId: property.managedById,
+        status: "NEW",
+        purpose: enquiryData?.purpose,
+        preferredDate: enquiryData?.preferredDate,
+        preferredTime: enquiryData?.preferredTime,
+        guestCount: enquiryData?.guestCount
+      }
+    });
+  } else if (enquiryData) {
+    // Update existing conversation with new enquiry details
+    conversation = await prisma.conversation.update({
+      where: { id: conversation.id },
+      data: {
+        purpose: enquiryData.purpose,
+        preferredDate: enquiryData.preferredDate,
+        preferredTime: enquiryData.preferredTime,
+        guestCount: enquiryData.guestCount,
+        status: "NEW" // Re-open or mark as new enquiry
+      }
+    });
+  }
+
+  // If there's an initial message, send it
+  if (enquiryData?.message) {
+    await prisma.message.create({
+      data: {
+        conversationId: conversation.id,
+        senderId: userId,
+        message: enquiryData.message
+      }
+    });
+  }
+
+  return conversation;
+}
