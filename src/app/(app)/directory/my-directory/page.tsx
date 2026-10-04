@@ -7,7 +7,7 @@ import styles from "./page.module.css";
 import { MessageCircle } from "lucide-react";
 
 export const metadata = {
-  title: "My Directory | KSIJ Reload",
+  title: "My Directory | KSIJ One",
 };
 
 export default async function MyDirectoryPage() {

@@ -26,7 +26,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           <div className={styles.goldLine}></div>
           <div className={styles.proposedBadge}>PROPOSED SERVICE</div>
           <p className={styles.headerDisclaimer}>
-            This page demonstrates a possible KSIJ Reload service workflow. Final eligibility, documents, approval criteria and programme terms would be determined by the respective Jamaat/committee.
+            This page demonstrates a possible KSIJ One service workflow. Final eligibility, documents, approval criteria and programme terms would be determined by the respective Jamaat/committee.
           </p>
         </div>
       </header>
@@ -117,13 +117,13 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
               <div className={styles.timelineStep}>
                 <div className={styles.stepNumber}>05</div>
                 <div className={styles.stepTitle}>Decision & support</div>
-                <div className={styles.stepText}>You receive an update through KSIJ Reload.</div>
+                <div className={styles.stepText}>You receive an update through KSIJ One.</div>
               </div>
             </div>
           </section>
 
           <div className={styles.footerDisclaimer}>
-            <strong>Important:</strong> The information shown on this page is an illustrative KSIJ Reload concept. Actual eligibility criteria, required documents, assistance amounts, approval procedures and programme terms will be determined by the responsible Jamaat, trust or committee before launch.
+            <strong>Important:</strong> The information shown on this page is an illustrative KSIJ One concept. Actual eligibility criteria, required documents, assistance amounts, approval procedures and programme terms will be determined by the responsible Jamaat, trust or committee before launch.
           </div>
         </div>
 

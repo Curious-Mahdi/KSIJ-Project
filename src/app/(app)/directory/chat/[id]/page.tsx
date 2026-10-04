@@ -8,7 +8,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export const metadata = {
-  title: "Conversation | KSIJ Reload Directory",
+  title: "Conversation | KSIJ One Directory",
 };
 
 export default async function ConversationPage({ params }: { params: Promise<{ id: string }> }) {

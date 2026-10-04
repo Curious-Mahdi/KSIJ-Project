@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const p = await params;
   const listing = await getListingById(p.id);
   if (!listing) return { title: "Listing Not Found" };
-  return { title: `${listing.name} | KSIJ Reload Directory` };
+  return { title: `${listing.name} | KSIJ One Directory` };
 }
 
 export default async function ListingProfilePage({ params }: { params: Promise<{ id: string }> }) {

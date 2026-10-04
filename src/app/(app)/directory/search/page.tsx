@@ -6,7 +6,7 @@ import { Search as SearchIcon, ArrowRight, MapPin } from "lucide-react";
 import SearchForm from "../SearchForm";
 
 export const metadata = {
-  title: "Search Results | KSIJ Reload Directory",
+  title: "Search Results | KSIJ One Directory",
 };
 
 const CATEGORIES = [
