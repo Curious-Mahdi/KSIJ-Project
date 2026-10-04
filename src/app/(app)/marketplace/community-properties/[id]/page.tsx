@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getCommunityPropertyById } from "@/lib/actions/marketplace";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import * as motion from "framer-motion/client";
 import { MapPin, Building, Info, Users, ShieldCheck } from "lucide-react";
 import styles from "../../member-marketplace/[id]/page.module.css";
 import ClientActions from "./ClientActions";
@@ -25,43 +26,47 @@ export default async function CommunityPropertyDetailPage({ params }: { params: 
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.breadcrumb}>
-        <Link href="/marketplace/community-properties">Community Properties</Link>
-        <span>/</span>
-        <span className="text-muted">{property.name}</span>
+    <div className="w-full">
+      <div className="container" style={{ paddingTop: '32px' }}>
+        <div className={styles.breadcrumb}>
+          <Link href="/marketplace/community-properties">Community Properties</Link>
+          <span>/</span>
+          <span style={{ color: 'var(--color-text-secondary)' }}>{property.name}</span>
+        </div>
       </div>
 
-      <div className={styles.layout}>
-        <div className={styles.mainCol}>
-          {/* Gallery */}
-          <div className={styles.gallery}>
-            {property.images?.length > 0 ? (
-              <img src={property.images[0].url} alt={property.name} className={styles.mainImage} />
-            ) : (
-              <div className="flex-center" style={{ height: '400px', background: '#e2e8f0', color: '#94a3b8' }}>
-                <Building size={64} />
+      <section className="section-padding" style={{ paddingTop: 0 }}>
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className={styles.layout}>
+            <div className={styles.mainCol}>
+              {/* Gallery */}
+              <div className={styles.gallery}>
+                {property.images?.length > 0 ? (
+                  <img src={property.images[0].url} alt={property.name} className={styles.mainImage} />
+                ) : (
+                  <div className="flex-center" style={{ height: '400px', background: 'var(--color-surface)', color: 'var(--color-text-muted)' }}>
+                    <Building size={64} />
+                  </div>
+                )}
               </div>
-            )}
-          </div>
 
-          <div className={styles.titleSection}>
-            <div className={styles.metaBadge} style={{ background: 'var(--color-primary)', color: 'white', fontWeight: 'bold' }}>OFFICIAL COMMUNITY PROPERTY</div>
-            <h1 className={styles.title}>{property.name}</h1>
-            <div className={styles.location}>
-              <MapPin size={16} />
-              {property.location || property.city || "Location not specified"}
-            </div>
-            
-            <div className={styles.mobilePriceBox}>
-              <div className={styles.price}>
-                {property.pricing || "Contact for Pricing"}
+              <div className={styles.titleSection}>
+                <div className={styles.metaBadge}>OFFICIAL COMMUNITY PROPERTY</div>
+                <h1 className={styles.title}>{property.name}</h1>
+                <div className={styles.location}>
+                  <MapPin size={16} />
+                  {property.location || property.city || "Location not specified"}
+                </div>
+                
+                <div className={styles.mobilePriceBox}>
+                  <div className={styles.price}>
+                    {property.pricing || "Contact for Pricing"}
+                  </div>
+                  <div className={styles.transactionType}>Jamaat Managed</div>
+                </div>
               </div>
-              <div className={styles.transactionType}>Jamaat Managed</div>
-            </div>
-          </div>
 
-          <div className={styles.divider}></div>
+              <div className={styles.divider}></div>
 
           {/* Description */}
           <section className={styles.section}>
@@ -160,17 +165,19 @@ export default async function CommunityPropertyDetailPage({ params }: { params: 
           <div className={styles.sellerCard}>
             <h3>Managed By</h3>
             <div className={styles.sellerHeader}>
-              <div className={styles.sellerAvatar} style={{ background: 'var(--color-primary)', color: 'white' }}>
+              <div className={styles.sellerAvatar}>
                 <ShieldCheck size={24} />
               </div>
               <div>
                 <div className={styles.sellerName}>Jamaat Administration</div>
-                <div className="text-muted small-text">Official Property</div>
+                <div style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>Official Property</div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 }

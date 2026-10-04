@@ -1,17 +1,25 @@
 import styles from "./page.module.css";
+import * as motion from "framer-motion/client";
 import { MapPin, Clock } from "lucide-react";
 import Link from "next/link";
 
 export default function EventsPage() {
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h1 className={styles.pageTitle}>Community Events</h1>
-        <p className={styles.pageSubtitle}>Stay updated with what's happening around Jamaat</p>
-      </div>
+    <div className="w-full">
+      <section className={styles.hero}>
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <span className={styles.heroEyebrow}>EVENTS</span>
+            <h1 className="h1 mb-16" style={{ color: 'var(--color-primary-dark)' }}>Community Events</h1>
+            <p className={styles.pageSubtitle}>Stay updated with what&apos;s happening around Jamaat</p>
+          </motion.div>
+        </div>
+      </section>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>Upcoming Events</h2>
+      <section className="section-padding">
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <h2 className="h2 mb-32">Upcoming Events</h2>
         
         <div className={styles.eventsList}>
           <Link href="/events/hackathon" className={styles.eventCard}>
@@ -62,10 +70,14 @@ export default function EventsPage() {
             </div>
           </Link>
         </div>
+        </motion.div>
+        </div>
       </section>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>Past Events</h2>
+      <section className="section-padding bg-light-green">
+        <div className="container">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <h2 className="h2 mb-32">Past Events</h2>
         
         <div className={styles.eventsList}>
           <Link href="/events/ai-bootcamp" className={`${styles.eventCard} ${styles.pastEventCard}`}>
@@ -107,6 +119,8 @@ export default function EventsPage() {
               </p>
             </div>
           </Link>
+        </div>
+        </motion.div>
         </div>
       </section>
     </div>
