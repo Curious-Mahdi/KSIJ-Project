@@ -1,0 +1,151 @@
+.container {
+  min-height: 100vh;
+  background-color: #FAF9F5;
+  color: #122019;
+  padding: 48px 24px;
+}
+
+.contentWrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #68756F;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 32px;
+  transition: color 0.2s;
+}
+.backLink:hover {
+  color: #063F2B;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 32px;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  color: #063F2B;
+  margin-bottom: 8px;
+}
+
+.postBtn {
+  background: white;
+  border: 1px solid #0B5D3B;
+  color: #0B5D3B;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.postBtn:hover {
+  background: #EEF6F1;
+}
+
+.tabs {
+  display: flex;
+  gap: 32px;
+  border-bottom: 1px solid #DDE5DF;
+  margin-bottom: 32px;
+}
+.tab {
+  padding: 12px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #68756F;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.2s;
+}
+.tab:hover {
+  color: #122019;
+}
+.tabActive {
+  color: #0B5D3B;
+}
+.tabActive::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #0B5D3B;
+}
+
+.successMessage {
+  background: #EEF6F1;
+  border: 1px solid #0B5D3B;
+  color: #0B5D3B;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+}
+
+.cardsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  background: white;
+  border: 1px solid #DDE5DF;
+  border-radius: 12px;
+  padding: 24px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+.card:hover {
+  border-color: #0B5D3B;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #063F2B;
+  margin-bottom: 8px;
+}
+
+.emptyState {
+  background: white;
+  border: 1px solid #DDE5DF;
+  border-radius: 12px;
+  padding: 64px 24px;
+  text-align: center;
+}
+.emptyTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #122019;
+  margin-bottom: 8px;
+}
+.emptyDesc {
+  color: #68756F;
+}

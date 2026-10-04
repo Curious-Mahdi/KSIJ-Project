@@ -4,6 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "KSIJ One",
   description: "KSIJ One — One community. Everything you need.",
+  manifest: "/manifest.json",
 };
 
 export const viewport: Viewport = {
@@ -11,6 +12,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  themeColor: "#0B5D3B",
 };
 
 import { Providers } from "@/components/Providers";

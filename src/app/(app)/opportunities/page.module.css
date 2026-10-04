@@ -1,0 +1,512 @@
+.container {
+  min-height: 100vh;
+  background-color: #FAF9F5;
+  color: #122019;
+}
+
+/* HERO SECTION */
+.hero {
+  background: white;
+  border-bottom: 1px solid #DDE5DF;
+  padding: 48px 24px;
+}
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #0B5D3B;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: block;
+}
+.heroTitle {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  color: #063F2B;
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+.heroSubtitle {
+  font-size: 1.125rem;
+  color: #68756F;
+  margin-bottom: 32px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.searchContainer {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto 24px;
+  display: flex;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  border-radius: 12px;
+  background: white;
+  border: 1px solid #DDE5DF;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+.searchContainer:focus-within {
+  border-color: #0B5D3B;
+  box-shadow: 0 4px 20px rgba(11,93,59,0.1);
+}
+.searchIcon {
+  padding: 16px;
+  color: #68756F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.searchInput {
+  flex: 1;
+  border: none;
+  padding: 16px 0;
+  font-size: 1rem;
+  outline: none;
+  background: transparent;
+  color: #122019;
+}
+.searchInput::placeholder {
+  color: #9CA3AF;
+}
+.searchClear {
+  background: transparent;
+  border: none;
+  padding: 0 16px;
+  color: #68756F;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.searchClear:hover {
+  color: #122019;
+}
+.searchButton {
+  background: #0B5D3B;
+  color: white;
+  border: none;
+  padding: 0 24px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+.searchButton:hover {
+  background: #063F2B;
+}
+
+.searchSuggestions {
+  font-size: 0.875rem;
+  color: #68756F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.suggestionChip {
+  background: #FAF9F5;
+  border: 1px solid #DDE5DF;
+  padding: 4px 12px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.suggestionChip:hover {
+  background: #EEF6F1;
+  color: #0B5D3B;
+  border-color: #0B5D3B;
+}
+
+/* INTENT BOX */
+.intentBox {
+  background: #EEF6F1;
+  border: 1px solid #DDE5DF;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 800px;
+  margin: 32px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.intentLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #0B5D3B;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.intentInput {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  color: #063F2B;
+  outline: none;
+}
+.intentInput::placeholder {
+  color: #68756F;
+}
+.intentButton {
+  background: transparent;
+  color: #0B5D3B;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.intentButton:hover {
+  color: #063F2B;
+}
+
+/* NAVIGATION TABS */
+.tabsWrapper {
+  background: white;
+  border-bottom: 1px solid #DDE5DF;
+  position: sticky;
+  top: 70px;
+  z-index: 10;
+}
+.tabsContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 16px;
+  padding: 16px 24px;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+}
+.tabsContainer::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+.tab {
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.tabActive {
+  background: #0B5D3B;
+  color: white;
+}
+.tabInactive {
+  background: white;
+  color: #122019;
+  border-color: #DDE5DF;
+}
+.tabInactive:hover {
+  background: #FAF9F5;
+}
+
+/* LAYOUT */
+.mainLayout {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 48px;
+  align-items: start;
+}
+@media (max-width: 991px) {
+  .mainLayout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* FILTERS */
+.filtersPanel {
+  position: sticky;
+  top: 140px;
+}
+.filterGroup {
+  margin-bottom: 32px;
+}
+.filterTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #063F2B;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.filterItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  color: #68756F;
+  font-size: 0.95rem;
+}
+.checkbox {
+  width: 18px;
+  height: 18px;
+  border: 1px solid #DDE5DF;
+  border-radius: 4px;
+  accent-color: #0B5D3B;
+  cursor: pointer;
+}
+
+/* CONTENT SECTIONS */
+.section {
+  margin-bottom: 64px;
+}
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 24px;
+}
+.sectionTitle {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  color: #063F2B;
+  margin-bottom: 4px;
+}
+.sectionSubtitle {
+  color: #68756F;
+  font-size: 0.95rem;
+}
+.postButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: white;
+  border: 1px solid #0B5D3B;
+  color: #0B5D3B;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.postButton:hover {
+  background: #EEF6F1;
+}
+
+/* CARDS LIST */
+.cardsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* OPPORTUNITY CARD */
+.card {
+  background: white;
+  border: 1px solid #DDE5DF;
+  border-radius: 12px;
+  padding: 24px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+.card:hover {
+  border-color: #0B5D3B;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.cardBadge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+.badgeJob { background: #EEF6F1; color: #0B5D3B; }
+.badgeInternship { background: #Fdf2f8; color: #db2777; }
+.badgeMentorship { background: #eff6ff; color: #2563eb; }
+.badgeProject { background: #fffbeb; color: #d97706; }
+.badgeVolunteering { background: #f3f4f6; color: #4b5563; }
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #063F2B;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.cardOrg {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #122019;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.verifiedIcon {
+  color: #C8A64B;
+}
+.cardMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+  font-size: 0.875rem;
+  color: #68756F;
+}
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.cardSkills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.skillTag {
+  background: #FAF9F5;
+  border: 1px solid #DDE5DF;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: #68756F;
+}
+.cardFooter {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #DDE5DF;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #68756F;
+}
+.cardAction {
+  color: #0B5D3B;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* BEYOND JOBS */
+.beyondGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+@media (max-width: 991px) {
+  .beyondGrid {
+    grid-template-columns: 1fr;
+  }
+}
+.beyondCard {
+  background: white;
+  border: 1px solid #DDE5DF;
+  border-radius: 12px;
+  padding: 32px 24px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.beyondCard:hover {
+  border-color: #0B5D3B;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.05);
+}
+.beyondIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #EEF6F1;
+  color: #0B5D3B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.beyondTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #063F2B;
+  margin-bottom: 12px;
+}
+.beyondDesc {
+  color: #68756F;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+.beyondAction {
+  margin-top: auto;
+  color: #0B5D3B;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+/* EMPTY STATE */
+.emptyState {
+  background: white;
+  border: 1px solid #DDE5DF;
+  border-radius: 12px;
+  padding: 64px 24px;
+  text-align: center;
+}
+.emptyTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #122019;
+  margin-bottom: 8px;
+}
+.emptyDesc {
+  color: #68756F;
+  margin-bottom: 24px;
+}
+
+/* Mobile Filter Button */
+.mobileFilterBtn {
+  display: none;
+}
+@media (max-width: 991px) {
+  .mobileFilterBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    background: white;
+    border: 1px solid #DDE5DF;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    font-weight: 600;
+    color: #122019;
+  }
+  .filtersPanel {
+    display: none; /* In a real implementation, this would open a drawer/modal */
+  }
+}

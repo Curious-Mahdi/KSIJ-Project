@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Grid, Users, Store, Calendar, MoreHorizontal, Bell } from "lucide-react";
+import { Home, Grid, Users, Store, Calendar, MoreHorizontal, Bell, Briefcase } from "lucide-react";
 import { useSession } from "next-auth/react";
 import styles from "./layout.module.css";
 
@@ -50,7 +50,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Desktop Navigation */}
         <nav className={styles.desktopNav}>
-          {['home', 'services', 'directory', 'venues', 'events'].map((route) => {
+          {['home', 'services', 'directory', 'opportunities', 'venues', 'events'].map((route) => {
             const isActive = pathname.startsWith(`/${route}`);
             return (
               <Link key={route} href={`/${route}`} className={styles.navLink}>
@@ -113,6 +113,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <Link href="/directory" className={`${styles.bottomNavItem} ${pathname.startsWith('/directory') ? styles.bottomNavActive : ''}`}>
           <Users size={24} />
           <span>Directory</span>
+        </Link>
+        <Link href="/opportunities" className={`${styles.bottomNavItem} ${pathname.startsWith('/opportunities') ? styles.bottomNavActive : ''}`}>
+          <Briefcase size={24} />
+          <span>Opportunities</span>
         </Link>
         <Link href="/venues" className={`${styles.bottomNavItem} ${pathname.startsWith('/venues') ? styles.bottomNavActive : ''}`}>
           <Store size={24} />
