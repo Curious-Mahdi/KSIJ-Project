@@ -34,6 +34,11 @@ const NAV_ITEMS: NavItem[] = [
     icon: BarChart3,
   },
   {
+    label: "Assistance Verification",
+    href: "/admin/verification",
+    icon: ShieldCheck,
+  },
+  {
     label: "Assistance Registry",
     href: "/admin/registry",
     icon: ShieldCheck,

@@ -467,7 +467,9 @@ model Organization {
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
 
-  records      AssistanceRecord[]
+  records          AssistanceRecord[]
+  apiKey           String?            @default("ak_live_demo")
+  verificationLogs VerificationAuditLog[]
 }
 
 model Beneficiary {
@@ -499,12 +501,15 @@ model AssistanceRecord {
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
-  category       String       // "Medical Aid", "Food Support", "Education / Scholarship", "Emergency Financial Aid", "Loan", "Housing Support"
+  category       String       // "Medical Assistance", "Food Support", "Education / Scholarship", etc.
   amount         Float
   date           DateTime     @default(now())
   status         String       @default("COMPLETED")
   purpose        String?
   notes          String?
+  privateNotes   String?      // Organization's strictly private case worker notes
+  caseReference  String?      // Internal case/dossier reference
+  isPrivate      Boolean      @default(true)
   
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
@@ -513,4 +518,36 @@ model AssistanceRecord {
   @@index([organizationId])
   @@index([category])
   @@index([date])
+}
+
+model CentralVerificationRecord {
+  id                   String   @id @default(cuid())
+  beneficiaryReference String   // e.g. "BEN-000123"
+  category             String   // e.g. "Medical Assistance"
+  lastAssistanceDate   DateTime
+  status               String   @default("ACTIVE")
+  reviewRequired       Boolean  @default(true)
+  sourceAttestation    String   @default("AUTHORIZED_MEMBER_FOUNDATION")
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([beneficiaryReference])
+  @@index([category])
+}
+
+model VerificationAuditLog {
+  id                   String       @id @default(cuid())
+  organizationId       String
+  organization         Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  beneficiaryReference String
+  category             String
+  action               String       // "VERIFICATION_CHECK", "ASSISTANCE_RECORDED", "ACCESS_DENIED"
+  result               String       // "RELEVANT_ASSISTANCE_FOUND", "CLEARED", "BLOCKED"
+  reviewRequired       Boolean      @default(false)
+  details              String?
+  createdAt            DateTime     @default(now())
+
+  @@index([organizationId])
+  @@index([beneficiaryReference])
+  @@index([createdAt])
 }
