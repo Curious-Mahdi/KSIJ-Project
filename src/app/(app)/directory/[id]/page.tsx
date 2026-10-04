@@ -42,7 +42,7 @@ export default async function ListingProfilePage({ params }: { params: Promise<{
         </div>
         <div className={styles.type}>
           {listing.listingType} &middot; {listing.category}
-          {listing.verificationStatus === 'UNVERIFIED' && <span style={{ marginLeft: '12px', fontSize: '0.75rem', backgroundColor: '#FFF3CD', color: '#856404', padding: '2px 8px', borderRadius: '12px' }}>Not yet verified</span>}
+          {listing.verificationStatus === 'VERIFIED' && <span style={{ marginLeft: '12px', fontSize: '0.75rem', backgroundColor: '#D4EDDA', color: '#155724', padding: '2px 8px', borderRadius: '12px', fontWeight: 500 }}>Verified Community Profile</span>}
           {listing.sourceType === 'COMMUNITY_DIRECTORY_SCAN' && <span style={{ marginLeft: '8px', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>From Community Directory</span>}
         </div>
         <h1 className={styles.title}>{listing.name}</h1>
