@@ -49,7 +49,7 @@ export default async function MarketplacePage() {
                 {prop.images?.[0]?.url ? (
                   <img src={prop.images[0].url} alt={prop.name} className={styles.cardImg} />
                 ) : (
-                  <div className="flex-center" style={{ height: '100%', background: '#e2e8f0', color: '#94a3b8' }}>
+                  <div className="flex-center" style={{ height: '100%', background: 'var(--color-surface-success)', color: 'var(--color-primary-light)' }}>
                     <Building size={48} />
                   </div>
                 )}
@@ -103,7 +103,7 @@ export default async function MarketplacePage() {
                 {listing.images?.[0]?.url ? (
                   <img src={listing.images[0].url} alt={listing.title} className={styles.cardImg} />
                 ) : (
-                  <div className="flex-center" style={{ height: '100%', background: '#e2e8f0', color: '#94a3b8' }}>
+                  <div className="flex-center" style={{ height: '100%', background: 'var(--color-surface-success)', color: 'var(--color-primary-light)' }}>
                     <Building size={48} />
                   </div>
                 )}

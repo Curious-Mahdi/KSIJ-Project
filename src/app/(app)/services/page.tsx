@@ -27,22 +27,24 @@ export default function ServicesLandingPage() {
         </Link>
       </section>
 
-      {/* Quick Information Strip */}
+      {/* Quick Information Strip (Process Flow) */}
       <div className={styles.infoStrip}>
         <div className={styles.infoBlock}>
-          <div className={styles.infoNumber}>01</div>
-          <div className={styles.infoTitle}>Simple Applications</div>
-          <div className={styles.infoText}>Apply for community support through one guided process.</div>
+          <div className={styles.infoIcon}>📝</div>
+          <div className={styles.infoTitle}>1. Apply</div>
+          <div className={styles.infoText}>Submit your request through one simple guided process.</div>
+          <div className={styles.processArrow}></div>
         </div>
         <div className={styles.infoBlock}>
-          <div className={styles.infoNumber}>02</div>
-          <div className={styles.infoTitle}>Document Uploads</div>
-          <div className={styles.infoText}>Keep required documents together with your application.</div>
+          <div className={styles.infoIcon}>📎</div>
+          <div className={styles.infoTitle}>2. Upload</div>
+          <div className={styles.infoText}>Securely attach required documents to your application.</div>
+          <div className={styles.processArrow}></div>
         </div>
         <div className={styles.infoBlock}>
-          <div className={styles.infoNumber}>03</div>
-          <div className={styles.infoTitle}>Track Your Application</div>
-          <div className={styles.infoText}>Follow the progress of your request from submission to decision.</div>
+          <div className={styles.infoIcon}>⏱️</div>
+          <div className={styles.infoTitle}>3. Track</div>
+          <div className={styles.infoText}>Follow the progress of your request until a decision is made.</div>
         </div>
       </div>
 

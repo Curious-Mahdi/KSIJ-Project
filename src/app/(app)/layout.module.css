@@ -16,7 +16,8 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background-color: var(--color-surface);
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--color-border);
   padding: 0 var(--space-24);
   height: 72px;
@@ -28,12 +29,13 @@
 
 .logo {
   font-family: var(--font-serif);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 1.5rem;
   color: var(--color-primary);
   display: none;
   flex: 1;
   text-align: left;
+  letter-spacing: -0.02em;
 }
 @media (min-width: 768px) {
   .logo {
@@ -81,7 +83,7 @@
   transition: color 0.2s ease;
 }
 .navLink:hover {
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
 }
 .navLinkActive {
   color: var(--color-primary);
@@ -156,6 +158,8 @@
 .mainContent {
   flex: 1;
   width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
 /* Bottom Nav (Mobile) */
@@ -185,8 +189,10 @@
   align-items: center;
   gap: var(--space-4);
   color: var(--color-text-secondary);
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 500;
+  transition: color 0.2s ease;
+  padding: 4px;
 }
 .bottomNavActive {
   color: var(--color-primary);
