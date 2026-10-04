@@ -114,14 +114,14 @@ async function main() {
       sellerId: admin.id
     },
     {
-      title: "Looking for a used PS5",
-      shortDescription: "Looking to buy a pre-owned PlayStation 5 (Disc edition).",
-      description: "I am looking to buy a pre-owned PlayStation 5 in good condition (Disc edition preferred). Please DM me if you are upgrading and want to sell yours. Ready to pay cash immediately.",
-      category: "Electronics",
-      transactionType: "WANTED",
-      price: 35000,
+      title: "Ikea 3-Seater Sofa (Grey)",
+      shortDescription: "Barely used 3-seater sofa, moving out sale.",
+      description: "Selling a barely used Ikea 3-seater sofa in dark grey. We bought it 6 months ago but are now moving out of the city. No stains, tears, or damage. Buyer must arrange for pickup.",
+      category: "Home & Garden",
+      transactionType: "SELL",
+      price: 12000,
       currency: "INR",
-      location: "Mumbai",
+      location: "Mazgaon, Mumbai",
       status: "PUBLISHED",
       sellerId: admin.id
     }
