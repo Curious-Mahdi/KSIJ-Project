@@ -3,288 +3,135 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Seeding Community Properties...');
+  console.log('Seeding Marketplace and Community Properties...');
 
-  // 1. Get an admin user (we will use this user as the managedBy for the properties)
   let admin = await prisma.user.findFirst({
     where: { isAdmin: true },
   });
 
   if (!admin) {
-    console.log('No admin user found. Falling back to any user...');
     admin = await prisma.user.findFirst();
   }
-  
+
   if (!admin) {
-    console.log('No user found at all. Creating a dummy admin user...');
-    admin = await prisma.user.create({
-      data: {
-        googleId: 'dummy-admin-google-id',
-        name: 'System Admin',
-        email: 'admin@ksijreload.local',
-        isAdmin: true
-      }
-    });
+    console.error("No users found to act as owner.");
+    return;
   }
 
-  // Create a separate test user to own member listings so the current user can chat with them
-  let testSeller = await prisma.user.findFirst({
-    where: { email: 'test.seller@ksijreload.local' }
-  });
+  // Clear existing seeded data to avoid duplicates
+  await prisma.communityProperty.deleteMany({ where: { managedById: admin.id } });
+  await prisma.marketplaceListing.deleteMany({ where: { sellerId: admin.id } });
 
-  if (!testSeller) {
-    console.log('Creating Test Seller user...');
-    testSeller = await prisma.user.create({
-      data: {
-        googleId: 'test-seller-google-id',
-        name: 'Community Member (Test Seller)',
-        email: 'test.seller@ksijreload.local',
-        isAdmin: false
-      }
-    });
-  }
-
-  const properties = [
+  // 1. Seed Community Properties (Venues, Halls, etc)
+  const communityProperties = [
     {
-      name: 'KSIJ Masjid Dongri — Masjid & Imambara Hall',
-      propertyType: 'Hall / Venue',
-      shortDescription: 'KSIJ Masjid and Imambara Hall in Dongri is a community-managed venue used for Majlis, Niyaz, Nikah, Walima, marriages and other functions.',
-      description: 'KSIJ Masjid and Imambara Hall in Dongri is a community-managed venue used for Majlis, Niyaz, Nikah, Walima, marriages and other functions. Charges and arrangements vary depending on the type of gathering and requirements.',
-      managedById: admin.id,
-      address: '66/70 Hazrat Abbas a.s Street',
-      area: 'Dongri',
-      city: 'Mumbai',
-      location: 'Dongri, Mumbai 400009',
-      usageTags: 'Nikah / Walima, Majlis, Niyaz, Community Program, Religious Gathering',
-      pricing: 'Pricing as per official Trust resolution',
+      name: "Jamaat Main Hall (Imambargah)",
+      propertyType: "Hall / Venue",
+      location: "Dongri, Mumbai",
+      city: "Mumbai",
+      capacity: 800,
+      shortDescription: "The primary community hall located in the heart of Dongri, perfect for large events.",
+      description: "The primary community hall located in the heart of Dongri. This spacious, fully air-conditioned venue is perfect for large religious gatherings, Majalis, Nikah ceremonies, and Walima dinners. It includes separate entrances for ladies and gents, a fully equipped industrial kitchen for Niyaz preparation, and dedicated parking.",
+      usageTags: "Majlis,Nikah / Walima,Niyaz,Community Program",
+      pricing: "Rs 15,000 / event",
       pricingDetails: JSON.stringify({
-        masjid: {
-          gentsMajlis: '₹500',
-          majlisRecording: '₹1,000',
-          masjidAC: '₹2,500 per hour',
-          fullLight: '₹1,000',
-        },
-        imambaraHallReligious: {
-          ladiesMajlis: '₹1,000 per hall',
-          gentsLadiesMajlisNiyaz: '₹3,000 per hall',
-          infalliblesNiyaz: '₹1,500 per hall',
-        },
-        imambaraHallMarriage: {
-          gents: '₹15,000 per hall',
-          ladies: '₹15,000 per hall',
-        },
-        other: {
-          extra: '₹1,000 per hour',
-          housekeeping: '₹1,000 per hall',
-          ac: '₹2,500 per hour',
-          videoShoot: '₹1,000',
-          kitchenUse: '₹1,500',
-        }
+        "Jamaat Members": { "Standard": "Rs 15,000", "AC Charges": "Rs 5,000 extra" },
+        "Non-Members": { "Standard": "Rs 30,000", "AC Charges": "Rs 8,000 extra" }
       }),
-      functionTimings: '11:00 AM – 3:00 PM\n6:00 PM – 11:00 PM',
-      termsAndConditions: 'Marriage-purpose deposit: ₹10,000 for 1 hall/floor.\nAdditional deposit: ₹5,000 if more than 1 hall/floor is booked.\nMusic is not allowed.\nDamage to Trust property must be reimbursed.\nAdditional terms may apply. Please confirm with the Trust.',
+      functionTimings: "Morning Slot: 10:00 AM - 4:00 PM\nEvening Slot: 6:00 PM - 11:30 PM",
+      termsAndConditions: "- Advance booking requires 50% deposit.\n- Decoration must be handled by approved panel decorators.\n- Sound systems must be kept within permissible limits after 10 PM.",
+      status: "PUBLISHED",
+      managedById: admin.id
     },
     {
-      name: 'Aarambaug Hall',
-      propertyType: 'Hall / Venue',
-      shortDescription: 'Community-managed hall serving local community gatherings and functions.',
-      description: 'Community-managed hall serving local community gatherings and functions.',
-      managedById: admin.id,
-      area: 'Aarambaug / Mazgaon',
-      city: 'Mumbai',
-      location: 'Aarambaug / Mazgaon, Mumbai',
-      usageTags: 'Community Function, Religious Gathering, Other Functions',
-      pricing: 'Details to be confirmed',
+      name: "Mehfil-e-Abbas Ground",
+      propertyType: "Other Community Property",
+      location: "Bandra West, Mumbai",
+      city: "Mumbai",
+      capacity: 1500,
+      shortDescription: "Expansive open-air ground suitable for massive community events and sports.",
+      description: "An expansive open-air ground suitable for massive community events, sports tournaments, and large-scale Niyaz distribution. The ground is well-leveled and includes basic lighting, washroom facilities, and a small administrative office.",
+      usageTags: "Community Program,Sports,Large Gatherings",
+      pricing: "Rs 25,000 / day",
+      status: "PUBLISHED",
+      managedById: admin.id
     },
     {
-      name: 'Kapaswadi Mehfil-e-Mustafa',
-      propertyType: 'Hall / Venue',
-      shortDescription: 'Community venue serving local religious and community gatherings.',
-      description: 'Community venue serving local religious and community gatherings.',
-      managedById: admin.id,
-      area: 'Kapaswadi',
-      city: 'Mumbai',
-      location: 'Kapaswadi, Mumbai',
-      usageTags: 'Religious Gathering, Majlis, Community Function',
-      pricing: 'Details to be confirmed',
-    },
-    {
-      name: 'Nazar Ali Imambada Hall',
-      propertyType: 'Hall / Venue',
-      shortDescription: 'Community-managed Imambada venue for religious and community gatherings.',
-      description: 'Community-managed Imambada venue for religious and community gatherings.',
-      managedById: admin.id,
-      city: 'Mumbai',
-      location: 'Mumbai',
-      usageTags: 'Religious Gathering, Majlis, Community Function, Other Functions',
-      pricing: 'Details to be confirmed',
+      name: "Fatima Zehra (s.a) Ladies Hall",
+      propertyType: "Hall / Venue",
+      location: "Andheri East, Mumbai",
+      city: "Mumbai",
+      capacity: 250,
+      shortDescription: "A secure, elegantly designed hall dedicated exclusively for ladies' events.",
+      description: "A secure, elegantly designed hall dedicated exclusively for ladies' events. Ideal for Milad, private family gatherings, and ladies' Majalis. Features a built-in sound system, comfortable seating, and a private dining area.",
+      usageTags: "Majlis,Ladies Event,Milad",
+      pricing: "Rs 8,000 / event",
+      status: "PUBLISHED",
+      managedById: admin.id
     }
   ];
 
-  for (const prop of properties) {
-    const existing = await prisma.communityProperty.findFirst({
-      where: { name: prop.name }
-    });
-
-    if (existing) {
-      console.log(`Property ${prop.name} already exists, updating...`);
-      await prisma.communityProperty.update({
-        where: { id: existing.id },
-        data: prop
-      });
-    } else {
-      console.log(`Creating property ${prop.name}...`);
-      await prisma.communityProperty.create({
-        data: prop
-      });
-    }
+  for (const cp of communityProperties) {
+    await prisma.communityProperty.create({ data: cp });
   }
-  
-  // Seed demo listings for Member Marketplace
-  console.log('Seeding Demo Member Listings...');
-  
-  const demoListings = [
+
+  // 2. Seed Member Marketplace Listings (Real-looking data)
+  const marketplaceListings = [
     {
-      title: '2 BHK Flat for Rent in Dongri',
-      category: 'Property',
-      transactionType: 'Rent',
-      price: 35000,
-      currency: 'INR',
-      location: 'Dongri, Mumbai',
-      city: 'Mumbai',
-      area: 'Dongri',
-      bedrooms: 2,
-      bathrooms: 2,
-      condition: 'Good',
-      shortDescription: '2 BHK flat available for rent in Dongri.',
-      description: '2 BHK flat available for rent in Dongri.',
-      propertyType: 'Residential',
+      title: "Toyota Innova Crysta (2020) - Mint Condition",
+      shortDescription: "Mint condition Toyota Innova Crysta (Diesel) with original paint.",
+      description: "Selling our family car, a 2020 Toyota Innova Crysta (Diesel). It has been driven carefully by a single owner, fully serviced at authorized Toyota centers. Zero accidents, original paint, and brand new tires installed last month. Perfect vehicle for large families.",
+      category: "Vehicles",
+      transactionType: "SELL",
+      price: 1850000,
+      currency: "INR",
+      location: "Bandra West, Mumbai",
+      status: "PUBLISHED",
+      sellerId: admin.id
     },
     {
-      title: '2 BHK Home for Sale in Dongri',
-      category: 'Property',
-      transactionType: 'Sale',
-      price: 15000000,
-      currency: 'INR',
-      location: 'Dongri, Mumbai',
-      city: 'Mumbai',
-      area: 'Dongri',
-      bedrooms: 2,
-      bathrooms: 2,
-      shortDescription: '2 BHK residential property available for sale in Dongri.',
-      description: '2 BHK residential property available for sale in Dongri.',
-      propertyType: 'Residential',
-    },
-    {
-      title: 'Honda Activa — Good Condition',
-      category: 'Vehicles',
-      transactionType: 'Sale',
-      price: 55000,
-      currency: 'INR',
-      location: 'Mumbai',
-      city: 'Mumbai',
-      condition: 'Used - Good',
-      shortDescription: 'Honda Activa in good condition.',
-      description: 'Honda Activa in good condition.',
-      vehicleType: 'Scooter',
-      brand: 'Honda',
-      model: 'Activa',
-    },
-    {
-      title: 'Royal Enfield Classic 350',
-      category: 'Vehicles',
-      transactionType: 'Sale',
-      price: 135000,
-      currency: 'INR',
-      location: 'Mumbai',
-      city: 'Mumbai',
-      condition: 'Used - Good',
-      shortDescription: 'Royal Enfield Classic 350 in good condition.',
-      description: 'Royal Enfield Classic 350 in good condition.',
-      vehicleType: 'Motorcycle',
-      brand: 'Royal Enfield',
-      model: 'Classic 350',
-    },
-    {
-      title: 'iPhone 15 128GB',
-      category: 'Electronics',
-      transactionType: 'Sale',
+      title: "2BHK Apartment Available for Rent in Dongri",
+      shortDescription: "Spacious 2BHK apartment 5 mins from Imambargah.",
+      description: "Spacious and well-ventilated 2BHK apartment available for families. Located just 5 minutes walking distance from the main Imambargah. Features modular kitchen, 24/7 water supply, and one dedicated car parking spot. Building has 2 elevators and security.",
+      category: "Real Estate",
+      transactionType: "RENT",
       price: 45000,
-      currency: 'INR',
-      location: 'Mumbai',
-      city: 'Mumbai',
-      condition: 'Used - Good',
-      shortDescription: 'iPhone 15 128GB in good condition.',
-      description: 'iPhone 15 128GB in good condition.',
-      brand: 'Apple',
-      model: 'iPhone 15',
+      currency: "INR",
+      location: "Dongri, Mumbai",
+      status: "PUBLISHED",
+      sellerId: admin.id
     },
     {
-      title: 'MacBook Air',
-      category: 'Electronics',
-      transactionType: 'Sale',
-      price: 70000,
-      currency: 'INR',
-      location: 'Mumbai',
-      city: 'Mumbai',
-      condition: 'Used - Good',
-      shortDescription: 'MacBook Air in good condition.',
-      description: 'MacBook Air in good condition.',
-      brand: 'Apple',
-      model: 'MacBook Air',
+      title: "Brand New iPhone 15 Pro (256GB, Titanium)",
+      shortDescription: "Unboxed iPhone 15 Pro, 256GB Natural Titanium.",
+      description: "Unboxed but never used iPhone 15 Pro, 256GB Natural Titanium. Was gifted to me but I prefer Android. Comes with the original box, cable, and a 1-year Apple warranty starting from this month. Price is slightly negotiable for quick buyers.",
+      category: "Electronics",
+      transactionType: "SELL",
+      price: 125000,
+      currency: "INR",
+      location: "Andheri, Mumbai",
+      status: "PUBLISHED",
+      sellerId: admin.id
     },
     {
-      title: '3-Seater Sofa Set',
-      category: 'Furniture',
-      transactionType: 'Sale',
-      price: 18000,
-      currency: 'INR',
-      location: 'Mumbai',
-      city: 'Mumbai',
-      condition: 'Used - Good',
-      shortDescription: '3-Seater Sofa Set in good condition.',
-      description: '3-Seater Sofa Set in good condition.',
-    },
-    {
-      title: 'Shop Space Available for Rent',
-      category: 'Property',
-      transactionType: 'Rent',
-      price: 50000,
-      currency: 'INR',
-      location: 'Mumbai',
-      city: 'Mumbai',
-      shortDescription: 'Commercial shop space available for rent.',
-      description: 'Commercial shop space available for rent.',
-      propertyType: 'Commercial',
+      title: "Looking for a used PS5",
+      shortDescription: "Looking to buy a pre-owned PlayStation 5 (Disc edition).",
+      description: "I am looking to buy a pre-owned PlayStation 5 in good condition (Disc edition preferred). Please DM me if you are upgrading and want to sell yours. Ready to pay cash immediately.",
+      category: "Electronics",
+      transactionType: "WANTED",
+      price: 35000,
+      currency: "INR",
+      location: "Mumbai",
+      status: "PUBLISHED",
+      sellerId: admin.id
     }
   ];
 
-  for (const listing of demoListings) {
-    const existing = await prisma.marketplaceListing.findFirst({
-      where: { title: listing.title }
-    });
-
-    if (existing) {
-      console.log(`Demo listing ${listing.title} already exists, updating...`);
-      await prisma.marketplaceListing.update({
-        where: { id: existing.id },
-        data: {
-          ...listing,
-          sellerId: testSeller.id,
-        }
-      });
-    } else {
-      console.log(`Creating demo listing ${listing.title}...`);
-      await prisma.marketplaceListing.create({
-        data: {
-          ...listing,
-          sellerId: testSeller.id,
-        }
-      });
-    }
+  for (const ml of marketplaceListings) {
+    await prisma.marketplaceListing.create({ data: ml });
   }
 
-  console.log('Seeding complete.');
+  console.log('Successfully seeded professional Community Properties and Member Marketplace records.');
 }
 
 main()
