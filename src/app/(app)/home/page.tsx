@@ -147,15 +147,6 @@ export default function HomePage() {
               <ChevronRight className={styles.qaArrow} size={20} />
             </Link>
 
-            <Link href="/library" className={styles.qaCard}>
-              <div className={styles.qaHeader}>
-                <div className={`${styles.qaIconWrap} ${styles.qaIconBlue}`}><BookOpen size={20} /></div>
-              </div>
-              <h3 className={styles.qaTitle}>Library</h3>
-              <p className={styles.qaDesc}>Browse and borrow community books</p>
-              <ChevronRight className={styles.qaArrow} size={20} />
-            </Link>
-
           </div>
         </section>
       </div>
