@@ -224,21 +224,21 @@ export default function HomePage() {
                     <span className={styles.updateTime}>Technology &middot; Today</span>
                   </div>
                 </div>
-                <h3 className={styles.updateTitle}>ASID Hackathon - Build for the Community</h3>
-                <p className={styles.updateSummary}>Join the complete ASID Hackathon today, Oct 4th! Featuring separate sections for girls and boys. Build innovative solutions that directly solve problems for our community and win exciting prizes.</p>
+                <h3 className={styles.updateTitle}>KSIJ Hackathon - Build for the Community</h3>
+                <p className={styles.updateSummary}>Join the complete KSIJ Hackathon today, Oct 4th! Featuring separate sections for girls and boys. Build innovative solutions that directly solve problems for our community and win exciting prizes.</p>
                 <div className={styles.readMoreLink}>Read more <span className={styles.linkArrow}>&rarr;</span></div>
               </Link>
 
               <Link href="/updates/ai-bootcamp" className={styles.updateRow}>
                 <div className={styles.updateSource}>
-                  <div className={styles.updateAvatar} style={{backgroundColor: '#0284c7'}}>P</div>
+                  <div className={styles.updateAvatar} style={{backgroundColor: '#0284c7'}}>K</div>
                   <div className={styles.updateMeta}>
-                    <span className={styles.updateAuthor}>PSIJ Mumbai &amp; Tech and AI Committee</span>
+                    <span className={styles.updateAuthor}>KSIJ Mumbai &amp; Tech and AI Committee</span>
                     <span className={styles.updateTime}>Education &middot; 1 month ago</span>
                   </div>
                 </div>
                 <h3 className={styles.updateTitle}>2-Day AI Bootcamp by Ali Mehdi Hemani</h3>
-                <p className={styles.updateSummary}>PSIJ Mumbai successfully conducted a 2-day AI bootcamp led by Ali Mehdi Hemani, founder of DIT (Digitalist Institute). Students mastered Generative AI on Day 1 and Agentic AI on Day 2.</p>
+                <p className={styles.updateSummary}>KSIJ Mumbai successfully conducted a 2-day AI bootcamp led by Ali Mehdi Hemani, founder of DIT (Digitalist Institute). Students mastered Generative AI on Day 1 and Agentic AI on Day 2.</p>
                 <div className={styles.readMoreLink}>Read more <span className={styles.linkArrow}>&rarr;</span></div>
               </Link>
 
@@ -264,7 +264,7 @@ export default function HomePage() {
                   <div style={{ width: '2px', height: '16px', backgroundColor: 'var(--color-accent-gold)', marginTop: '4px', borderRadius: '2px' }}></div>
                 </div>
                 <div className={styles.eventDetails}>
-                  <h3 className={styles.eventTitle}>ASID Hackathon</h3>
+                  <h3 className={styles.eventTitle}>KSIJ Hackathon</h3>
                   <p className={styles.eventInfo}>Khoja Masjid Imambada Hall Dongri</p>
                   <div className={styles.eventLink}>View event <span className={styles.linkArrow}>&rarr;</span></div>
                 </div>

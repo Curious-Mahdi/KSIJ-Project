@@ -21,7 +21,7 @@ export default function EventsPage() {
               <span className={styles.dateYear}>2026</span>
             </div>
             <div className={styles.eventContent}>
-              <h3 className={styles.eventTitle}>ASID Hackathon - Build for the Community</h3>
+              <h3 className={styles.eventTitle}>KSIJ Hackathon - Build for the Community</h3>
               <div className={styles.eventDetails}>
                 <div className={styles.eventDetailItem}>
                   <MapPin size={16} />
@@ -33,7 +33,7 @@ export default function EventsPage() {
                 </div>
               </div>
               <p className={styles.eventDescription}>
-                Join the complete ASID Hackathon today! Featuring separate sections for girls and boys. Build innovative solutions that directly solve problems for our community and win exciting prizes. Powered by Tech and AI Committee.
+                Join the complete KSIJ Hackathon today! Featuring separate sections for girls and boys. Build innovative solutions that directly solve problems for our community and win exciting prizes. Powered by Tech and AI Committee.
               </p>
             </div>
           </Link>
@@ -83,7 +83,7 @@ export default function EventsPage() {
                 </div>
               </div>
               <p className={styles.eventDescription}>
-                PSIJ Mumbai successfully conducted a 2-day AI bootcamp led by Ali Mehdi Hemani, founder of DIT (Digitalist Institute). Students mastered Generative AI on Day 1 and Agentic AI on Day 2.
+                KSIJ Mumbai successfully conducted a 2-day AI bootcamp led by Ali Mehdi Hemani, founder of DIT (Digitalist Institute). Students mastered Generative AI on Day 1 and Agentic AI on Day 2.
               </p>
             </div>
           </Link>
