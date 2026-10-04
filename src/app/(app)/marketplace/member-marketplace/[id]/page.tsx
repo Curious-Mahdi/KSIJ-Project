@@ -7,8 +7,9 @@ import styles from "./page.module.css";
 import ClientActions from "./ClientActions";
 import Link from "next/link";
 
-export default async function MemberListingDetailPage({ params }: { params: { id: string } }) {
-  const listing = await getMarketplaceListingById(params.id);
+export default async function MemberListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const listing = await getMarketplaceListingById(resolvedParams.id);
   
   if (!listing) {
     notFound();

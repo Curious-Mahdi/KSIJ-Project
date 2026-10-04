@@ -4,8 +4,9 @@ import styles from "./page.module.css";
 import cardStyles from "../page.module.css";
 import { getMarketplaceListings } from "@/lib/actions/marketplace";
 
-export default async function MemberMarketplacePage({ searchParams }: { searchParams: any }) {
-  const listings = await getMarketplaceListings(searchParams);
+export default async function MemberMarketplacePage({ searchParams }: { searchParams: Promise<any> }) {
+  const resolvedSearchParams = await searchParams;
+  const listings = await getMarketplaceListings(resolvedSearchParams);
 
   const categories = [
     "Property", "Vehicles", "Electronics", "Furniture", 
@@ -37,7 +38,7 @@ export default async function MemberMarketplacePage({ searchParams }: { searchPa
             </div>
             {categories.map(c => (
               <div key={c} className={styles.filterItem}>
-                <Link href={`/marketplace/member-marketplace?category=${c}`} style={{color: 'inherit', textDecoration: 'none', fontWeight: searchParams.category === c ? 'bold' : 'normal'}}>
+                <Link href={`/marketplace/member-marketplace?category=${c}`} style={{color: 'inherit', textDecoration: 'none', fontWeight: resolvedSearchParams.category === c ? 'bold' : 'normal'}}>
                   {c}
                 </Link>
               </div>
@@ -48,7 +49,7 @@ export default async function MemberMarketplacePage({ searchParams }: { searchPa
             <h3 className={styles.filterTitle}>Transaction Type</h3>
             {types.map(t => (
               <div key={t} className={styles.filterItem}>
-                <Link href={`/marketplace/member-marketplace?transactionType=${t}`} style={{color: 'inherit', textDecoration: 'none', fontWeight: searchParams.transactionType === t ? 'bold' : 'normal'}}>
+                <Link href={`/marketplace/member-marketplace?transactionType=${t}`} style={{color: 'inherit', textDecoration: 'none', fontWeight: resolvedSearchParams.transactionType === t ? 'bold' : 'normal'}}>
                   {t}
                 </Link>
               </div>
