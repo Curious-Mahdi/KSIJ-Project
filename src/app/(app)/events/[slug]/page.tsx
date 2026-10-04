@@ -1,8 +1,11 @@
+"use client";
+
+import { use } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-export default async function EventDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  const resolvedParams = await params;
+export default function EventDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = use(params);
   
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '48px 24px', minHeight: '100vh' }}>

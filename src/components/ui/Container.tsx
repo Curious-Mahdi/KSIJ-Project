@@ -12,12 +12,13 @@ export function Container({
   as: Component = 'div',
   ...props
 }: ContainerProps) {
+  const Comp = Component as any;
   return (
-    <Component
+    <Comp
       className={`w-full max-w-[1240px] mx-auto px-5 sm:px-8 ${className}`}
       {...props}
     >
       {children}
-    </Component>
+    </Comp>
   );
 }
