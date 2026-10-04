@@ -10,9 +10,9 @@ export const metadata = {
 };
 
 const CATEGORIES = [
-  "Healthcare", "Education", "Technology & Digital", "Food & Dining",
-  "Retail & Shopping", "Professional Services", "Home Services",
-  "Travel & Transport", "Personal Services", "Other"
+  "Healthcare", "Construction & Real Estate", "Events & Decor", "Travel & Transport",
+  "Hospitality & Food", "Retail & Shopping", "Technology & Digital", "Education",
+  "Professional Services", "Import & Export", "Manufacturing & Industrial", "Media & Publishing", "Other"
 ];
 
 // Note: In Next.js 15, searchParams is a Promise. We need to await it.
