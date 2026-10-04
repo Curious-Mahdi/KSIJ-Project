@@ -4,17 +4,17 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Search, ChevronRight, Grid, Users, Calendar, Folder, BookOpen } from "lucide-react";
+import { useSession } from "next-auth/react";
 import styles from "./page.module.css";
 
 export default function HomePage() {
   const router = useRouter();
+  const { data: session } = useSession();
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
-  const user = {
-    name: "Ali"
-  };
+  const userName = session?.user?.name ? session.user.name.split(' ')[0] : "";
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && searchQuery.trim()) {
@@ -45,7 +45,7 @@ export default function HomePage() {
         style={{ position: 'relative' }}
       >
         <div className={styles.heroContent}>
-          <h1 className={styles.heroGreeting}>Salamun Alaykum, {user.name}</h1>
+          <h1 className={styles.heroGreeting}>Salamun Alaykum{userName ? `, ${userName}` : ''}</h1>
           <div className={styles.goldHairline}></div>
           <p className={styles.heroSubtitle}>Everything your community has to offer, in one place.</p>
           
