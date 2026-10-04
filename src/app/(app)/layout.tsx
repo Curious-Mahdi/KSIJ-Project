@@ -58,8 +58,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Link href="/directory" className={`${styles.navLink} ${pathname === '/directory' ? styles.navLinkActive : ''}`}>Directory</Link>
           <Link href="/marketplace" className={`${styles.navLink} ${pathname.startsWith('/marketplace') ? styles.navLinkActive : ''}`}>Marketplace</Link>
           <Link href="/events" className={`${styles.navLink} ${pathname === '/events' ? styles.navLinkActive : ''}`}>Events</Link>
-          <Link href="/facilities" className={`${styles.navLink} ${pathname === '/facilities' ? styles.navLinkActive : ''}`}>Facilities</Link>
-          <Link href="/library" className={`${styles.navLink} ${pathname === '/library' ? styles.navLinkActive : ''}`}>Library</Link>
           {isAdmin && (
             <Link href="/admin" className={styles.navLink} style={{ color: "#d97706", fontWeight: 600 }}>👑 Admin</Link>
           )}
