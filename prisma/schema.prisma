@@ -28,15 +28,9 @@ model User {
   messages               Message[]
   contactShares          ContactShare[]
 
-<<<<<<< HEAD
-  marketplaceListings MarketplaceListing[]
-  communityProperties CommunityProperty[]  @relation("ManagedProperties")
-  marketplaceReports  MarketplaceReport[]
-=======
   marketplaceListings    MarketplaceListing[]
   communityProperties    CommunityProperty[]  @relation("ManagedProperties")
   marketplaceReports     MarketplaceReport[]
->>>>>>> 41789456288e707cc780c6a98a41ff48d807f8ed
 }
 
 model DirectoryListing {

@@ -35,15 +35,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     }
   }, [status, router]);
 
-<<<<<<< HEAD
-  useEffect(() => {
-    if (isProtectedRoute && status === "unauthenticated") {
-      router.push("/login");
-    }
-  }, [isProtectedRoute, status, router]);
 
-=======
->>>>>>> 41789456288e707cc780c6a98a41ff48d807f8ed
   if (isProtectedRoute && (status === "loading" || status === "unauthenticated")) {
     return null;
   }
@@ -66,12 +58,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Desktop Navigation with Animated Tab Indicators */}
         <nav className={styles.desktopNav}>
-<<<<<<< HEAD
-  {
-    ['home', 'services', 'directory', 'venues', 'events'].map((route) => {
-=======
-          {navRoutes.map((route) => {
->>>>>>> 41789456288e707cc780c6a98a41ff48d807f8ed
+          {['home', 'services', 'directory', 'venues', 'events'].map((route) => {
       const isActive = pathname.startsWith(`/${route}`);
       return (
         <Link key={route} href={`/${route}`} className={styles.navLink}>
@@ -87,14 +74,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       );
     })
   }
-<<<<<<< HEAD
-=======
           {isAdmin && (
             <Link href="/admin" className={styles.navLink} style={{ color: "#d97706", fontWeight: 600 }}>
               <span style={{ position: 'relative', zIndex: 1 }}>👑 Admin</span>
             </Link>
           )}
->>>>>>> 41789456288e707cc780c6a98a41ff48d807f8ed
         </nav >
 
     {/* Header Actions */ }
