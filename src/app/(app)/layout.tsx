@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, Grid, Users, Calendar, MoreHorizontal, Bell, BookOpen } from "lucide-react";
+import { Home, Grid, Users, Store, MoreHorizontal, Bell } from "lucide-react";
 import { useSession } from "next-auth/react";
 import styles from "./layout.module.css";
 
@@ -23,6 +23,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     }
   }, [isProtectedRoute, status, router]);
 
+  // Periodic refresh for authenticated active sessions (notifications, chats)
+  useEffect(() => {
+    if (status === "authenticated") {
+      const interval = setInterval(() => {
+        router.refresh();
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [status, router]);
+
   if (isProtectedRoute && (status === "loading" || status === "unauthenticated")) {
     return null;
   }
@@ -36,19 +46,19 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Top Header */}
       <header className={styles.header}>
         {/* Desktop Logo */}
-        <Link href="/home" className={styles.logo}>KSIJ Reload</Link>
+        <Link href="/home" className={styles.logo}>KSIJ One</Link>
 
         {/* Mobile Title */}
-        <span className={styles.mobileTitle}>KSIJ Reload</span>
+        <span className={styles.mobileTitle}>KSIJ One</span>
 
         {/* Desktop Navigation */}
         <nav className={styles.desktopNav}>
           <Link href="/home" className={`${styles.navLink} ${pathname === '/home' ? styles.navLinkActive : ''}`}>Home</Link>
-          <Link href="/services" className={`${styles.navLink} ${pathname === '/services' ? styles.navLinkActive : ''}`}>Services</Link>
-          <Link href="/directory" className={`${styles.navLink} ${pathname === '/directory' ? styles.navLinkActive : ''}`}>Directory</Link>
-          <Link href="/events" className={`${styles.navLink} ${pathname === '/events' ? styles.navLinkActive : ''}`}>Events</Link>
-          <Link href="/facilities" className={`${styles.navLink} ${pathname === '/facilities' ? styles.navLinkActive : ''}`}>Facilities</Link>
-          <Link href="/library" className={`${styles.navLink} ${pathname === '/library' ? styles.navLinkActive : ''}`}>Library</Link>
+          <Link href="/services" className={`${styles.navLink} ${pathname.startsWith('/services') ? styles.navLinkActive : ''}`}>Services</Link>
+          <Link href="/directory" className={`${styles.navLink} ${pathname.startsWith('/directory') ? styles.navLinkActive : ''}`}>Directory</Link>
+          <Link href="/marketplace" className={`${styles.navLink} ${pathname.startsWith('/marketplace') ? styles.navLinkActive : ''}`}>Marketplace</Link>
+          <Link href="/events" className={`${styles.navLink} ${pathname.startsWith('/events') ? styles.navLinkActive : ''}`}>Events</Link>
+          <Link href="/facilities" className={`${styles.navLink} ${pathname.startsWith('/facilities') ? styles.navLinkActive : ''}`}>Facilities</Link>
           {isAdmin && (
             <Link href="/admin" className={styles.navLink} style={{ color: "#d97706", fontWeight: 600 }}>👑 Admin</Link>
           )}
@@ -104,21 +114,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Home size={24} />
           <span>Home</span>
         </Link>
-        <Link href="/services" className={`${styles.bottomNavItem} ${pathname === '/services' ? styles.bottomNavActive : ''}`}>
+        <Link href="/services" className={`${styles.bottomNavItem} ${pathname.startsWith('/services') ? styles.bottomNavActive : ''}`}>
           <Grid size={24} />
           <span>Services</span>
         </Link>
-        <Link href="/directory" className={`${styles.bottomNavItem} ${pathname === '/directory' ? styles.bottomNavActive : ''}`}>
+        <Link href="/directory" className={`${styles.bottomNavItem} ${pathname.startsWith('/directory') ? styles.bottomNavActive : ''}`}>
           <Users size={24} />
           <span>Directory</span>
         </Link>
-        <Link href="/events" className={`${styles.bottomNavItem} ${pathname === '/events' ? styles.bottomNavActive : ''}`}>
-          <Calendar size={24} />
-          <span>Events</span>
-        </Link>
-        <Link href="/library" className={`${styles.bottomNavItem} ${pathname === '/library' ? styles.bottomNavActive : ''}`}>
-          <BookOpen size={24} />
-          <span>Library</span>
+        <Link href="/marketplace" className={`${styles.bottomNavItem} ${pathname.startsWith('/marketplace') ? styles.bottomNavActive : ''}`}>
+          <Store size={24} />
+          <span>Market</span>
         </Link>
         <Link href="/more" className={`${styles.bottomNavItem} ${pathname === '/more' ? styles.bottomNavActive : ''}`}>
           <MoreHorizontal size={24} />

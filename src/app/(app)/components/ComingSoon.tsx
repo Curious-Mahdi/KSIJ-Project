@@ -10,7 +10,7 @@ export default function ComingSoon({ title }: { title: string }) {
       </div>
       <h1 className="h2">{title}</h1>
       <p className="text-secondary" style={{ maxWidth: "400px" }}>
-        We are working hard to bring you this feature. This section will be coming in the next phase of KSIJ Reload.
+        We are working hard to bring you this feature. This section will be coming in the next phase of KSIJ One.
       </p>
     </div>
   );

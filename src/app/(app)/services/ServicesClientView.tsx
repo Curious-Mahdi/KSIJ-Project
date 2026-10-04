@@ -96,20 +96,31 @@ export default function ServicesClientView({
         }}
       >
         <div className="max-w-6xl mx-auto px-6 py-10">
-          <h1
-            className="font-bold mb-2"
-            style={{
-              fontSize: "1.875rem",
-              color: "#122019",
-              letterSpacing: "-0.01em",
-              lineHeight: 1.2,
-            }}
-          >
-            Community Services &amp; Support
-          </h1>
-          <p className="mb-6" style={{ color: "#68736D", fontSize: "0.9375rem" }}>
-            Get information about schemes, eligibility, required documents, procedures and more.
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+            <div>
+              <h1
+                className="font-bold mb-1"
+                style={{
+                  fontSize: "1.875rem",
+                  color: "#122019",
+                  letterSpacing: "-0.01em",
+                  lineHeight: 1.2,
+                }}
+              >
+                Community Services &amp; Support
+              </h1>
+              <p style={{ color: "#68736D", fontSize: "0.9375rem" }}>
+                Get information about schemes, eligibility, required documents, procedures and more.
+              </p>
+            </div>
+            <Link
+              href="/services/applications"
+              className="inline-flex items-center gap-2 self-start sm:self-auto px-4 py-2 text-sm font-semibold rounded-lg text-white shadow-sm hover:opacity-95 transition-opacity"
+              style={{ backgroundColor: "#0B5133" }}
+            >
+              My Applications &rarr;
+            </Link>
+          </div>
 
           <div className="relative" style={{ maxWidth: "560px" }}>
             <Search

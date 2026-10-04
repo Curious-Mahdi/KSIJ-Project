@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "KSIJ Reload",
-  description: "One trusted digital home for the KSIJ community.",
+  title: "KSIJ One",
+  description: "KSIJ One — One community. Everything you need.",
 };
 
 export const viewport: Viewport = {

@@ -77,7 +77,7 @@ export default function OnboardingPage() {
         
         <div style={{ textAlign: 'center', marginBottom: 'var(--space-32)' }}>
           <h1 className="h1" style={{ fontSize: '2rem', marginBottom: 'var(--space-8)', color: 'var(--color-text-main)' }}>
-            Welcome to KSIJ Reload
+            Welcome to KSIJ One
           </h1>
           <p className="text-secondary" style={{ fontSize: '1.125rem' }}>
             Let's set up your community profile.

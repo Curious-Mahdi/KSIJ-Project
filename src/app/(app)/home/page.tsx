@@ -3,18 +3,21 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search, ChevronRight, Grid, Users, Calendar, Folder, BookOpen } from "lucide-react";
+import { Search, ChevronRight, Grid, Users, Calendar, Folder, BookOpen, SearchIcon, Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { globalSearch } from "@/lib/actions/search";
 import styles from "./page.module.css";
 
 export default function HomePage() {
   const router = useRouter();
+  const { data: session } = useSession();
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchResults, setSearchResults] = useState<{ directory: any[], marketplace: any[] }>({ directory: [], marketplace: [] });
   const searchRef = useRef<HTMLDivElement>(null);
 
-  const user = {
-    name: "Ali"
-  };
+  const userName = session?.user?.name ? session.user.name.split(' ')[0] : "";
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && searchQuery.trim()) {
@@ -33,6 +36,30 @@ export default function HomePage() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    const fetchResults = async () => {
+      if (!searchQuery.trim()) {
+        setSearchResults({ directory: [], marketplace: [] });
+        return;
+      }
+      setIsSearching(true);
+      try {
+        const results = await globalSearch(searchQuery);
+        setSearchResults(results);
+      } catch (error) {
+        console.error("Search failed:", error);
+      } finally {
+        setIsSearching(false);
+      }
+    };
+
+    const timer = setTimeout(() => {
+      fetchResults();
+    }, 300); // debounce
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
   return (
     <div className={styles.pageWrapper}>
       
@@ -45,7 +72,7 @@ export default function HomePage() {
         style={{ position: 'relative' }}
       >
         <div className={styles.heroContent}>
-          <h1 className={styles.heroGreeting}>Salamun Alaykum, {user.name}</h1>
+          <h1 className={styles.heroGreeting}>Salamun Alaykum{userName ? `, ${userName}` : ''}</h1>
           <div className={styles.goldHairline}></div>
           <p className={styles.heroSubtitle}>Everything your community has to offer, in one place.</p>
           
@@ -70,34 +97,44 @@ export default function HomePage() {
             {isSearchFocused && searchQuery.length > 0 && (
               <div className={styles.searchResults}>
                 
-                <div className={styles.resultCategory}>
-                  <div className={styles.resultCategoryTitle}>Services</div>
-                  <Link href="/services" className={styles.resultItem}>
-                    <span className={styles.resultItemTitle}>Scholarship Assistance</span>
-                    <ChevronRight className={styles.resultItemArrow} size={16} />
-                  </Link>
-                  <Link href="/services" className={styles.resultItem}>
-                    <span className={styles.resultItemTitle}>Medical Consultations</span>
-                    <ChevronRight className={styles.resultItemArrow} size={16} />
-                  </Link>
-                </div>
+                {isSearching ? (
+                  <div className="flex-center py-24 text-secondary">
+                    <Loader2 size={20} className="animate-spin" />
+                    <span className="ml-8">Searching...</span>
+                  </div>
+                ) : (
+                  <>
+                    {searchResults.directory.length > 0 && (
+                      <div className={styles.resultCategory}>
+                        <div className={styles.resultCategoryTitle}>Directory</div>
+                        {searchResults.directory.map((item) => (
+                          <Link key={item.id} href={`/directory/${item.id}`} className={styles.resultItem}>
+                            <span className={styles.resultItemTitle}>{item.name}</span>
+                            <ChevronRight className={styles.resultItemArrow} size={16} />
+                          </Link>
+                        ))}
+                      </div>
+                    )}
 
-                <div className={styles.resultCategory}>
-                  <div className={styles.resultCategoryTitle}>Updates</div>
-                  <Link href="/updates/scholarship" className={styles.resultItem}>
-                    <span className={styles.resultItemTitle}>Higher Education Scholarship 2024</span>
-                    <ChevronRight className={styles.resultItemArrow} size={16} />
-                  </Link>
-                </div>
+                    {searchResults.marketplace.length > 0 && (
+                      <div className={styles.resultCategory}>
+                        <div className={styles.resultCategoryTitle}>Marketplace</div>
+                        {searchResults.marketplace.map((item) => (
+                          <Link key={item.id} href={`/marketplace/${item.transactionType.toLowerCase() === 'sell' ? 'member-marketplace' : 'community-properties'}/${item.id}`} className={styles.resultItem}>
+                            <span className={styles.resultItemTitle}>{item.title}</span>
+                            <ChevronRight className={styles.resultItemArrow} size={16} />
+                          </Link>
+                        ))}
+                      </div>
+                    )}
 
-                <div className={styles.resultCategory}>
-                  <div className={styles.resultCategoryTitle}>Events</div>
-                  <Link href="/events/townhall" className={styles.resultItem}>
-                    <span className={styles.resultItemTitle}>Community Townhall</span>
-                    <ChevronRight className={styles.resultItemArrow} size={16} />
-                  </Link>
-                </div>
-
+                    {searchResults.directory.length === 0 && searchResults.marketplace.length === 0 && (
+                      <div className="flex-center py-24 text-secondary">
+                        <span className="text-sm">No results found for "{searchQuery}"</span>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
             )}
           </div>
@@ -147,15 +184,6 @@ export default function HomePage() {
               <ChevronRight className={styles.qaArrow} size={20} />
             </Link>
 
-            <Link href="/library" className={styles.qaCard}>
-              <div className={styles.qaHeader}>
-                <div className={`${styles.qaIconWrap} ${styles.qaIconBlue}`}><BookOpen size={20} /></div>
-              </div>
-              <h3 className={styles.qaTitle}>Library</h3>
-              <p className={styles.qaDesc}>Browse and borrow community books</p>
-              <ChevronRight className={styles.qaArrow} size={20} />
-            </Link>
-
           </div>
         </section>
       </div>
@@ -193,24 +221,24 @@ export default function HomePage() {
                   <div className={styles.updateAvatar}>T</div>
                   <div className={styles.updateMeta}>
                     <span className={styles.updateAuthor}>Tech and AI Committee</span>
-                    <span className={styles.updateTime}>Technology &middot; 2 hours ago</span>
+                    <span className={styles.updateTime}>Technology &middot; Today</span>
                   </div>
                 </div>
-                <h3 className={styles.updateTitle}>Register for the Hackathon</h3>
-                <p className={styles.updateSummary}>Join the community hackathon at Khoja Masjid Imambada Hall Dongri. Build innovative solutions, collaborate with peers, and showcase your coding skills. Prizes for the top teams.</p>
+                <h3 className={styles.updateTitle}>KSIJ Hackathon - Build for the Community</h3>
+                <p className={styles.updateSummary}>Join the complete KSIJ Hackathon today, Oct 4th! Featuring separate sections for girls and boys. Build innovative solutions that directly solve problems for our community and win exciting prizes.</p>
                 <div className={styles.readMoreLink}>Read more <span className={styles.linkArrow}>&rarr;</span></div>
               </Link>
 
               <Link href="/updates/ai-bootcamp" className={styles.updateRow}>
                 <div className={styles.updateSource}>
-                  <div className={styles.updateAvatar} style={{backgroundColor: '#0284c7'}}>E</div>
+                  <div className={styles.updateAvatar} style={{backgroundColor: '#0284c7'}}>K</div>
                   <div className={styles.updateMeta}>
-                    <span className={styles.updateAuthor}>Education Board</span>
+                    <span className={styles.updateAuthor}>KSIJ Mumbai &amp; Tech and AI Committee</span>
                     <span className={styles.updateTime}>Education &middot; 1 month ago</span>
                   </div>
                 </div>
-                <h3 className={styles.updateTitle}>AI 2-Day Boot Camp</h3>
-                <p className={styles.updateSummary}>A successful conclusion to our intensive AI 2-day boot camp, where students learned the fundamentals of machine learning and modern AI development.</p>
+                <h3 className={styles.updateTitle}>2-Day AI Bootcamp by Ali Mehdi Hemani</h3>
+                <p className={styles.updateSummary}>KSIJ Mumbai successfully conducted a 2-day AI bootcamp led by Ali Mehdi Hemani, founder of DIT (Digitalist Institute). Students mastered Generative AI on Day 1 and Agentic AI on Day 2.</p>
                 <div className={styles.readMoreLink}>Read more <span className={styles.linkArrow}>&rarr;</span></div>
               </Link>
 
@@ -236,7 +264,7 @@ export default function HomePage() {
                   <div style={{ width: '2px', height: '16px', backgroundColor: 'var(--color-accent-gold)', marginTop: '4px', borderRadius: '2px' }}></div>
                 </div>
                 <div className={styles.eventDetails}>
-                  <h3 className={styles.eventTitle}>Hackathon</h3>
+                  <h3 className={styles.eventTitle}>KSIJ Hackathon</h3>
                   <p className={styles.eventInfo}>Khoja Masjid Imambada Hall Dongri</p>
                   <div className={styles.eventLink}>View event <span className={styles.linkArrow}>&rarr;</span></div>
                 </div>
@@ -250,7 +278,7 @@ export default function HomePage() {
                 </div>
                 <div className={styles.eventDetails}>
                   <h3 className={styles.eventTitle}>NASR Football Cup</h3>
-                  <p className={styles.eventInfo}>Venue TBD</p>
+                  <p className={styles.eventInfo}>Please register! Released on Oct 4th.</p>
                   <div className={styles.eventLink}>View event <span className={styles.linkArrow}>&rarr;</span></div>
                 </div>
               </Link>

@@ -1,15 +1,17 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { sendMessage, shareContact, markConversationCompleted } from "@/lib/actions/directory";
+import { useRouter } from "next/navigation";
+import { sendMessage, shareContact, markConversationCompleted, markConversationReopened } from "@/lib/actions/directory";
 import styles from "./page.module.css";
 import { Send, Phone, Mail, CheckCircle2 } from "lucide-react";
 
-export default function ChatInterface({ conversation, currentUserId }: { conversation: any, currentUserId: string }) {
+export default function ChatInterface({ conversation, currentUserId, entityName = "the listing" }: { conversation: any, currentUserId: string, entityName?: string }) {
   const [text, setText] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   
   const isOwner = currentUserId === conversation.ownerId;
 
@@ -21,6 +23,14 @@ export default function ChatInterface({ conversation, currentUserId }: { convers
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [conversation.messages]);
+
+  // Polling to auto-refresh chat
+  useEffect(() => {
+    const interval = setInterval(() => {
+      router.refresh();
+    }, 3000); // Check for new messages every 3 seconds
+    return () => clearInterval(interval);
+  }, [router]);
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +63,12 @@ export default function ChatInterface({ conversation, currentUserId }: { convers
     }
   };
 
+  const handleReopen = async () => {
+    if (confirm("Reopen this conversation?")) {
+      await markConversationReopened(conversation.id);
+    }
+  };
+
   // Determine if a contact share card should be rendered
   const contactShares = conversation.contactShares || [];
 
@@ -63,8 +79,20 @@ export default function ChatInterface({ conversation, currentUserId }: { convers
         <div className={styles.messageList}>
           
           <div className={styles.systemMessage}>
-            Conversation started regarding <strong>{conversation.listing.name}</strong>
+            Conversation started regarding <strong>{entityName}</strong>
           </div>
+          
+          {(conversation.purpose || conversation.preferredDate || conversation.preferredTime || conversation.guestCount) && (
+            <div style={{ margin: '16px auto', maxWidth: '80%', background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', fontSize: '0.9rem' }}>
+              <div style={{ fontWeight: 600, color: 'var(--color-primary)', marginBottom: '8px' }}>Enquiry Details</div>
+              <ul style={{ margin: 0, paddingLeft: '20px', color: '#475569', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                {conversation.purpose && <li><strong>Purpose:</strong> {conversation.purpose}</li>}
+                {conversation.preferredDate && <li><strong>Date:</strong> {conversation.preferredDate}</li>}
+                {conversation.preferredTime && <li><strong>Time:</strong> {conversation.preferredTime}</li>}
+                {conversation.guestCount && <li><strong>Guests:</strong> {conversation.guestCount}</li>}
+              </ul>
+            </div>
+          )}
 
           {conversation.messages.map((msg: any) => {
             const isMine = msg.senderId === currentUserId;
@@ -101,8 +129,22 @@ export default function ChatInterface({ conversation, currentUserId }: { convers
           ))}
 
           {conversation.status === "COMPLETED" && (
-            <div className={styles.systemMessage}>
-              This conversation was marked as completed.
+            <div className={styles.systemMessage} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px'}}>
+              <span>This conversation was marked as completed.</span>
+              <button 
+                onClick={handleReopen} 
+                style={{
+                  background: 'none', 
+                  border: '1px solid var(--color-primary)', 
+                  color: 'var(--color-primary)',
+                  padding: '4px 12px',
+                  borderRadius: '16px',
+                  cursor: 'pointer',
+                  fontSize: '0.85rem'
+                }}
+              >
+                Reopen Conversation
+              </button>
             </div>
           )}
 

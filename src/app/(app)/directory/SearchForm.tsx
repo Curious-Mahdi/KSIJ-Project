@@ -1,21 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 import styles from "./page.module.css";
 
 export default function SearchForm({ initialQuery = "" }: { initialQuery?: string }) {
   const [query, setQuery] = useState(initialQuery);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    const params = new URLSearchParams(searchParams.toString());
+    
     if (query.trim()) {
-      router.push(`/directory/search?q=${encodeURIComponent(query.trim())}`);
+      params.set("q", query.trim());
     } else {
-      router.push(`/directory/search`);
+      params.delete("q");
     }
+    
+    router.push(`/directory/search?${params.toString()}`);
   };
 
   return (

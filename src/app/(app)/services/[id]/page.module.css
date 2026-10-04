@@ -1,0 +1,390 @@
+.pageWrapper {
+  min-height: 100vh;
+  background-color: #FAF9F5;
+  color: #122019;
+  font-family: var(--font-sans), sans-serif;
+  padding-bottom: 100px;
+}
+
+.headerSection {
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #DDE5DF;
+  padding: 40px 24px;
+}
+
+.headerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.breadcrumb {
+  font-size: 0.875rem;
+  color: #68756F;
+  margin-bottom: 24px;
+}
+
+.breadcrumb a {
+  color: #0B5D3B;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.iconWrapper {
+  width: 64px;
+  height: 64px;
+  background-color: #EEF6F1;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin-bottom: 24px;
+}
+
+.serviceTitle {
+  font-family: var(--font-serif), serif;
+  font-size: 2.5rem;
+  font-weight: 400;
+  margin: 0 0 16px 0;
+  color: #122019;
+}
+
+.serviceSubtitle {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: #68756F;
+  max-width: 700px;
+  margin: 0 0 24px 0;
+}
+
+.goldLine {
+  width: 60px;
+  height: 2px;
+  background-color: #C8A64B;
+  margin-bottom: 24px;
+}
+
+.proposedBadge {
+  display: inline-block;
+  background-color: #EEF6F1;
+  color: #0B5D3B;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 4px 12px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.headerDisclaimer {
+  font-size: 0.875rem;
+  color: #68756F;
+  font-style: italic;
+  max-width: 800px;
+}
+
+.mainLayout {
+  max-width: 1200px;
+  margin: 40px auto 0;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 70% 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.sectionHeading {
+  font-family: var(--font-serif), serif;
+  font-size: 1.75rem;
+  font-weight: 400;
+  margin: 0 0 24px 0;
+  color: #122019;
+}
+
+.sectionSubheading {
+  font-size: 1rem;
+  color: #68756F;
+  margin-top: -16px;
+  margin-bottom: 24px;
+}
+
+.providesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.providesItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background-color: #FFFFFF;
+  border: 1px solid #DDE5DF;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+}
+
+.checkIcon {
+  color: #0B5D3B;
+  flex-shrink: 0;
+}
+
+.eligibilityGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.eligibilityCard {
+  background-color: #FFFFFF;
+  border: 1px solid #DDE5DF;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.eligibilityTitle {
+  font-weight: 600;
+  color: #122019;
+  margin-bottom: 8px;
+}
+
+.eligibilityText {
+  font-size: 0.875rem;
+  color: #68756F;
+  line-height: 1.5;
+}
+
+.eligibilityNote {
+  font-size: 0.875rem;
+  color: #68756F;
+  font-style: italic;
+  margin-top: 20px;
+}
+
+.documentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.documentItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  background-color: #FFFFFF;
+  border: 1px solid #DDE5DF;
+  border-radius: 12px;
+}
+
+.docIcon {
+  color: #0B5D3B;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.docInfo {
+  flex-grow: 1;
+}
+
+.docName {
+  font-weight: 500;
+  color: #122019;
+  margin-bottom: 4px;
+}
+
+.docReason {
+  font-size: 0.875rem;
+  color: #68756F;
+}
+
+.docBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.docRequired {
+  background-color: #EEF6F1;
+  color: #0B5D3B;
+}
+
+.docOptional {
+  background-color: #F3F4F6;
+  color: #4B5563;
+}
+
+.timeline {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+}
+
+.timelineStep {
+  flex: 1;
+  min-width: 200px;
+}
+
+.stepNumber {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #C8A64B;
+  margin-bottom: 8px;
+}
+
+.stepTitle {
+  font-weight: 600;
+  color: #122019;
+  margin-bottom: 8px;
+}
+
+.stepText {
+  font-size: 0.875rem;
+  color: #68756F;
+  line-height: 1.5;
+}
+
+.footerDisclaimer {
+  margin-top: 80px;
+  padding: 24px;
+  background-color: #FFFFFF;
+  border: 1px solid #DDE5DF;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  color: #68756F;
+  line-height: 1.5;
+}
+
+/* Right Sticky Panel */
+.stickyPanel {
+  position: sticky;
+  top: 100px;
+  background-color: #FFFFFF;
+  border: 1px solid #DDE5DF;
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.panelTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #122019;
+  margin: 0 0 16px 0;
+}
+
+.panelText {
+  font-size: 0.875rem;
+  color: #68756F;
+  line-height: 1.5;
+  margin-bottom: 32px;
+}
+
+.startButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 16px;
+  background-color: #0B5D3B;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-decoration: none;
+}
+
+.startButton:hover {
+  background-color: #0A4F35;
+}
+
+.secondaryButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 16px;
+  background-color: transparent;
+  color: #0B5D3B;
+  border: 1px solid #0B5D3B;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-decoration: none;
+  margin-top: 16px;
+}
+
+.secondaryButton:hover {
+  background-color: #EEF6F1;
+}
+
+/* Application Status Card inside panel (when applied) */
+.statusBadge {
+  display: inline-block;
+  background-color: #EEF6F1;
+  color: #0B5D3B;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 99px;
+  margin-bottom: 24px;
+}
+
+.statusRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 0.875rem;
+}
+
+.statusLabel {
+  color: #68756F;
+}
+
+.statusValue {
+  font-weight: 500;
+  color: #122019;
+}
+
+
+@media (max-width: 1024px) {
+  .mainLayout {
+    grid-template-columns: 1fr;
+  }
+  .stickyPanel {
+    position: static;
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .providesGrid, .eligibilityGrid {
+    grid-template-columns: 1fr;
+  }
+  .timeline {
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+  .timelineStep {
+    margin-bottom: 24px;
+  }
+}

@@ -1,7 +1,7 @@
 import ListYourselfForm from "./ListYourselfForm";
 
 export const metadata = {
-  title: "List Yourself | KSIJ Reload Directory",
+  title: "List Yourself | KSIJ One Directory",
 };
 
 export default function ListYourselfPage() {

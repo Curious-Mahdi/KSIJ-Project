@@ -8,7 +8,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export const metadata = {
-  title: "Conversation | KSIJ Reload Directory",
+  title: "Conversation | KSIJ One Directory",
 };
 
 export default async function ConversationPage({ params }: { params: Promise<{ id: string }> }) {
@@ -29,9 +29,26 @@ export default async function ConversationPage({ params }: { params: Promise<{ i
   }
 
   const isOwner = conversation.ownerId === userId;
-  const otherUser = isOwner ? conversation.initiatedBy : conversation.listing?.owner;
-  if (!otherUser) {
-    notFound();
+  
+  let entityName = "Unknown";
+  let entityLink = "#";
+  let otherUser = conversation.initiatedBy; // default to initiator
+  
+  if (conversation.listing) {
+    entityName = conversation.listing.name;
+    entityLink = `/directory/${conversation.listingId}`;
+    if (isOwner) otherUser = conversation.initiatedBy;
+    else otherUser = conversation.listing.owner;
+  } else if (conversation.marketplaceListing) {
+    entityName = conversation.marketplaceListing.title;
+    entityLink = `/marketplace/member-marketplace/${conversation.marketplaceListingId}`;
+    if (isOwner) otherUser = conversation.initiatedBy;
+    else otherUser = conversation.marketplaceListing.seller;
+  } else if (conversation.communityProperty) {
+    entityName = conversation.communityProperty.name;
+    entityLink = `/marketplace/community-properties/${conversation.communityPropertyId}`;
+    if (isOwner) otherUser = conversation.initiatedBy;
+    else otherUser = conversation.communityProperty.managedBy;
   }
 
   return (
@@ -39,15 +56,15 @@ export default async function ConversationPage({ params }: { params: Promise<{ i
       
       <div className={styles.header}>
         <div className={styles.headerInfo}>
-          <Link href="/directory" style={{ color: 'var(--color-text-secondary)', marginRight: '8px' }}>
+          <Link href="/notifications" style={{ color: 'var(--color-text-secondary)', marginRight: '8px' }}>
             <ArrowLeft size={24} />
           </Link>
           <div className={styles.avatar}>
-            {otherUser.name?.charAt(0).toUpperCase() || "U"}
+            {otherUser?.name?.charAt(0).toUpperCase() || "U"}
           </div>
           <div>
             <div className={styles.listingName}>
-              {isOwner ? otherUser.name : (conversation.listing?.name || "Conversation")}
+              {isOwner ? otherUser?.name : entityName}
             </div>
             <div className={styles.status}>
               <div className={styles.statusIndicator} style={{ 
@@ -59,13 +76,13 @@ export default async function ConversationPage({ params }: { params: Promise<{ i
         </div>
         
         <div className={styles.headerActions}>
-          <Link href={`/directory/${conversation.listingId}`} style={{ fontSize: '0.875rem', color: 'var(--color-primary)', textDecoration: 'none', fontWeight: 600 }}>
-            View Listing
+          <Link href={entityLink} style={{ fontSize: '0.875rem', color: 'var(--color-primary)', textDecoration: 'none', fontWeight: 600 }}>
+            View Reference
           </Link>
         </div>
       </div>
 
-      <ChatInterface conversation={conversation} currentUserId={userId} />
+      <ChatInterface conversation={conversation} currentUserId={userId} entityName={entityName} />
 
     </div>
   );

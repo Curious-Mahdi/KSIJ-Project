@@ -1,18 +1,19 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { getDirectoryListings } from "@/lib/actions/directory";
 import styles from "./page.module.css";
 import { Search, Building2, Briefcase, UserSquare2, ArrowRight } from "lucide-react";
 import SearchForm from "./SearchForm";
 
 export const metadata = {
-  title: "Directory | KSIJ Reload",
+  title: "Directory | KSIJ One",
   description: "Find businesses, professionals and services across the community.",
 };
 
 const CATEGORIES = [
-  "Healthcare", "Education", "Technology & Digital", "Food & Dining",
-  "Retail & Shopping", "Professional Services", "Home Services",
-  "Travel & Transport", "Personal Services", "Other"
+  "Healthcare", "Construction & Real Estate", "Events & Decor", "Travel & Transport",
+  "Hospitality & Food", "Retail & Shopping", "Technology & Digital", "Education",
+  "Professional Services", "Import & Export", "Manufacturing & Industrial", "Media & Publishing", "Other"
 ];
 
 export default async function DirectoryPage() {
@@ -27,10 +28,21 @@ export default async function DirectoryPage() {
         <div className="animateFadeUp">
           <h1 className={styles.title}>Directory</h1>
           <p className={styles.subtitle}>Find businesses, professionals and services across the community.</p>
+          
+          <div className={styles.headerActions}>
+            <Link href="/directory/my-directory" className={styles.secondaryBtn}>
+              My Dashboard & Chats
+            </Link>
+            <Link href="/directory/list-yourself" className={styles.primaryBtn}>
+              List Yourself <ArrowRight size={16} style={{marginLeft: '8px'}} />
+            </Link>
+          </div>
         </div>
 
         <div className={`${styles.searchContainer} animateFadeUp delay-100`}>
-          <SearchForm />
+          <Suspense fallback={<div style={{ padding: '16px', textAlign: 'center' }}>Loading search...</div>}>
+            <SearchForm />
+          </Suspense>
           
           <div className={styles.searchHelpers}>
             <Link href="/directory/search?q=Web Developer" className={styles.helperTag}>Try: Web Developer</Link>

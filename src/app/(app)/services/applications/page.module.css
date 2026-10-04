@@ -1,0 +1,151 @@
+.pageWrapper {
+  min-height: 100vh;
+  background-color: #FAF9F5;
+  color: #122019;
+  font-family: var(--font-sans), sans-serif;
+  padding: 40px 24px 100px;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #DDE5DF;
+}
+
+.pageTitle {
+  font-family: var(--font-serif), serif;
+  font-size: 2.5rem;
+  font-weight: 400;
+  margin: 0 0 8px 0;
+  color: #122019;
+}
+
+.subtitle {
+  font-size: 1.125rem;
+  color: #68756F;
+  margin: 0;
+}
+
+.exploreButton {
+  padding: 12px 24px;
+  background-color: #FFFFFF;
+  color: #0B5D3B;
+  border: 1px solid #0B5D3B;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.exploreButton:hover {
+  background-color: #EEF6F1;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.card {
+  display: block;
+  background-color: #FFFFFF;
+  border: 1px solid #DDE5DF;
+  border-radius: 12px;
+  padding: 24px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: #0B5D3B;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.serviceTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #122019;
+  margin-bottom: 4px;
+}
+
+.appId {
+  font-size: 0.875rem;
+  color: #68756F;
+}
+
+.statusBadge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 99px;
+  text-transform: uppercase;
+  background-color: #F3F4F6;
+  color: #4B5563;
+}
+
+.statusReview {
+  background-color: #EEF6F1;
+  color: #0B5D3B;
+}
+
+.statusAction {
+  background-color: #FEF3C7;
+  color: #92400E;
+}
+
+.cardFooter {
+  border-top: 1px solid #DDE5DF;
+  padding-top: 16px;
+  font-size: 0.875rem;
+  color: #68756F;
+}
+
+/* Empty State */
+.emptyState {
+  text-align: center;
+  padding: 80px 24px;
+  background-color: #FFFFFF;
+  border: 1px dashed #DDE5DF;
+  border-radius: 12px;
+}
+
+.emptyTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #122019;
+  margin-bottom: 12px;
+}
+
+.emptyText {
+  color: #68756F;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
