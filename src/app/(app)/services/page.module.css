@@ -57,6 +57,24 @@
   border-radius: 8px;
 }
 
+.myApplicationsBtn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 24px;
+  background-color: #0B5D3B;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.myApplicationsBtn:hover {
+  background-color: #0e4d32;
+  transform: translateY(-1px);
+}
+
 .infoStrip {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

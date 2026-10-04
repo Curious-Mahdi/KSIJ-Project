@@ -19,6 +19,9 @@ export default function ServicesLandingPage() {
         <p className={styles.disclaimer}>
           Illustrative service concepts — eligibility, documentation and support may vary by programme.
         </p>
+        <Link href="/services/applications" className={styles.myApplicationsBtn}>
+          My Applications →
+        </Link>
       </section>
 
       {/* Quick Information Strip */}

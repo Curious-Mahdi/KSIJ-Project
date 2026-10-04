@@ -15,8 +15,7 @@ export async function globalSearch(query: string) {
         { description: { contains: searchStr, mode: 'insensitive' } },
         { category: { contains: searchStr, mode: 'insensitive' } },
         { location: { contains: searchStr, mode: 'insensitive' } }
-      ],
-      status: "APPROVED"
+      ]
     },
     take: 3,
     select: {
@@ -34,8 +33,7 @@ export async function globalSearch(query: string) {
         { title: { contains: searchStr, mode: 'insensitive' } },
         { description: { contains: searchStr, mode: 'insensitive' } },
         { category: { contains: searchStr, mode: 'insensitive' } }
-      ],
-      status: "APPROVED"
+      ]
     },
     take: 3,
     select: {
