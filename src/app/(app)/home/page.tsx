@@ -431,7 +431,7 @@ export default function HomePage() {
                     <div className={styles.searchModalHeader}>
                       <Search className={styles.searchModalIcon} size={28} color="#075C3A" />
                       <input 
-                        ref={(input) => input && input.focus()}
+                        ref={(input) => { if (input) input.focus(); }}
                         type="text" 
                         placeholder={t("searchPlaceholder")} 
                         className={styles.searchModalInput}

@@ -419,3 +419,98 @@ model Enquiry {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Opportunity {
+  id                    String    @id @default(cuid())
+  type                  String
+  title                 String
+  slug                  String?
+  organisationName      String
+  organisationId        String?
+  postedByUserId        String
+  description           String
+  category              String
+  skills                String?
+  location              String?
+  workMode              String?
+  experienceLevel       String?
+  employmentType        String?
+  compensationMin       Float?
+  compensationMax       Float?
+  compensationPeriod    String?
+  currency              String    @default("INR")
+  duration              String?
+  startDate             String?
+  applicationDeadline   DateTime?
+  applicationMethod     String?
+  externalApplicationUrl String?
+  status                String    @default("ACTIVE")
+  verificationStatus    String    @default("UNVERIFIED")
+  mentorCapacity        Int?
+  timeCommitment        String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+// ==========================================
+// CENTRALIZED ASSISTANCE REGISTRY MODELS
+// ==========================================
+
+model Organization {
+  id           String             @id @default(cuid())
+  name         String             @unique
+  code         String             @unique
+  description  String?
+  contactEmail String?
+  contactPhone String?
+  status       String             @default("ACTIVE")
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  records      AssistanceRecord[]
+}
+
+model Beneficiary {
+  id                 String             @id @default(cuid())
+  beneficiaryId      String             @unique // e.g. "BEN-000101"
+  name               String
+  phone              String
+  area               String
+  familySize         Int                @default(1)
+  verificationStatus String             @default("VERIFIED") // VERIFIED, PENDING, UNVERIFIED
+  verificationRef    String?
+  notes              String?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  assistanceRecords  AssistanceRecord[]
+
+  @@index([phone])
+  @@index([name])
+  @@index([area])
+  @@index([beneficiaryId])
+}
+
+model AssistanceRecord {
+  id             String       @id @default(cuid())
+  beneficiaryId  String
+  beneficiary    Beneficiary  @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  category       String       // "Medical Aid", "Food Support", "Education / Scholarship", "Emergency Financial Aid", "Loan", "Housing Support"
+  amount         Float
+  date           DateTime     @default(now())
+  status         String       @default("COMPLETED")
+  purpose        String?
+  notes          String?
+  
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([beneficiaryId])
+  @@index([organizationId])
+  @@index([category])
+  @@index([date])
+}
