@@ -44,8 +44,8 @@ export default async function MarketplacePage() {
         <div className={styles.grid}>
           {communityProperties.length > 0 ? communityProperties.slice(0, 3).map((prop: any) => (
             <Link href={`/marketplace/community-properties/${prop.id}`} key={prop.id} className={styles.card}>
-              <div className={styles.cardImgWrap}>
-                <div className={styles.cardBadge}>COMMUNITY PROPERTY</div>
+              <div className={styles.cardImgWrap} style={{ aspectRatio: '4/3' }}>
+                <div className={styles.cardBadge} style={{ background: 'var(--color-primary)', color: 'white' }}>OFFICIAL COMMUNITY PROPERTY</div>
                 {prop.images?.[0]?.url ? (
                   <img src={prop.images[0].url} alt={prop.name} className={styles.cardImg} />
                 ) : (
@@ -57,12 +57,21 @@ export default async function MarketplacePage() {
               <div className={styles.cardContent}>
                 <h3 className={styles.cardTitle}>{prop.name}</h3>
                 <div className={styles.cardLocation}>
-                  <MapPin size={14} />
-                  {prop.location || prop.city || "Location not specified"}
-                </div>
-                <div className={styles.cardMeta}>
                   <span>{prop.propertyType}</span>
-                  {prop.capacity && <span>Cap: {prop.capacity}</span>}
+                  <span>{prop.location || prop.city || "Location not specified"}</span>
+                </div>
+                {prop.usageTags && (
+                  <div style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', marginBottom: '8px' }}>
+                    {prop.usageTags.split(',').join(' · ')}
+                  </div>
+                )}
+                {prop.pricing && (
+                  <div style={{ fontWeight: 600, color: 'var(--color-primary)', fontSize: '0.9rem', marginBottom: '12px' }}>
+                    {prop.pricing}
+                  </div>
+                )}
+                <div style={{ marginTop: 'auto', textAlign: 'center', padding: '8px', border: '1px solid var(--color-border)', borderRadius: '6px', color: 'var(--color-primary)', fontWeight: 600, fontSize: '0.875rem' }}>
+                  View Property
                 </div>
               </div>
             </Link>
@@ -100,17 +109,17 @@ export default async function MarketplacePage() {
                 )}
               </div>
               <div className={styles.cardContent}>
-                <div className={styles.cardPrice}>
-                  {listing.price ? `${listing.currency} ${listing.price.toLocaleString()}` : "Price Not Specified"}
+                <div className={styles.cardPrice} style={{ fontWeight: 700, color: 'var(--color-primary)', fontSize: '1.1rem', marginBottom: '4px' }}>
+                  {listing.price ? `${listing.currency === 'INR' ? '₹' : listing.currency} ${listing.price.toLocaleString()}` : "Price Not Specified"}
                 </div>
                 <h3 className={styles.cardTitle} style={{ fontSize: '1rem' }}>{listing.title}</h3>
                 <div className={styles.cardLocation}>
                   <MapPin size={14} />
                   {listing.location || listing.city || "Mumbai"}
                 </div>
-                <div className={styles.cardMeta}>
-                  <span>{listing.category}</span>
-                  <span style={{ fontSize: '0.7rem', background: '#f1f5f9', padding: '2px 8px', borderRadius: '12px' }}>
+                <div className={styles.cardMeta} style={{ marginTop: 'auto', paddingTop: '12px' }}>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>{listing.category}</span>
+                  <span style={{ fontSize: '0.7rem', background: '#e2e8f0', color: '#475569', padding: '4px 8px', borderRadius: '4px', fontWeight: 600 }}>
                     MEMBER LISTING
                   </span>
                 </div>
